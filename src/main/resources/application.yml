@@ -6,3 +6,6 @@ spring:
       username: ictuser
       password: gksghk12!
       pool-name: cp_my
+
+server:
+  port: 9002

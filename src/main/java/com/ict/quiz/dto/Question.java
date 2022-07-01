@@ -1,18 +1,18 @@
-package com.ict.quiz.user.vo;
+package com.ict.quiz.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Getter
-//@RequiredArgsConstructor
+@ToString
 @NoArgsConstructor
-public class QuestionVo {
+public class Question {
 
     private Long id;
     private String text;
     private byte[] image;
     private int seq;
-    private String useYn;
-    private Long categoryId;
+    private String use_yn;
+    private Long category_id;
 }

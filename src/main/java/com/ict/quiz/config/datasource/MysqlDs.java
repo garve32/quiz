@@ -34,7 +34,7 @@ public class MysqlDs {
         factoryBean.setDataSource(myDs());
         PathMatchingResourcePatternResolver patternResolver = new PathMatchingResourcePatternResolver();
         factoryBean.setMapperLocations(patternResolver.getResources("/mapper/**/**.xml"));
-        factoryBean.setTypeAliasesPackage("com.ict.quiz.**.vo");
+        factoryBean.setTypeAliasesPackage("com.ict.quiz.dto");
 
         SqlSessionFactory sqlSessionFactory = factoryBean.getObject();
         sqlSessionFactory.getConfiguration().setLazyLoadingEnabled(true);
