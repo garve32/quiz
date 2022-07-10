@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ict.quiz.web.user.mapper.QuestionApiMapper">
+<mapper namespace="com.ict.quiz.web.questions.QuestionMapper">
 
-    <select id="getQuestionById" resultType="Question">
-        SELECT id, text, image, seq, use_yn, category_id
-          FROM question
-         WHERE id = #{id}
+    <select id="findById" resultType="Question">
+        select id, text, image, seq, use_yn, category_id
+          from question
+         where id = #{id}
+    </select>
+
+    <select id="findByQuestionId" resultType="QuestionOption">
+        select id, number, seq, text, correct_yn, question_id
+          from question_option
+         where question_id = #{question_id}
     </select>
 
     <select id="getCategory" resultType="Category">
