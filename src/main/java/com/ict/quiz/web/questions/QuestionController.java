@@ -7,12 +7,14 @@ import com.ict.quiz.domain.UserQuestion;
 import com.ict.quiz.session.SessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.thymeleaf.util.ArrayUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -28,16 +30,10 @@ public class QuestionController {
     @GetMapping("/category")
     public String category(Model model, HttpSession session) throws Exception {
 
-        List<Category> categoryList = new ArrayList<>();
-        categoryList.add(new Category(3L, "DVA-C01", 1L, 3, 2));
-        categoryList.add(new Category(4L, "Data분석", 2L, 3, 1));
-
-        model.addAttribute("categoryList", categoryList);
-
+        List<Category> leaf = questionService.findLeaf();
+        model.addAttribute("categoryList", leaf);
         CategoryForm form = new CategoryForm();
-
         model.addAttribute("form", form);
-        //model.addAttribute("q", null);
         return "questions/category";
     }
 
@@ -48,51 +44,92 @@ public class QuestionController {
         log.info("model = {}", model);
 
         UserQuestion userQuestion = questionService.pickRandomQuestion(form);
-
+        log.info("userQuestion = {}", userQuestion);
+        // 사용자화 문제 저장
+        questionService.saveUserQuestion(userQuestion);
         log.info("userQuestion = {}", userQuestion);
         model.addAttribute("uq", userQuestion);
 
-        // 사용자화 문제 저장
-//        questionService.saveUserQuestion(userQuestionVo);
+        String[] q_set = userQuestion.getQuestion_set().split(",");
 
-        String first = userQuestion.getQuestion_set().split(",")[0];
+        String progress = "1/"+q_set.length;
+        model.addAttribute("progress", progress);
+
+        String first = q_set[0];
         Long question_id = Long.valueOf(first);
 
         // 첫번째 문제 조회
         Question question = questionService.findById(question_id);
-        log.info("question = {}", question);
+        //log.info("question = {}", question);
         model.addAttribute("q", question);
+        if(question.getImage() != null &&question.getImage().length > 0) {
+            String image = Base64.encodeBase64String(question.getImage());
+            model.addAttribute("image", image);
+        }
 
         // 문제 옵션 조회
         List<QuestionOption> questionOptions = questionService.findByQuestionId(question_id);
-        log.info("questionOptions = {}", questionOptions);
+        //log.info("questionOptions = {}", questionOptions);
         model.addAttribute("options", questionOptions);
+
+        String s = "1";
+
+        model.addAttribute("s", s);
 
         return "questions/question";
     }
 
-    @PostMapping("/question")
-    public String question(Question q, Model model) throws Exception {
+    @PostMapping("/moveQuestion")
+    public String question(UserQuestion userQuestion, Model model) throws Exception {
 
         log.info("model = {}", model);
-        log.info("question = {}", q);
+        log.info("UserQuestion = {}", userQuestion);
 
-        Long question_id = q.getId();
+        Long question_id = 0L;
+        String progress = "/";
+        String[] p_set = userQuestion.getProgress_set().split(",");
+        String[] q_set = userQuestion.getQuestion_set().split(",");
+        for (int i = 0; i < p_set.length; i++) {
+            String s = p_set[i];
+            if("1".equals(s)) {
+                question_id = Long.valueOf(q_set[i]);
+                progress = (i+1) + "/" + p_set.length;
+                break;
+            }
+        }
+        model.addAttribute("progress", progress);
+
+        // 사용자화 문제 저장
+        questionService.updateUserQuestion(userQuestion);
+        log.info("userQuestion = {}", userQuestion);
+        model.addAttribute("uq", userQuestion);
 
         // 문제 조회
         Question question = questionService.findById(question_id);
-        log.info("question = {}", question);
+        //log.info("question = {}", question);
         model.addAttribute("q", question);
+        if(question.getImage() != null &&question.getImage().length > 0) {
+            String image = Base64.encodeBase64String(question.getImage());
+            model.addAttribute("image", image);
+        }
 
         // 문제 옵션 조회
         List<QuestionOption> questionOptions = questionService.findByQuestionId(question_id);
-        log.info("questionOptions = {}", questionOptions);
+        //log.info("questionOptions = {}", questionOptions);
         model.addAttribute("options", questionOptions);
 
-        UserQuestion userQuestion = new UserQuestion();
-
-        model.addAttribute("uq", userQuestion);
 
         return "questions/question :: #q_item";
+    }
+
+    @PostMapping("/end")
+    public String end(UserQuestion userQuestion, Model model) {
+
+        // 사용자화 문제 저장
+        questionService.updateUserQuestion(userQuestion);
+
+        // 채점
+
+        return "redirect:/ questions/result";
     }
 }

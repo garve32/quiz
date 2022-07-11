@@ -20,4 +20,10 @@ public interface QuestionMapper {
     Question findById(Long id);
 
     List<QuestionOption> findByQuestionId(Long question_id);
+
+    List<Category> findLeaf();
+
+    void saveUserQuestion(UserQuestion userQuestion);
+
+    void updateUserQuestion(UserQuestion userQuestion);
 }

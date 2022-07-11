@@ -1,4 +1,4 @@
-package com.ict.quiz.web.user.mapper;
+package com.ict.quiz.api.user.mapper;
 
 import com.ict.quiz.dto.Category;
 import com.ict.quiz.dto.Question;

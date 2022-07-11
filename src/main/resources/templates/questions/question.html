@@ -12,69 +12,53 @@
 <!--    </div>-->
 
     <div class="card" id="q_item">
-        <h5 class="card-header">Q1</h5>
+        <h5 class="card-header" th:text="${progress}"></h5>
         <div class="card-body">
             <h5 class="card-title" th:text="${q.text}">question title</h5>
-            <div class="input-group px-4 py-2" th:each="option : ${options}">
-                <div class="input-group-prepend" >
-                    <div class="input-group-lg">
-                        <input type="radio" th:value="${option.text}" class="form-check-input">
-                    </div>
+            <img th:if="${image}" th:src="*{'data:image/png;base64,'+ image}" />
+<!--            <div th:object="${item}">-->
+                <div class="form-check px-4 py-2" th:each="option : ${options}">
+                        <input type="radio" th:id="${optionStat.index}" th:name="ans" th:value="${option.id}" class="form-check-input">
+                    <label th:for="${optionStat.index}" th:text="${option.text}" class="form-check-label">ITEM</label>
                 </div>
-                <label th:text="${option.text}" class="form-check-label">
-                    BOOK
-                </label>
-            </div>
+<!--            </div>-->
         </div>
     </div>
-
-<!--    <div class="card" >-->
-<!--        <h5 class="card-header">Q1</h5>-->
-<!--        <div class="card-body" th:fragment="card">-->
-<!--            <h5 class="card-title">question title</h5>-->
-<!--            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
-<!--&lt;!&ndash;            <a href="#" class="btn btn-primary">Go somewhere</a>&ndash;&gt;-->
-<!--            <div class="input-group px-4 py-2" th:each="option : ${options}">-->
-<!--                <div class="input-group-prepend" >-->
-<!--                    <div class="input-group-lg">-->
-<!--                        <input type="radio"  th:value="${option.id}" class="form-check-input">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <label  th:text="${option.text}" class="form-check-label">-->
-<!--                    BOOK-->
-<!--                </label>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 
     <div class="row py-2">
         <div class="col">
             <button type="button" id="prevBtn"class="btn btn-primary btn-lg btn-block" onclick="prevQuestion()">이전</button>
         </div>
-        <div class="col">
+        <div class="col" id="nextDiv">
             <button type="button" id="nextBtn"class="btn btn-primary btn-lg btn-block" onclick="nextQuestion()">다음</button>
+        </div>
+        <div class="col" id="endDiv" style="display: none;">
+            <button type="button" id="endBtn"class="btn btn-warning btn-lg btn-block" data-toggle="modal" data-target="#endModal">제출</button>
         </div>
     </div>
 
-    <!-- 추가 -->
-<!--    <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>-->
+    <!-- The Modal -->
+    <div class="modal fade" id="endModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-<!--    <div>-->
-<!--        <label for="itemId">상품 ID</label>-->
-<!--        <input type="text" id="itemId" name="itemId" class="form-control" value="1" th:value="${item.id}" readonly>-->
-<!--    </div>-->
-<!--    <div>-->
-<!--        <label for="itemName">상품명</label>-->
-<!--        <input type="text" id="itemName" name="itemName" class="form-control" value="상품A" th:value="${item.itemName}" readonly>-->
-<!--    </div>-->
-<!--    <div>-->
-<!--        <label for="price">가격</label>-->
-<!--        <input type="text" id="price" name="price" class="form-control" value="10000" th:value="${item.price}" readonly>-->
-<!--    </div>-->
-<!--    <div>-->
-<!--        <label for="quantity">수량</label>-->
-<!--        <input type="text" id="quantity" name="quantity" class="form-control" value="10" th:value="${item.quantity}" readonly>-->
-<!--    </div>-->
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">결과를 제출 하시겠습니까?</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success"
+                            data-dismiss="modal">Close</button>
+                    <a th:href="@{'/home/'+'/deleteFingerprints'}"><button
+                            type="button" class="btn btn-success">Yes</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 <!--    <hr class="my-4">-->
 
@@ -96,33 +80,76 @@
 </div> <!-- /container -->
 
     <script th:inline="javascript">
-        let q_pool = [];
-        let idx = 1;
+        let q_set = [];
+        let p_set = [];
+        let a_set = [];
+        let idx = 0;
+        let uq;
 
         $(document).ready(function(){
-            q_pool = [[${uq.question_set}]].split(',');
+            q_set = [[${uq.question_set}]].split(',');
+            p_set = [[${uq.progress_set}]].split(',');
+            p_set[0] = 1;
+            a_set = [[${uq.answer_set}]].split(',');
+            uq = [[${uq}]];
+            //$("#progress").text(idx+1+"/"+q_set.length);
         });
+
+        function endQuestion() {
+            // 현재 문제는 완료처리
+            p_set[idx] = 2;
+            a_set[idx] = $('input[name="ans"]:checked').val();
+            uq.answer_set = a_set;
+        }
 
         function nextQuestion() {
 
-            if(q_pool.length == idx) {
+            // 현재 문제는 완료처리
+            p_set[idx] = 2;
+            a_set[idx] = $('input[name="ans"]:checked').val();
+            uq.answer_set = a_set;
+
+            if(idx == q_set.length - 1) {
                 alert("마지막 문제임");
+                // 제출
+                $.ajax({
+                    url: "/questions/end",
+                    type: 'post',
+                    data: uq,
+                    success: function (response) {
+                        console.log(response)
+                        window.location.href = response;
+                    },
+                    error: function (response) {
+                        alert("에러발생");
+                    }
+
+                });
+
             } else {
 
-                let Question = {id: q_pool[idx]};
-                $.ajax({
-                    url: "/questions/question",
-                    type: 'post',
-                    // data : JSON.stringify({q_id:q_pool[idx]}),
-                    data: Question,
-                    success: function (response) {
-                        $("#q_item").replaceWith(response);
-                        idx++;
-                        if(q_pool.length == idx) {
 
-                            $("#nextBtn").text("제출")
-                                .removeClass("btn-primary")
-                                .addClass("btn-warning");
+                idx++;
+                // 다음 문제는 진행중 처리
+                p_set[idx] = 1;
+                uq.progress_set = p_set;
+
+                $.ajax({
+                    url: "/questions/moveQuestion",
+                    type: 'post',
+                    data: uq,
+                    success: function (response) {
+                        console.log(response)
+                        $("#q_item").replaceWith(response);
+
+                        if(idx == q_set.length - 1) {
+                            $("#nextDiv").hide();
+                            $("#endDiv").show();
+                            // $("#nextBtn").text("제출")
+                            //     .removeClass("btn-primary")
+                            //     .addClass("btn-warning")
+                            //     .attr("data-toggle", "modal")
+                            //     .attr("data-target", "#endModal");
                         }
                     },
                     error: function (response) {
@@ -134,7 +161,36 @@
         }
 
         function prevQuestion() {
-            alert("prev");
+            if(idx == 0) {
+                alert("첫번째 문제임");
+            } else {
+                // 현재 문제는 미진행처리
+                p_set[idx] = 0;
+                idx--;
+                // 이전 문제는 진행중 처리
+                p_set[idx] = 1;
+                let UserQuestion = {question_set: q_set, progress_set:p_set};
+                $.ajax({
+                    url: "/questions/moveQuestion",
+                    type: 'post',
+                    data: UserQuestion,
+                    success: function (response) {
+                        $("#q_item").replaceWith(response);
+                        if(idx < q_set.length - 1) {
+                            $("#endDiv").hide();
+                            $("#nextDiv").show();
+                            //
+                            // $("#nextBtn").text("다음")
+                            //     .removeClass("btn-primary")
+                            //     .removeClass("btn-warning")
+                            //     .addClass("btn-primary");
+                        }
+                    },
+                    error: function (response) {
+                        alert("에러발생");
+                    }
+                });
+            }
         }
 
     </script>

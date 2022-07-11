@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
         resolvers.add(new LoginUserArgumentResolver());
     }
 
-    @Bean
+    //@Bean
     public FilterRegistrationBean logFilter() {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new LogFilter());
@@ -34,10 +34,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LogInterceptor())
-                .order(1)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/js/**", "/css/**", "/*.ico", "/error");
+//        registry.addInterceptor(new LogInterceptor())
+//                .order(1)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/js/**", "/css/**", "/*.ico", "/error");
 
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(2)

@@ -1,6 +1,6 @@
-package com.ict.quiz.web.admin.service;
+package com.ict.quiz.api.admin.service;
 
-import com.ict.quiz.web.admin.mapper.AdminMapper;
+import com.ict.quiz.api.admin.mapper.AdminMapper;
 import com.ict.quiz.dto.Question;
 import com.ict.quiz.dto.QuestionOption;
 import lombok.RequiredArgsConstructor;

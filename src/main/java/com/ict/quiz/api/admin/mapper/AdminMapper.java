@@ -1,4 +1,4 @@
-package com.ict.quiz.web.admin.mapper;
+package com.ict.quiz.api.admin.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 

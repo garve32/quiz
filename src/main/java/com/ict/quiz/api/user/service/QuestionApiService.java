@@ -1,6 +1,6 @@
-package com.ict.quiz.web.user.service;
+package com.ict.quiz.api.user.service;
 
-import com.ict.quiz.web.user.mapper.QuestionApiMapper;
+import com.ict.quiz.api.user.mapper.QuestionApiMapper;
 import com.ict.quiz.dto.Category;
 import com.ict.quiz.dto.Question;
 import com.ict.quiz.dto.UserQuestion;

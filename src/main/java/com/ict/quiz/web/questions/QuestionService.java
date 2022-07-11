@@ -30,4 +30,15 @@ public class QuestionService {
         return questionMapper.findByQuestionId(question_id);
     }
 
+    public List<Category> findLeaf() {
+        return questionMapper.findLeaf();
+    }
+
+    public void saveUserQuestion(UserQuestion userQuestion) {
+        questionMapper.saveUserQuestion(userQuestion);
+    }
+
+    public void updateUserQuestion(UserQuestion userQuestion) {
+        questionMapper.updateUserQuestion(userQuestion);
+    }
 }

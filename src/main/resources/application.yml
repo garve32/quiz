@@ -12,6 +12,11 @@ server:
   error:
     whitelabel:
       enabled: false
+  servlet:
+    session:
+      timeout: 30m
+      tracking-modes: cookie
+
 
 logging:
   level:
