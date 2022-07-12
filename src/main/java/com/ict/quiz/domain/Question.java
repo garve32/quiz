@@ -5,9 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Question {
+public class Question extends Criteria{
 
     private Long id;
     private String text;
@@ -15,5 +13,8 @@ public class Question {
     private int seq;
     private String use_yn;
     private Long category_id;
+
+    /** 페이징 정보 */
+    public Pagination pagination;
 
 }

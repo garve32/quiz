@@ -4,18 +4,18 @@
 <mapper namespace="com.ict.quiz.web.users.UserMapper">
 
     <select id="findAll" resultType="User">
-        select id, login_id, password, name
+        select id, login_id, password, name, admin_yn
           from user
     </select>
 
     <select id="findById" resultType="User">
-        select id, login_id, password, name
+        select id, login_id, password, name, admin_yn
           from user
          where id = #{id}
     </select>
 
     <select id="findByLoginId" resultType="User">
-        select id, login_id, password, name
+        select id, login_id, password, name, admin_yn
           from user
          where login_id = #{login_id}
     </select>

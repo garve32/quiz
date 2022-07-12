@@ -33,7 +33,7 @@
             <button type="button" id="nextBtn"class="btn btn-primary btn-lg btn-block" onclick="nextQuestion()">다음</button>
         </div>
         <div class="col" id="endDiv" style="display: none;">
-            <button type="button" id="endBtn"class="btn btn-warning btn-lg btn-block" data-toggle="modal" data-target="#endModal">제출</button>
+            <button type="button" id="endBtn"class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#endModal">제출</button>
         </div>
     </div>
 
@@ -50,10 +50,9 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-success"
+                    <button type="button" class="btn btn-secondary"
                             data-dismiss="modal">Close</button>
-                    <a th:href="@{'/home/'+'/deleteFingerprints'}"><button
-                            type="button" class="btn btn-success">Yes</button></a>
+                    <button type="button" class="btn btn-success" onclick="endQuestion()">Yes</button>
                 </div>
             </div>
         </div>
@@ -97,16 +96,54 @@
 
         function endQuestion() {
             // 현재 문제는 완료처리
+            console.log(uq);
             p_set[idx] = 2;
-            a_set[idx] = $('input[name="ans"]:checked').val();
+            const A = $('input[name="ans"]:checked').val();
+            if(A == null) {
+                a_set[idx] = 0;
+            } else {
+                a_set[idx] = A;
+            }
+            //a_set[idx] = $('input[name="ans"]:checked').val();
             uq.answer_set = a_set;
+
+            const timezoneOffset = new Date().getTimezoneOffset() * 60000;
+            const timezoneDate = new Date(Date.now() - timezoneOffset);
+
+            uq.end_dt = timezoneDate.toISOString().substring(0, 19);
+
+            let param = "";
+            console.log(uq);
+
+            // for(var i=0; i<uq.length; i++) {
+            //     param+=<input type='hidden' name='"+ d.vals[i][0] +"' value='"+ d.vals[i][1] +"'>";
+            // }
+
+            for (const [key, value] of Object.entries(uq)) {
+                param += "<input type='hidden' name='"+ key +"' value='"+ value +"'/>";
+            }
+
+            let goform = $("<form>", {
+                method: "post",
+                action: "/questions/end",
+                target: "_self",
+                html: param
+            }).appendTo("body");
+
+            goform.submit();
         }
 
         function nextQuestion() {
-
+            console.log(uq);
             // 현재 문제는 완료처리
             p_set[idx] = 2;
-            a_set[idx] = $('input[name="ans"]:checked').val();
+            const A = $('input[name="ans"]:checked').val();
+            if(A == null) {
+                a_set[idx] = 0;
+            } else {
+                a_set[idx] = A;
+            }
+            //a_set[idx] = $('input[name="ans"]:checked').val();
             uq.answer_set = a_set;
 
             if(idx == q_set.length - 1) {
@@ -114,7 +151,7 @@
                 // 제출
                 $.ajax({
                     url: "/questions/end",
-                    type: 'post',
+                    type: "post",
                     data: uq,
                     success: function (response) {
                         console.log(response)
@@ -136,7 +173,7 @@
 
                 $.ajax({
                     url: "/questions/moveQuestion",
-                    type: 'post',
+                    type: "post",
                     data: uq,
                     success: function (response) {
                         console.log(response)

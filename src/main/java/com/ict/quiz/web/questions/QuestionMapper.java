@@ -26,4 +26,6 @@ public interface QuestionMapper {
     void saveUserQuestion(UserQuestion userQuestion);
 
     void updateUserQuestion(UserQuestion userQuestion);
+
+    String findCorrectByQuestionId(Long question_id);
 }

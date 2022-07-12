@@ -10,34 +10,42 @@
         <h2>홈 화면</h2>
     </div>
 
-    <h4 class="mb-3" th:text="|로그인: ${user.name}|">로그인 사용자 이름
+    <div class="row">
+        <div class="col">
+            <h4 class="my-1" th:text="|사용자 : ${user.name}|">로그인 사용자 이름</h4>
 
-    </h4>
+        </div>
+        <div class="col">
+            <form th:action="@{/logout}" method="post">
+                <button class="w-50 btn btn-dark btn-lg float-right">로그아웃</button>
+            </form>
+        </div>
+
+    </div>
     <hr class="my-4">
 
     <div class="row">
         <div class="col">
-            <button class="w-100 btn btn-primary btn-lg" type="button"
+            <button class="w-100 btn btn-primary " type="button"
                     th:onclick="|location.href='@{/questions/category}'|">
                 시험 시작
             </button>
         </div>
         <div class="col">
-            <button class="w-100 btn btn-info btn-lg" type="button"
+            <button class="w-100 btn btn-outline-primary " type="button"
                     th:onclick="|location.href='@{/questions/history}'|">
-                시험 이력
+                시험 이력 <span class="badge badge-info">4</span>
             </button>
         </div>
-        <div class="col">
-            <form th:action="@{/logout}" method="post">
-                <button class="btn btn-dark btn-lg">
-                    로그아웃
-                </button>
-            </form>
+
+        <div class="col" th:if="${user.admin_yn.equals('Y')}">
+            <button class="w-100 btn btn-success " type="button"
+                    th:onclick="|location.href='@{/admin}'|">
+                문제 관리
+            </button>
         </div>
     </div>
 
-    <hr class="my-4">
 
 </div> <!-- /container -->
 

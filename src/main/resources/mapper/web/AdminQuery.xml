@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ict.quiz.web.admin.AdminMapper">
+
+    <select id="findAllQuestions" parameterType="Question" resultType="Question">
+        select id, text, image, seq, use_yn, category_id
+          from question
+         order by id
+         limit #{pagination.firstRecordIndex}, #{recordsPerPage}
+    </select>
+
+    <select id="findAllQuestionsCount" parameterType="Question" resultType="int">
+    select count(*)
+      from question
+    </select>
+
+
+
+</mapper>

@@ -1,6 +1,6 @@
 package com.ict.quiz.api.admin.controller;
 
-import com.ict.quiz.api.admin.service.AdminService;
+import com.ict.quiz.api.admin.service.AdminApiService;
 import com.ict.quiz.dto.Question;
 import com.ict.quiz.dto.QuestionOption;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +17,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/adm/")
 @RequiredArgsConstructor
-public class AdminController {
+public class AdminApiController {
 
-    private final AdminService adminService;
+    private final AdminApiService adminService;
 
     @PostMapping("/qst/")
     public ResponseEntity saveQuestion(@RequestPart Question question,

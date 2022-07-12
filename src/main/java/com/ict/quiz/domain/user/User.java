@@ -15,5 +15,6 @@ public class User {
     private String password;
     @NotEmpty
     private String name; //사용자 이름
+    private String admin_yn;
 
 }

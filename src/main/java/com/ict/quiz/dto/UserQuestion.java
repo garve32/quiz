@@ -1,12 +1,11 @@
 package com.ict.quiz.dto;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@ToString
+@Data
 @NoArgsConstructor
 public class UserQuestion {
 
@@ -17,7 +16,9 @@ public class UserQuestion {
     private String question_set;
     private String progress_set;
     private String correct_set;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime start_dt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime end_dt;
 
 

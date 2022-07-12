@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="fragments/header :: header">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+    <div class="py-5 text-center">
+        <h2>문제 리스트</h2>
+    </div>
+
+    <hr class="my-4">
+    <div class="row">
+        <form th:action="@{/admin/questions}" method="get">
+        <div class="col">
+
+            <div class="input-group">
+
+                    <input type="text" class="form-control" name="searchKeyword" th:value="${searchKeyword}" placeholder="Search Category" aria-label="Search Category" aria-describedby="button-addon4">
+                    <div class="input-group-append" id="button-addon4">
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                        <button class="btn btn-outline-secondary" type="button" th:onclick="|location.href='@{/admin/questions}'|">Reset</button>
+                    </div>
+
+            </div>
+        </div>
+        </form>
+        <div class="col">
+            <button type="button" class="btn btn-primary float-right">문제 등록</button>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+<!--    <th:block layout:fragment="content">-->
+    <div class="table-responsive">
+
+
+
+<!--        <div class="form-group">-->
+<!--            <form th:action="@{/admin/questions}" method="get">-->
+
+<!--                <input type="text" class="form-control" name="searchKeyword" th:value="${searchKeyword}"  placeholder="카테고리 검색" size="10" >-->
+<!--                <button type="submit" class="btn btn-info btn-sm" >Search</button>-->
+<!--                <button type="submit" class="btn btn-info btn-sm" >Reset</button>-->
+<!--            </form>-->
+<!--        </div>-->
+        <table class="table table-sm table-hover">
+            <thead>
+            <tr>
+                <th scope="col" th:class="w-25">id</th>
+                <th scope="col">title</th>
+                <th scope="col" th:class="w-25">카테고리</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr th:each="item : ${list}">
+                <td><span th:text="${item.id}">id</span></td>
+                <td><span th:text="${item.text}">text</span></td>
+                <td><span th:text="${item.category_id}">category_id</span></td>
+            </tr>
+            </tbody>
+        </table>
+
+<!--        <div class="btn_wrap text-right">-->
+<!--            <a th:href="@{/board/write.do}" class="btn btn-primary waves-effect waves-light">Write</a>-->
+<!--        </div>-->
+
+        <th:block layout:fragment="paging">
+            <nav th:replace="fragments/paging :: pagination"></nav>
+        </th:block>
+    </div>
+<!--    </th:block>-->
+
+    <hr class="my-4">
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            function movePage(uri, queryString) {
+                location.href = uri + queryString;
+            }
+            /*]]>*/
+        </script>
+    </th:block>
+
+</div>
+</body>
+</html>

@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.ArrayUtils;
 
 import javax.servlet.http.HttpSession;
@@ -123,13 +120,19 @@ public class QuestionController {
     }
 
     @PostMapping("/end")
-    public String end(UserQuestion userQuestion, Model model) {
+    public String end(@ModelAttribute UserQuestion userQuestion, Model model) {
+
+        log.info("userQuestion = {}", userQuestion);
+        log.info("model = {}", model);
 
         // 사용자화 문제 저장
         questionService.updateUserQuestion(userQuestion);
 
         // 채점
+        String s = questionService.saveScore(userQuestion);
+        log.info("s = {}", s);
+        model.addAttribute("s", s);
 
-        return "redirect:/ questions/result";
+        return "questions/result";
     }
 }

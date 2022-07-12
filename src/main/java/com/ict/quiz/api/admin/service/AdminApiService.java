@@ -1,6 +1,6 @@
 package com.ict.quiz.api.admin.service;
 
-import com.ict.quiz.api.admin.mapper.AdminMapper;
+import com.ict.quiz.api.admin.mapper.AdminApiMapper;
 import com.ict.quiz.dto.Question;
 import com.ict.quiz.dto.QuestionOption;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +11,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AdminService {
+public class AdminApiService {
 
-    private final AdminMapper adminMapper;
+    private final AdminApiMapper adminMapper;
 
     public void createQuestion(Question question, MultipartFile multipartFile) {
     }

@@ -13,6 +13,7 @@
         select id, number, seq, text, correct_yn, question_id
           from question_option
          where question_id = #{question_id}
+         order by seq
     </select>
 
     <select id="getCategory" resultType="Category">
@@ -31,6 +32,7 @@
              , group_concat(0) as progress_set
              , group_concat(0) as answer_set
              , group_concat(0) as correct_set
+             , now() as start_dt
         from (select category_id, id
                 from question
                where category_id = #{category_id}
@@ -51,7 +53,7 @@
             , #{progress_set}
             , #{answer_set}
             , #{correct_set}
-            , now()
+            , #{start_dt}
             , #{end_dt}
         )
         <selectKey keyColumn="id" keyProperty="id" order="AFTER" resultType="UserQuestion">
@@ -66,6 +68,12 @@
         update user_question
            set progress_set = #{progress_set}
              , answer_set = #{answer_set}
+           <if test="correct_set != null and !correct_set.equals('')">
+             , correct_set = #{correct_set}
+           </if>
+           <if test="end_dt != null and !end_dt.equals('')">
+             , end_dt = #{end_dt}
+           </if>
          where id = #{id}
     </update>
 
@@ -73,6 +81,16 @@
         select id, name, p_id, question_cnt, success_cnt
           from category
          where question_cnt is not null
+    </select>
+
+    <select id="findCorrectByQuestionId" resultType="string">
+        select group_concat(qo.id order by qo.seq separator'')
+        from question q
+                 inner join question_option qo
+                            on q.id = qo.question_id
+                                and qo.correct_yn = 'Y'
+        where q.id = #{question_id}
+        group by q.id
     </select>
 
 </mapper>
