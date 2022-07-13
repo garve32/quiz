@@ -1,7 +1,5 @@
 package com.ict.quiz.web.admin;
 
-import com.ict.quiz.api.admin.service.AdminApiService;
-import com.ict.quiz.domain.Criteria;
 import com.ict.quiz.domain.Question;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

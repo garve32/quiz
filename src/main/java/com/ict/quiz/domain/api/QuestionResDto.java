@@ -1,13 +1,9 @@
-package com.ict.quiz.dto;
+package com.ict.quiz.domain.api;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
-@ToString
-@NoArgsConstructor
-public class Question {
+public class QuestionResDto {
 
     private Long id;
     private String text;

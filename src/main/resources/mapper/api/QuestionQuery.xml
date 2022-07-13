@@ -3,55 +3,58 @@
 
 <mapper namespace="com.ict.quiz.api.user.mapper.QuestionApiMapper">
 
-    <select id="getQuestionById" resultType="Question">
-        SELECT id, text, image, seq, use_yn, category_id
-          FROM question
-         WHERE id = #{id}
-    </select>
-
-    <select id="getCategory" resultType="Category">
+    <select id="findAllCategoryInfo" resultType="CategoryResDto">
         select id, name, p_id, question_cnt, success_cnt
-          from category
-         where id = #{category_id}
+        from category
+        where question_cnt is not null
     </select>
 
     <select id="pickRandomQuestion" resultType="UserQuestion">
         select #{user_id} as user_id
              , (select ifnull(max(seq), 0) + 1
                 from user_question
-                where user_id = 3) as seq
+                where user_id = #{user_id}) as seq
              , category_id
              , group_concat(id order by id) as question_set
              , group_concat(0) as progress_set
+             , group_concat(0) as answer_set
              , group_concat(0) as correct_set
+             , now() as start_dt
         from (select category_id, id
-                from question
-               where category_id = #{category_id}
-               order by rand()
-               limit #{question_cnt}) as t1
+              from question
+              where category_id = #{category_id}
+              order by rand()
+                  limit #{question_cnt}) as t1
         group by category_id
     </select>
 
     <insert id="saveUserQuestion">
         insert into user_question (
-            user_id, seq, category_id, question_set, progress_set, correct_set, start_dt, end_dt
+            user_id, seq, category_id, question_set, progress_set, answer_set, correct_set, start_dt, end_dt
         )
         values (
-            #{user_id}
-            , #{seq}
-            , #{category_id}
-            , #{question_set}
-            , #{progress_set}
-            , #{correct_set}
-            , #{start_dt}
-            , #{end_dt}
+        #{user_id}
+        , #{seq}
+        , #{category_id}
+        , #{question_set}
+        , #{progress_set}
+        , #{answer_set}
+        , #{correct_set}
+        , #{start_dt}
+        , #{end_dt}
         )
         <selectKey keyColumn="id" keyProperty="id" order="AFTER" resultType="UserQuestion">
             select id
-              from user_question
-             where user_id = #{user_id}
-               and seq = #{seq}
+            from user_question
+            where user_id = #{user_id}
+            and seq = #{seq}
         </selectKey>
     </insert>
+
+    <select id="findById" resultType="QuestionResDto">
+        select id, text, image, seq, use_yn, category_id
+        from question
+        where id = #{id}
+    </select>
 
 </mapper>

@@ -37,14 +37,10 @@ public class QuestionController {
     @PostMapping("/start")
     public String start(CategoryForm form, Model model) throws Exception {
 
-        log.info("CategoryForm = {}", form);
-        log.info("model = {}", model);
-
+        // 문제 랜덤 pick
         UserQuestion userQuestion = questionService.pickRandomQuestion(form);
-        log.info("userQuestion = {}", userQuestion);
         // 사용자화 문제 저장
         questionService.saveUserQuestion(userQuestion);
-        log.info("userQuestion = {}", userQuestion);
         model.addAttribute("uq", userQuestion);
 
         String[] q_set = userQuestion.getQuestion_set().split(",");
@@ -69,9 +65,7 @@ public class QuestionController {
         //log.info("questionOptions = {}", questionOptions);
         model.addAttribute("options", questionOptions);
 
-        String s = "1";
 
-        model.addAttribute("s", s);
 
         return "questions/question";
     }
