@@ -4,7 +4,7 @@
 <mapper namespace="com.ict.quiz.web.questions.QuestionMapper">
 
     <select id="findById" resultType="Question">
-        select id, text, image, seq, use_yn, category_id
+        select id, text, image, seq, use_yn, type, category_id
           from question
          where id = #{id}
     </select>

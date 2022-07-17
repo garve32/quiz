@@ -1,7 +1,7 @@
 package com.ict.quiz.web.argumentresolver;
 
 import com.ict.quiz.SessionConst;
-import com.ict.quiz.domain.user.User;
+import com.ict.quiz.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

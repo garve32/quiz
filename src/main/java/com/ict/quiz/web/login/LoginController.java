@@ -1,11 +1,13 @@
 package com.ict.quiz.web.login;
 
 import com.ict.quiz.SessionConst;
-import com.ict.quiz.domain.user.User;
+import com.ict.quiz.domain.User;
 import com.ict.quiz.session.SessionManager;
+import com.ict.quiz.web.argumentresolver.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +26,21 @@ public class LoginController {
     private final SessionManager sessionManager;
 
     private final LoginService loginService;
+
+    @GetMapping("/")
+    public String home(@Login User loginUser, Model model) {
+
+        //세션에 회원 데이터가 없으면 home
+        if (loginUser == null) {
+            return "home";
+        }
+
+        //세션이 유지되면 로그인으로 이동
+        model.addAttribute("user", loginUser);
+        int uqCnt = loginService.countUserQuestionByUserId(loginUser.getId());
+        model.addAttribute("uqCnt", uqCnt);
+        return "loginHome";
+    }
 
     @GetMapping("/users/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {

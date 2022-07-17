@@ -13,4 +13,6 @@ public class QuestionOption {
     private String text;
     private String correct_yn;
     private Long question_id;
+
+    private String del_yn;
 }

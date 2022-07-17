@@ -1,7 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header">
-</head>
+<head th:replace="fragments/header :: header" />
 
 <body>
 
@@ -36,7 +35,9 @@
         </div>
     </div>
 
-    <hr class="my-4">
+<!--    <hr class="my-4">-->
+
+    <div th:replace="fragments/footer :: footer" />
 
 </div>
 </body>

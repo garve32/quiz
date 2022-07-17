@@ -1,6 +1,6 @@
 package com.ict.quiz.web.login;
 
-import com.ict.quiz.domain.user.User;
+import com.ict.quiz.domain.User;
 import com.ict.quiz.web.users.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,5 +25,9 @@ public class LoginService {
 //                .filter(m -> m.getPassword().equals(password))
 //                .orElse(null);
 
+    }
+
+    public int countUserQuestionByUserId(Long user_id) {
+        return userMapper.countUserQuestionByUserId(user_id);
     }
 }

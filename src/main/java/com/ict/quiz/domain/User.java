@@ -1,4 +1,4 @@
-package com.ict.quiz.domain.user;
+package com.ict.quiz.domain;
 
 import lombok.Data;
 

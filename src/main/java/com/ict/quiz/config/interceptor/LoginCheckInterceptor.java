@@ -1,7 +1,7 @@
 package com.ict.quiz.config.interceptor;
 
 import com.ict.quiz.SessionConst;
-import com.ict.quiz.domain.user.User;
+import com.ict.quiz.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 

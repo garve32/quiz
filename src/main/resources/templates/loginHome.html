@@ -6,18 +6,20 @@
 
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
-    <div class="py-5 text-center">
-        <h2>홈 화면</h2>
+    <div class="py-4 text-center">
+        <h4>마이페이지</h4>
     </div>
 
+    <hr class="my-4">
+
     <div class="row">
-        <div class="col">
-            <h4 class="my-1" th:text="|사용자 : ${user.name}|">로그인 사용자 이름</h4>
+        <div class="col align-self-center">
+            <h5 class="my-1" th:text="|이름 : ${user.name}|">이름</h5>
 
         </div>
         <div class="col">
             <form th:action="@{/logout}" method="post">
-                <button class="w-50 btn btn-dark btn-lg float-right">로그아웃</button>
+                <button class="btn btn-dark float-right">로그아웃</button>
             </form>
         </div>
 
@@ -34,19 +36,32 @@
         <div class="col">
             <button class="w-100 btn btn-outline-primary " type="button"
                     th:onclick="|location.href='@{/questions/history}'|">
-                시험 이력 <span class="badge badge-info">4</span>
+                시험 이력 <span class="badge badge-info" th:text="${uqCnt}">0</span>
             </button>
         </div>
 
+<!--        <div class="col px-1" th:if="${user.admin_yn.equals('Y')}">-->
+<!--            <button class="w-100 btn btn-success " type="button"-->
+<!--                    th:onclick="|location.href='@{/admin}'|">-->
+<!--                문제 관리-->
+<!--            </button>-->
+<!--        </div>-->
+    </div>
+
+    <hr class="my-4">
+
+    <div class="row">
         <div class="col" th:if="${user.admin_yn.equals('Y')}">
             <button class="w-100 btn btn-success " type="button"
-                    th:onclick="|location.href='@{/admin}'|">
+                    th:onclick="|location.href='@{/admin/questions}'|">
                 문제 관리
             </button>
         </div>
     </div>
 
 
+
+    <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->
 
 </body>

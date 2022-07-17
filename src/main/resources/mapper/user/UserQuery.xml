@@ -36,5 +36,11 @@
              where login_id = #{login_id}
         </selectKey>
     </insert>
+    
+    <select id="countUserQuestionByUserId" resultType="int">
+        select count(*)
+        from user_question
+        where user_id = #{user_id}
+    </select>
 
 </mapper>

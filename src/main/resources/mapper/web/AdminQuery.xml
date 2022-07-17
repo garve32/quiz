@@ -3,17 +3,43 @@
 
 <mapper namespace="com.ict.quiz.web.admin.AdminMapper">
 
-    <select id="findAllQuestions" parameterType="Question" resultType="Question">
+    <select id="findAllQuestions" parameterType="QuestionPage" resultType="QuestionPage">
         select id, text, image, seq, use_yn, category_id
           from question
          order by id
          limit #{pagination.firstRecordIndex}, #{recordsPerPage}
     </select>
 
-    <select id="findAllQuestionsCount" parameterType="Question" resultType="int">
-    select count(*)
-      from question
+    <select id="findAllQuestionsCount" parameterType="QuestionPage" resultType="int">
+        select count(*)
+          from question
     </select>
+
+    <insert id="addQuestion" parameterType="Question" useGeneratedKeys="true" keyProperty="id">
+        insert into question (
+            text, image, seq, use_yn, type, category_id
+        )
+        values (
+            #{text}
+            ,#{image}
+            ,#{seq}
+            ,#{use_yn}
+            ,#{type}
+            ,#{category_id}
+            )
+    </insert>
+
+    <insert id="addOption" parameterType="QuestionOption">
+        insert into question_option (
+            number, seq, text, correct_yn, question_id
+        ) values (
+            #{number}
+            ,#{seq}
+            ,#{text}
+            ,#{correct_yn}
+            ,#{question_id}
+                         )
+    </insert>
 
 
 
