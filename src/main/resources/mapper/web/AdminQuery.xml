@@ -4,7 +4,7 @@
 <mapper namespace="com.ict.quiz.web.admin.AdminMapper">
 
     <select id="findAllQuestions" parameterType="QuestionPage" resultType="QuestionPage">
-        select id, text, image, seq, use_yn, category_id
+        select id, text, image_name, image, seq, use_yn, category_id
           from question
          order by id
          limit #{pagination.firstRecordIndex}, #{recordsPerPage}
@@ -15,12 +15,13 @@
           from question
     </select>
 
-    <insert id="addQuestion" parameterType="Question" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertQuestion" parameterType="Question" useGeneratedKeys="true" keyProperty="id">
         insert into question (
-            text, image, seq, use_yn, type, category_id
+            text, image_name, image, seq, use_yn, type, category_id
         )
         values (
             #{text}
+            ,#{image_name}
             ,#{image}
             ,#{seq}
             ,#{use_yn}
@@ -29,17 +30,59 @@
             )
     </insert>
 
-    <insert id="addOption" parameterType="QuestionOption">
+    <update id="updateQuestion" parameterType="Question">
+        update question
+        set text = #{text}
+            , image_name = #{image_name}
+            , image = #{image}
+            , seq = #{seq}
+            , use_yn = #{use_yn}
+            , type = #{type}
+            , category_id =#{category_id}
+        where id = {#id}
+    </update>
+
+    <update id="updateQuestionNotFile" parameterType="Question">
+        update question
+        set text = #{text}
+          , seq = #{seq}
+          , use_yn = #{use_yn}
+          , type = #{type}
+          , category_id =#{category_id}
+        where id = {#id}
+    </update>
+
+    <insert id="insertOption" parameterType="QuestionOption" useGeneratedKeys="true" keyProperty="id">
         insert into question_option (
-            number, seq, text, correct_yn, question_id
+            number, seq, text, correct_yn, del_yn, question_id
         ) values (
             #{number}
             ,#{seq}
             ,#{text}
             ,#{correct_yn}
+            ,#{del_yn}
             ,#{question_id}
-                         )
+            )
     </insert>
+
+    <update id="updateOption" parameterType="QuestionOption">
+        update question_option
+        set number = #{number}
+            , seq = #{seq}
+            , text = #{text}
+            , correct_yn = #{correct_yn}
+            , del_yn = #{del_yn}
+            , question_id = #{question_id}
+        where id = #{id}
+    </update>
+
+    <select id="findAllCategories" resultType="Category">
+        select id, p_id, name, description, time_limit, question_cnt
+             , success_type, success_cnt, success_percent, use_yn
+        from category
+        where use_yn = 'Y'
+          and question_cnt > 0
+    </select>
 
 
 

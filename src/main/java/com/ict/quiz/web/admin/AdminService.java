@@ -3,18 +3,11 @@ package com.ict.quiz.web.admin;
 import com.ict.quiz.domain.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -34,6 +27,30 @@ public class AdminService {
 
 
         return allQuestions;
+    }
+
+    public void insertQuestion(Question q) {
+        adminMapper.insertQuestion(q);
+    }
+
+    public void updateQuestion(Question q) {
+        adminMapper.updateQuestion(q);
+    }
+
+    public void updateQuestionNotFile(Question q) {
+        adminMapper.updateQuestionNotFile(q);
+    }
+
+    public void insertOption(QuestionOption o) {
+        adminMapper.insertOption(o);
+    }
+
+    public void updateOption(QuestionOption o) {
+        adminMapper.updateOption(o);
+    }
+
+    public List<Category> findAllCategories() {
+        return adminMapper.findAllCategories();
     }
 
     public void addQuestion(Question q, List<QuestionOption> o) throws IOException {
@@ -68,12 +85,4 @@ public class AdminService {
 //        log.info("path = {}", filePath);
     }
 
-    public void updateQuestion(Question q, List<QuestionOption> o) {
-        adminMapper.updateQuestion(q);
-
-        for (QuestionOption option : o) {
-            option.setQuestion_id(q.getId());
-            adminMapper.updateOption(option);
-        }
-    }
 }

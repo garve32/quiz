@@ -1,31 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header" />
-<style>
-    .image-area {
-        border: 2px dashed rgb(108, 117, 125, 0.5);;
-        padding: 1rem;
-        position: relative;
-    }
-
-    .image-area::before {
-        content: '이미지 미리보기';
-        color: #6c757d;
-        font-weight: bold;
-        text-transform: uppercase;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 0.8rem;
-        z-index: 1;
-    }
-
-    .image-area img {
-        z-index: 2;
-        position: relative;
-    }
-</style>
 
 <body>
 
@@ -39,14 +14,10 @@
 
     <hr class="my-4">
 
-    <form th:action="@{/admin/question/add}"  method="post" enctype="multipart/form-data">
+    <form th:action="@{/admin/question/save}"  method="post" enctype="multipart/form-data">
         <div th:object="${q}">
             <div th:if="${#fields.hasGlobalErrors()}">
-
-                    <div class="field-error global-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</div>
-
-<!--                <span class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></span>-->
-
+                <div class="field-error global-error" th:each="err : ${#fields.globalErrors()}" th:utext="${err}">글로벌 오류 메시지</div>
             </div>
             <!-- id -->
             <input type="hidden" th:field="*{question.id}" />
@@ -64,11 +35,15 @@
                 <span class="input-group-text" style="min-width: 80px">이미지</span>
             </div>
             <div class="custom-file">
-                <input type="file" id="upload" name="upload" class="custom-file-input" onchange="readURL(this);" >
-                <label id="upload-label" for="upload" class="custom-file-label" >Choose file</label>
+                <input type="file" id="upload" name="upload" class="custom-file-input" onchange="readURL(this);" th:value="${q.question.image}">
+                <label id="upload-label" for="upload" class="custom-file-label" th:text="${#strings.isEmpty(q.question.image_name) ?'선택된 파일 없음':q.question.image_name}">선택된 파일 없음</label>
+                <input type="hidden" th:field="*{q.question.image_name}">
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="delImageBtn" onclick="delImage(this);">X</button>
             </div>
         </div>
-        <div class="image-area mb-3"><img id="imageResult" th:src="*{'data:image/png;base64,'+ image}" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
+        <div class="image-area mb-3"><img id="imageResult" th:src="*{'data:image/png;base64,'+ upload}" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></div>
         <!-- image End -->
         <div th:object="${q}">
             <div class="row flex-sm-row">
@@ -77,9 +52,9 @@
                         <label class="input-group-text" style="min-width: 80px">카테고리</label>
                     </div>
                     <select th:field="*{question.category_id}" class="custom-select" >
-                        <option th:value=null>선택...</option>
-                        <option th:value="3">AWS DVA-C01</option>
-                        <option th:value="4">ADsP</option>
+                        <option value="-1">선택...</option>
+                        <option th:each="category : ${categoryList}" th:value="${category.id}"
+                                th:text="${category.name}">카테고리</option>
                     </select>
 
                 </div>
@@ -136,21 +111,21 @@
                     <input type="hidden" th:name="'options['+${stat.index}+'].correct_yn'" th:id="|real${stat.index}|" th:value="${option.correct_yn}"/>
                     <input type="hidden" th:name="'options['+${stat.index}+'].del_yn'" th:id="|del_yn${stat.index}|" th:value="${option.del_yn}">
                 </div>
-                <div th:if="${#lists.isEmpty(q.options)}" th:each="num, stat : ${#numbers.sequence(0,3)}" th:id="|options-lv2-${stat.index}|" class="input-group input-group-sm mb-1">
+                <div th:if="${#lists.isEmpty(q.options)}" th:each="num, stat : ${#numbers.sequence(0,3)}" th:id="|options-lv2-${stat.index}|" class="input-group input-group-sm mb-1" >
                     <div class="input-group-prepend">
                         <div class="input-group-text justify-content-md-center" style="min-width: 50px">
                             <input th:id="|dummy${stat.index}|" th:name="_dummy" th:type="${q.question.type == 'S'?'radio':'checkbox'}" class="option">
                         </div>
                     </div>
-                    <input type="text" class="form-control number-seq" th:name="'options['+${stat.index}+'].seq'">
+                    <input type="text" class="form-control number-seq" th:name="'options['+${stat.index}+'].seq'" >
                     <input type="text" class="form-control" th:name="'options['+${stat.index}+'].text'">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" th:id="|options-lv-del${stat.index}|" type="button" onclick="delOption(this)">X</button>
                     </div>
                     <!-- hidden -->
                     <input type="hidden" th:name="'options['+${stat.index}+'].id'">
-                    <input type="hidden" th:name="'options['+${stat.index}+'].correct_yn'" th:id="|real${stat.index}|"/>
-                    <input type="hidden" th:name="'options['+${stat.index}+'].del_yn'" th:id="|del_yn${stat.index}|">
+                    <input type="hidden" th:name="'options['+${stat.index}+'].correct_yn'" th:id="|real${stat.index}|" value="N">
+                    <input type="hidden" th:name="'options['+${stat.index}+'].del_yn'" th:id="|del_yn${stat.index}|" value="N">
                 </div>
             </div>
 
@@ -158,7 +133,14 @@
 
             <hr class="my-4">
 
-            <button type="submit" th:text="${#strings.isEmpty(q.question.id) ?'문제 등록':'문제 수정'}" class="btn btn-primary w-100">문제 등록</button>
+            <div class="row">
+                <div class="col">
+                    <button type="button" th:onclick="|location.href='@{/admin/questions}'|" class="btn btn-secondary w-100">문제 목록</button>
+                </div>
+                <div class="col">
+                    <button type="submit" th:text="${#strings.isEmpty(q.question.id) ?'문제 등록':'문제 수정'}" class="btn btn-primary w-100">문제 등록</button>
+                </div>
+            </div>
         </div>
     </form>
 
@@ -198,7 +180,13 @@
         return event.key != "Enter";
     });
 
+    function delImage(input) {
+        $('#upload').val('');
+        $('#upload-label').text('선택된 파일 없음');
+        $('#imageResult').prop('src', 'data:image/png;base64,null');
+        $("#question\\.image_name").val('');
 
+    }
 
     function addOption() {
         let max = -1;
@@ -261,11 +249,10 @@
     * ========================================== */
     function readURL(input) {
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            const reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#imageResult')
-                    .attr('src', e.target.result);
+                $('#imageResult').attr('src', e.target.result);
             };
             reader.readAsDataURL(input.files[0]);
         }
@@ -279,6 +266,7 @@
     $('#upload').change(function(event) {
         const files = event.target.files;
         $('#upload-label').text(files[0].name);
+        $("#question\\.image_name").val(files[0].name);
     });
 
 

@@ -13,8 +13,13 @@
             <div class="col-sm-6" th:each="category : ${categoryList}" >
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${category.name}">Category Title</h5>
-                        <p class="card-text">시험 시간 : 65분<br/>총 문항 수 : [[${category.question_cnt}]] 문항<br/>커트라인 : 75점
+                        <h5 class="card-title" th:utext="${category.name}">Category Title</h5>
+                        <p class="card-text">
+                            <div th:with="hours=${category.time_limit / 60},
+                                        minute=${category.time_limit - hours * 60}"
+                                 th:text="'시험 시간 : ' + ${hours} + ' 시간 ' + ${minute} + ' 분 '">
+                            </div>
+                            <br/>총 문항 수 : [[${category.question_cnt}]] 문항<br/>커트라인 : 75점
                         </p>
                         <form th:object="${form}" th:action="@{/questions/start}" method="post">
                             <input type="hidden" th:name="user_id" th:value="${session.loginUser.id}">

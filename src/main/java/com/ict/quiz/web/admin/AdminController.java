@@ -1,10 +1,8 @@
 package com.ict.quiz.web.admin;
 
-import com.ict.quiz.domain.Question;
-import com.ict.quiz.domain.QuestionOption;
-import com.ict.quiz.domain.QuestionPage;
-import com.ict.quiz.domain.QuestionWithOptionReqDto;
+import com.ict.quiz.domain.*;
 import com.ict.quiz.web.questions.QuestionService;
+import com.ict.quiz.web.validator.QuestionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -13,10 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,13 +29,9 @@ public class AdminController {
     private final AdminService adminService;
     private final QuestionService questionService;
 
-    @ModelAttribute("categoryMap")
-    public Map<String, String> categoryMap() {
-        Map<String, String> categoryMap = new LinkedHashMap<>();
-        categoryMap.put("3", "AWS DVA-C01");
-        categoryMap.put("4", "ADsP");
-
-        return categoryMap;
+    @ModelAttribute("categoryList")
+    public List<Category> categoryMap() {
+        return adminService.findAllCategories();
     }
 
     @ModelAttribute("useType")
@@ -84,9 +79,9 @@ public class AdminController {
 
         if(q.getImage() != null &&q.getImage().length > 0) {
             String image = Base64.encodeBase64String(q.getImage());
-            model.addAttribute("image", image);
+            model.addAttribute("upload", image);
         }
-        return "admin/addQuestion";
+        return "admin/detailQuestionForm";
     }
 
     @GetMapping("/question/add")
@@ -97,81 +92,85 @@ public class AdminController {
         dto.setQuestion(question);
         model.addAttribute("q", dto);
 
-        return "admin/addQuestion";
+        return "admin/detailQuestionForm";
     }
 
-    @PostMapping("/question/add")
-    public String addQuestion(@Validated @ModelAttribute("q") QuestionWithOptionReqDto q, BindingResult result, MultipartFile upload) throws Exception {
+    @PostMapping("/question/save")
+    public String saveQuestion(@Validated @ModelAttribute("q") QuestionWithOptionReqDto q, BindingResult result, @RequestParam("upload") MultipartFile upload) throws Exception {
 
-
-        if (result.hasErrors()) {
-            String errorMessage = "입력값을 확인하세요";
+        if (result.hasFieldErrors()) {
+            StringBuilder errorMessage = new StringBuilder();
             log.info("errors={} ", result);
-            if(result.hasFieldErrors()) {
+
                 List<FieldError> errors = result.getFieldErrors();
                 for (FieldError error : errors ) {
-                    errorMessage += ", " + error.getField();
-                    //log.info("error = {}", error);
-                    //System.out.println (error.getObjectName() + " - " + error.getField());
+                    if(!error.isBindingFailure()) {
+                        errorMessage.append("<br>").append(error.getDefaultMessage());
+                    } else {
+                        String field = error.getField();
+                        errorMessage.append("<br>").append(field).append("를 확인하세요.");
+                    }
                 }
-            }
-            log.info(errorMessage);
-            result.reject("-1", errorMessage);
 
-            return "admin/addQuestion";
+            result.reject("-1", errorMessage.delete(0, 4).toString());
+
+            return "admin/detailQuestionForm";
         }
 
         Question question = q.getQuestion();
         List<QuestionOption> options = q.getOptions();
-        question.setImage(upload.getBytes());
+        //question.setImage(upload.getBytes());
 
-        //log.info("question = {}", q);
         boolean hasCorrect = options.stream().anyMatch(item -> !item.getDel_yn().equals("Y") && item.getCorrect_yn().equals("Y"));
         if(!hasCorrect) {
             result.reject("-1", "정답을 한개 이상 표시하세요.");
-
-            return "admin/addQuestion";
+            return "admin/detailQuestionForm";
         }
 
+        byte[] bytes = upload.getBytes();
+        question.setImage(bytes);
 
-        //adminService.addQuestion(question, options);
-
-        for (QuestionOption option : options) {
-            log.info("before options = {}", option);
+        // insert 시 그냥 insert
+        // update 시 file name이 없으면 그냥 update(원래 없었던지 이번에 삭제했던지)
+        // update 시 file name이 있고 파일이 없으면? 파일업데이트 하면 안됨
+        // update 시 file name이 있고 파일이 있으면? 파일업데이트 해야 됨
+        if(question.getId() == null) {
+            log.info("insert = {}", question);
+            adminService.insertQuestion(question);
+        } else {
+            if(question.getImage_name().isEmpty()) {
+                log.info("update with file = {}", question);
+                adminService.updateQuestion(question);
+            } else {
+                if(upload.getSize() > 0) {
+                    // 파일 업데이트 해야함
+                    log.info("update with file = {}", question);
+                    adminService.updateQuestion(question);
+                } else {
+                    // 파일 업데이트 하면 안됨
+                    log.info("update without file = {}", question);
+                    adminService.updateQuestionNotFile(question);
+                }
+            }
         }
 
-        // ID도 없고 seq가 0인 row는 생성했다가 그냥 삭제한 row
-        options.removeIf(item -> item.getId() == null && item.getSeq() == 0);
+        // ID도 없고 seq가 0인 row는 생성했다가 그냥 삭제한 row => 화면에서 처리했음
+        // options.removeIf(item -> item.getId() == null && item.getSeq() == 0);
+        options.sort(Comparator.comparing(QuestionOption::getSeq));
 
         for (QuestionOption option : options) {
-            log.info("after options = {}", option);
-        }
-
-        for (QuestionOption option : options) {
+            option.setQuestion_id(question.getId());
             // Option 아이디가 없으면 insert
             if(option.getId() == null) {
                 log.info("insert option = {}", option);
-            }
-            // isDel == 'Y' 면 delete
-            else if ("Y".equals(option.getDel_yn())) {
-                log.info("delete option = {}", option);
-            }
-            // isDel != 'Y' 면 update
-            else {
+                adminService.insertOption(option);
+            } else {
                 log.info("update option = {}", option);
+                adminService.updateOption(option);
             }
-
-            //option.setQuestion_id(q.getId());
-            //adminMapper.addOption(option);
         }
-
-        //adminService.updateQuestion(question, options);
 
         return "redirect:/admin/questions";
     }
 
-    @PostMapping
-    public String saveQuestion() {
-        return null;
-    }
 }

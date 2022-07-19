@@ -1,9 +1,6 @@
 package com.ict.quiz.web.admin;
 
-import com.ict.quiz.domain.Criteria;
-import com.ict.quiz.domain.Question;
-import com.ict.quiz.domain.QuestionOption;
-import com.ict.quiz.domain.QuestionPage;
+import com.ict.quiz.domain.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,11 +11,15 @@ public interface AdminMapper {
 
     int findAllQuestionsCount(QuestionPage question);
 
-    void addQuestion(Question question);
-
-    void addOption(QuestionOption option);
+    void insertQuestion(Question question);
 
     void updateQuestion(Question question);
 
+    void updateQuestionNotFile(Question question);
+
+    void insertOption(QuestionOption option);
+
     void updateOption(QuestionOption option);
+
+    List<Category> findAllCategories();
 }

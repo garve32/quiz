@@ -4,13 +4,13 @@
 <mapper namespace="com.ict.quiz.web.questions.QuestionMapper">
 
     <select id="findById" resultType="Question">
-        select id, text, image, seq, use_yn, type, category_id
+        select id, text, image_name, image, seq, use_yn, type, category_id
           from question
          where id = #{id}
     </select>
 
     <select id="findByQuestionId" resultType="QuestionOption">
-        select id, number, seq, text, correct_yn, question_id
+        select id, number, seq, text, correct_yn, question_id, del_yn
           from question_option
          where question_id = #{question_id}
          order by seq
@@ -78,9 +78,11 @@
     </update>
 
     <select id="findLeaf" resultType="Category">
-        select id, name, p_id, question_cnt, success_cnt
+        select id, p_id, name, description, time_limit, question_cnt
+             , success_type, success_cnt, success_percent, use_yn
           from category
-         where question_cnt is not null
+         where use_yn = 'Y'
+           and question_cnt > 0
     </select>
 
     <select id="findCorrectByQuestionId" resultType="string">

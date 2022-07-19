@@ -47,6 +47,8 @@ public class QuestionController {
 
         String progress = "1/"+q_set.length;
         model.addAttribute("progress", progress);
+        int percent = 100 / q_set.length;
+        model.addAttribute("percent", percent);
 
         String first = q_set[0];
         Long question_id = Long.valueOf(first);
@@ -78,6 +80,7 @@ public class QuestionController {
 
         Long question_id = 0L;
         String progress = "/";
+        int percent = 0;
         String[] p_set = userQuestion.getProgress_set().split(",");
         String[] q_set = userQuestion.getQuestion_set().split(",");
         for (int i = 0; i < p_set.length; i++) {
@@ -85,10 +88,15 @@ public class QuestionController {
             if("1".equals(s)) {
                 question_id = Long.valueOf(q_set[i]);
                 progress = (i+1) + "/" + p_set.length;
+                percent = (int) Math.round( ((double)(i+1) / (double)p_set.length * 100));
+                log.info("i+1 = {}", i+1);
+                log.info("p_set.length = {}", p_set.length);
+                log.info("percent = {}", percent);
                 break;
             }
         }
         model.addAttribute("progress", progress);
+        model.addAttribute("percent", percent);
 
         // 사용자화 문제 저장
         questionService.updateUserQuestion(userQuestion);

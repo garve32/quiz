@@ -7,11 +7,15 @@
 
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
 
-    <h1>결과 화면</h1>
+    <div class="py-4 text-center">
+        <h4>테스트 결과</h4>
+    </div>
 
-    <h4 th:class="py-5" th:text="${s}"></h4>
+    <hr class="my-4">
 
-    <div>
+    <div th:text="${s}"></div>
+
+    <div class="w-25">
         <canvas id="myChart"></canvas>
     </div>
 

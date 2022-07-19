@@ -13,14 +13,14 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-
 server:
   port: 9002
   error:
     whitelabel:
       enabled: false
-
-
+  servlet:
+    session:
+      tracking-modes: cookie
 
 logging:
   level:
