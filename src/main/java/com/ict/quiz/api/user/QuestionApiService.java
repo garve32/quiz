@@ -1,10 +1,10 @@
-package com.ict.quiz.api.user.service;
+package com.ict.quiz.api.user;
 
-import com.ict.quiz.api.user.mapper.QuestionApiMapper;
 import com.ict.quiz.domain.CategoryResDto;
 import com.ict.quiz.domain.Question;
+import com.ict.quiz.domain.QuestionOption;
 import com.ict.quiz.domain.UserQuestion;
-import com.ict.quiz.domain.api.QuestionResDto;
+import com.ict.quiz.domain.api.UserQuestionReqDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class QuestionApiService {
 
     private final QuestionApiMapper questionMapper;
-    public QuestionResDto findById(Long id) {
+    public Question findById(Long id) {
         return questionMapper.findById(id);
     }
 
@@ -32,5 +32,17 @@ public class QuestionApiService {
 
     public List<CategoryResDto> findAllCategoryInfo() {
         return questionMapper.findAllCategoryInfo();
+    }
+
+    public void updateUserQuestion(UserQuestionReqDto req) {
+        questionMapper.updateUserQuestion(req);
+    }
+
+    public void endUserQuestion(UserQuestionReqDto req) {
+        questionMapper.endUserQuestion(req);
+    }
+
+    public List<QuestionOption> findOptionByQuestionId(Long question_id) {
+        return questionMapper.findOptionByQuestionId(question_id);
     }
 }

@@ -24,19 +24,11 @@
             <div class="image-area mb-3" th:if="${image}">
                 <img id="imageResult" th:if="${image}" th:src="*{'data:image/png;base64,'+ image}" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
             </div>
-            <hr class="my-4">
-<!--            <div th:each="option : ${options}" class="input-group input-group-sm mb-1" >-->
-<!--                <div class="input-group-prepend">-->
-<!--                    <div class="input-group-text justify-content-md-center" style="min-width: 50px">-->
-<!--                        <input th:id="${optionStat.index}" th:name="ans" th:type="${q.type == 'S'?'radio':'checkbox'}" class="option">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <input type="text" readonly class="form-control-plaintext" th:value="${option.text}">-->
 
-<!--            </div>-->
+            <hr class="my-4">
 
             <div class="form-check px-4 py-2" th:each="option : ${options}">
-                    <input type="radio" th:id="${optionStat.index}" th:name="ans" th:value="${option.id}" class="form-check-input">
+                    <input th:type="${q.type == 'S'?'radio':'checkbox'}" th:id="${optionStat.index}" th:name="ans" th:value="${option.id}" class="form-check-input">
                 <label th:for="${optionStat.index}" th:text="${option.text}" class="form-check-label">ITEM</label>
             </div>
         </div>
@@ -76,23 +68,7 @@
         </div>
     </div>
 
-
-<!--    <hr class="my-4">-->
-
-<!--    <div class="row">-->
-<!--        <div class="col">-->
-<!--            <button class="w-100 btn btn-primary btn-lg"-->
-<!--                    onclick="location.href='editForm.html'"-->
-<!--                    th:onclick="|location.href='@{/items/{itemId}/edit(itemId=${item.id})}'|"-->
-<!--                    type="button">상품 수정</button>-->
-<!--        </div>-->
-<!--        <div class="col">-->
-<!--            <button class="w-100 btn btn-secondary btn-lg"-->
-<!--                    onclick="location.href='items.html'"-->
-<!--                    th:onclick="|location.href='@{/items}'|"-->
-<!--                    type="button">목록으로</button>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div th:replace="fragments/footer :: footer"></div>
 
 </div> <!-- /container -->
 
@@ -116,11 +92,19 @@
             // 현재 문제는 완료처리
             console.log(uq);
             p_set[idx] = 2;
-            const A = $('input[name="ans"]:checked').val();
-            if(A == null) {
+
+            let chk_arr = [];
+            $('input[name="ans"]:checked').each(function () {
+                let chk = $(this).val();
+                chk_arr.push(chk);
+            })
+            let chk_str = chk_arr.join(":");
+
+            //const A = $('input[name="ans"]:checked').val();
+            if(chk_str == null) {
                 a_set[idx] = 0;
             } else {
-                a_set[idx] = A;
+                a_set[idx] = chk_str;
             }
             //a_set[idx] = $('input[name="ans"]:checked').val();
             uq.answer_set = a_set;

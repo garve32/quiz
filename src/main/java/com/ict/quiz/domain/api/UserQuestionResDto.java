@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 public class UserQuestionResDto {
 
     private Long id;

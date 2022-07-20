@@ -86,7 +86,7 @@
     </select>
 
     <select id="findCorrectByQuestionId" resultType="string">
-        select group_concat(qo.id order by qo.seq separator'')
+        select group_concat(qo.id order by qo.seq separator':')
         from question q
                  inner join question_option qo
                             on q.id = qo.question_id
