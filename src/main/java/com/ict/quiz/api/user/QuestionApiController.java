@@ -6,19 +6,18 @@ import com.ict.quiz.domain.CategoryResDto;
 import com.ict.quiz.domain.Question;
 import com.ict.quiz.domain.QuestionOption;
 import com.ict.quiz.domain.UserQuestion;
-import com.ict.quiz.domain.api.QuestionResDto;
+import com.ict.quiz.domain.api.QuestionStartReqDto;
 import com.ict.quiz.domain.api.QuestionWithOptionResDto;
 import com.ict.quiz.domain.api.UserQuestionReqDto;
 import com.ict.quiz.domain.api.UserQuestionResDto;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -29,14 +28,25 @@ public class QuestionApiController {
 
     private final QuestionApiService questionService;
 
+    @ApiOperation(
+            value = "카테고리 조회"
+            , notes = "선택할 수 있는 카테고리정보를 조회한다."
+            , response = CategoryResDto.class
+            , responseContainer = "List"
+    )
     @GetMapping("/category")
     public ResponseEntity getCategory() {
 
         List<CategoryResDto> categoryDto = questionService.findAllCategoryInfo();
 
-        return new ResponseEntity<>(categoryDto, HttpStatus.OK);
+        return ResponseEntity.ok(categoryDto);
     }
 
+    @ApiOperation(
+            value = "문제 단건 조회"
+            , notes = "문제ID에 해당하는 문제를 선택지와 함께 조회한다."
+            , response = QuestionWithOptionResDto.class
+    )
     @GetMapping("/{id}")
     public ResponseEntity getQuestion(@PathVariable("id") Long id) {
 
@@ -48,14 +58,20 @@ public class QuestionApiController {
         resDto.setQuestion(q);
         resDto.setOptions(o);
 
-        return new ResponseEntity<>(resDto, HttpStatus.OK);
+        return ResponseEntity.ok(resDto);
     }
 
+
+    @ApiOperation(
+            value = "문제 시작"
+            , notes = "카테고리를 선택하면 랜덤으로 문제가 출제되고, 사용자화 DB에 저장된다"
+            , response = UserQuestionResDto.class
+    )
     @PostMapping("/start")
-    public ResponseEntity start(@RequestBody Map<String, Object> req) {
+    public ResponseEntity start(@RequestBody QuestionStartReqDto startReqDto) {
 
         // 문제 랜덤 pick
-        UserQuestion userQuestion = questionService.pickRandomQuestion(req);
+        UserQuestion userQuestion = questionService.pickRandomQuestion(startReqDto);
 
         // 사용자화 문제 저장
         questionService.saveUserQuestion(userQuestion);
@@ -72,7 +88,7 @@ public class QuestionApiController {
 //        }
 
         // 정상 리턴
-        return new ResponseEntity(userQuestionResDto, HttpStatus.OK);
+        return ResponseEntity.ok(userQuestionResDto);
     }
 
     @PostMapping("/move")
@@ -93,6 +109,11 @@ public class QuestionApiController {
 
         log.info("resDto = {}", resDto);
 
-        return new ResponseEntity(resDto, HttpStatus.OK);
+        return ResponseEntity.ok(resDto);
+    }
+
+    @PostMapping("/end")
+    public ResponseEntity end() {
+        return ResponseEntity.ok(null);
     }
 }

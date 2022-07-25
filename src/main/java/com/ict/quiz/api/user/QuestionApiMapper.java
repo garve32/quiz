@@ -4,12 +4,11 @@ import com.ict.quiz.domain.CategoryResDto;
 import com.ict.quiz.domain.Question;
 import com.ict.quiz.domain.QuestionOption;
 import com.ict.quiz.domain.UserQuestion;
-import com.ict.quiz.domain.api.QuestionResDto;
+import com.ict.quiz.domain.api.QuestionStartReqDto;
 import com.ict.quiz.domain.api.UserQuestionReqDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface QuestionApiMapper {
@@ -18,7 +17,7 @@ public interface QuestionApiMapper {
 
     List<CategoryResDto> findAllCategoryInfo();
 
-    UserQuestion pickRandomQuestion(Map<String, Object> req);
+    UserQuestion pickRandomQuestion(QuestionStartReqDto req);
 
     void saveUserQuestion(UserQuestion userQuestion);
 

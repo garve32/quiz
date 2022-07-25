@@ -17,7 +17,8 @@
     </select>
 
     <select id="getCategory" resultType="Category">
-        select id, name, p_id, question_cnt, success_cnt
+        select id, p_id, name, description, time_limit, question_cnt
+             , success_type, success_cnt, success_percent, use_yn
           from category
          where id = #{category_id}
     </select>
@@ -73,6 +74,9 @@
            </if>
            <if test="end_dt != null and !end_dt.equals('')">
              , end_dt = #{end_dt}
+           </if>
+           <if test="success_cd != null and !success_cd.equals('')">
+             , success_cd = #{success_cd}
            </if>
          where id = #{id}
     </update>

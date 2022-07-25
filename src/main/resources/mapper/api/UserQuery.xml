@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ict.quiz.api.user.UserApiMapper">
+
+    <select id="findHisList" resultType="UserQuestion">
+        select id, user_id, seq, category_id, question_set, progress_set
+            , answer_set, correct_set, start_dt, end_dt, success_cd
+          from user_question
+        where user_id = #{user_id}
+        order by seq
+    </select>
+
+
+
+</mapper>

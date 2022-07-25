@@ -1,0 +1,34 @@
+package com.ict.quiz.api.user;
+
+import com.ict.quiz.domain.UserQuestion;
+import com.ict.quiz.domain.api.UserQuestionHisResDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+@Service
+@RequiredArgsConstructor
+public class UserApiService {
+
+    private final UserApiMapper userApiMapper;
+    public List<UserQuestionHisResDto> findHisList(Long user_id) {
+
+        List<UserQuestion> hisList = userApiMapper.findHisList(user_id);
+
+        List<UserQuestionHisResDto> resList = hisList.stream().map(o -> new UserQuestionHisResDto(o.getId(), o.getUser_id(), o.getSeq(), o.getCategory_id()
+                        , o.getQuestion_set(), o.getProgress_set(), o.getAnswer_set(), o.getCorrect_set()
+                        , o.getStart_dt(), o.getEnd_dt(), o.getQuestion_set().split(",").length, (int) Arrays.stream(o.getCorrect_set().split(",")).filter(c -> c.equals("1")).count()))
+                .collect(Collectors.toList());
+
+//        resList.forEach(h -> {
+//            h.setQuestion_cnt(h.getQuestion_set().split(",").length);
+//            h.setCorrect_cnt((int) Arrays.stream(h.getCorrect_set().split(",")).filter(c -> c.equals("1")).count());
+//        });
+
+        return resList;
+    }
+}

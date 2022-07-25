@@ -11,7 +11,7 @@
           and question_cnt > 0
     </select>
 
-    <select id="pickRandomQuestion" resultType="UserQuestion">
+    <select id="pickRandomQuestion" parameterType="QuestionStartReqDto" resultType="UserQuestion">
         select #{user_id} as user_id
              , (select ifnull(max(seq), 0) + 1
                 from user_question
@@ -79,6 +79,7 @@
         set progress_set = #{progress_set}
           , answer_set = #{answer_set}
           , end_dt = now()
+          , success_cd = #{success_cd}
         where id = #{id}
     </update>
 
