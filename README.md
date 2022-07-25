@@ -2,6 +2,8 @@
 
 ## [API 명세서](http://3.37.139.180:9002/swagger-ui/index.html) 
 
+http://3.37.139.180:9002/swagger-ui/index.html  
+
 http://3.37.139.180:9002/api/q
 
 | method | api       | 기능       | 비고                                   |
