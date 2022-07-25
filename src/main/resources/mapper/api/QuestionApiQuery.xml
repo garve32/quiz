@@ -78,10 +78,28 @@
         update user_question
         set progress_set = #{progress_set}
           , answer_set = #{answer_set}
+          , correct_set = #{correct_set}
           , end_dt = now()
           , success_cd = #{success_cd}
         where id = #{id}
     </update>
+
+    <select id="findCorrectByQuestionId" resultType="string">
+        select group_concat(qo.id order by qo.seq separator':')
+        from question q
+                 inner join question_option qo
+                            on q.id = qo.question_id
+                                and qo.correct_yn = 'Y'
+        where q.id = #{question_id}
+        group by q.id
+    </select>
+
+    <select id="findUserQuestionById" resultType="UserQuestionResDto">
+        select id, user_id, seq, category_id, question_set, progress_set
+             , answer_set, correct_set, start_dt, end_dt, success_cd
+        from user_question
+        where id = #{id}
+    </select>
 
 
 

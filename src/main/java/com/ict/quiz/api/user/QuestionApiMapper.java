@@ -1,11 +1,9 @@
 package com.ict.quiz.api.user;
 
-import com.ict.quiz.domain.CategoryResDto;
-import com.ict.quiz.domain.Question;
-import com.ict.quiz.domain.QuestionOption;
-import com.ict.quiz.domain.UserQuestion;
+import com.ict.quiz.domain.*;
 import com.ict.quiz.domain.api.QuestionStartReqDto;
 import com.ict.quiz.domain.api.UserQuestionReqDto;
+import com.ict.quiz.domain.api.UserQuestionResDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -27,4 +25,10 @@ public interface QuestionApiMapper {
     void endUserQuestion(UserQuestionReqDto req);
 
     List<QuestionOption> findOptionByQuestionId(Long question_id);
+
+    Category getCategory(Long id);
+
+    String findCorrectByQuestionId(Long question_id);
+
+    UserQuestionResDto findUserQuestionById(Long id);
 }

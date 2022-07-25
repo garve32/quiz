@@ -29,10 +29,6 @@ public class UserQuestionResDto {
     private LocalDateTime start_dt;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime end_dt;
-    @ApiModelProperty(example = "6")
-    private int question_cnt;
-    @ApiModelProperty(example = "")
-    private int correct_cnt;
     @ApiModelProperty(example = "S")
     private String success_cd;
 }
