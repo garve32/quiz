@@ -2,7 +2,7 @@ spring:
   datasource:
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://3.37.139.180:3306/ict?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      jdbc-url: jdbc:mysql://43.200.138.19:3306/ict?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
       username: ictuser
       password: gksghk12!
       pool-name: cp_my
