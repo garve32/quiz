@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="resultDetail(detail)">
+
+    <div class="card mb-3" id="q_item">
+        <h5 class="card-header" th:classappend="${detail.question.correct_yn eq 'Y'?'text-primary':'text-danger'}"
+            th:text="${detail.question.correct_yn eq 'Y'?'맞은 문제':'틀린 문제'}">맞은 문제
+        </h5>
+        <div class="card-body">
+            <p class="card-text" style="white-space: pre-line" th:utext="${detail.question.text}" />
+            <div class="image-area mb-3" th:if="${detail.question.image}">
+                <img id="imageResult" th:if="${detail.question.image}" th:src="*{'data:image/png;base64,'+ detail.question.image}" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+            </div>
+
+            <hr class="my-4">
+
+            <div class="form-check px-4 py-2" th:each="option : ${detail.options}">
+                <input th:type="${detail.question.type == 'S'?'radio':'checkbox'}" th:checked="${option.select_yn eq 'Y'}" class="form-check-input" disabled>
+                <label th:text="${option.text}" class="form-check-label">ITEM</label>
+                <span class="badge badge-primary" th:if="${option.correct_yn eq 'Y'}">(정답)</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -39,7 +39,7 @@
             , use_yn = #{use_yn}
             , type = #{type}
             , category_id =#{category_id}
-        where id = {#id}
+        where id = #{id}
     </update>
 
     <update id="updateQuestionNotFile" parameterType="Question">
@@ -49,7 +49,7 @@
           , use_yn = #{use_yn}
           , type = #{type}
           , category_id =#{category_id}
-        where id = {#id}
+        where id = #{id}
     </update>
 
     <insert id="insertOption" parameterType="QuestionOption" useGeneratedKeys="true" keyProperty="id">

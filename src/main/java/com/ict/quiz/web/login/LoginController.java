@@ -56,9 +56,7 @@ public class LoginController {
             return "login/loginForm";
         }
 
-        log.info("before service = {}", form);
         User loginUser = loginService.login(form.getLogin_id(), form.getPassword());
-        log.info("after service = {}", loginUser);
 
         if (loginUser == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");

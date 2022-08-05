@@ -139,12 +139,21 @@
             console.log(uq);
             // 현재 문제는 완료처리
             p_set[idx] = 2;
-            const A = $('input[name="ans"]:checked').val();
-            if(A == null) {
+
+            let chk_arr = [];
+            $('input[name="ans"]:checked').each(function () {
+                let chk = $(this).val();
+                chk_arr.push(chk);
+            })
+            let chk_str = chk_arr.join(":");
+
+            if(chk_str == null) {
                 a_set[idx] = 0;
             } else {
-                a_set[idx] = A;
+                a_set[idx] = chk_str;
             }
+
+
             //a_set[idx] = $('input[name="ans"]:checked').val();
             uq.answer_set = a_set;
 

@@ -13,10 +13,35 @@
 
     <hr class="my-4">
 
-    <div th:text="${s}"></div>
+        <div class="form-row">
+            <div class="col-md-4">
+                <canvas id="myChart"></canvas>
+            </div>
+            <div class="col-md-8">
+                <h1 th:text="${r.success_cd_nm}" style="font-weight: 900" th:classappend="${r.success_cd_nm eq '합격'? 'text-success':'text-danger'}"></h1>
+                <p th:text="|(합격하려면 ${r.success_per}%를 달성해야 함)|"></p>
+                <ul class="list-inline">
+                    <li class="list-inline-item"><h2 th:text="|${r.correct_per}% 정답|"></h2></li>
+                    <li class="list-inline-item"><p th:text="|(${r.correct_cnt} / ${r.total_q_cnt})|"></p></li>
+                </ul>
+                <p th:text="|${r.start_dt} - ${r.end_dt}|"></p>
+                <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    상세 문제 검토
+                </button>
+            </div>
+        </div>
 
-    <div class="w-25">
-        <canvas id="myChart"></canvas>
+<!--    <p>-->
+<!--        <a class="btn btn-secondary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">-->
+<!--            Link with href-->
+<!--        </a>-->
+<!--        -->
+<!--    </p>-->
+    <div class="collapse" id="collapseExample">
+        <hr class="my-4">
+        <div th:unless="${#lists.isEmpty(r.resultDetails)}" th:each="detail, stat : ${r.resultDetails}" >
+            <div th:replace="fragments/resultDetail :: resultDetail(detail=${detail})"></div>
+        </div>
     </div>
 
     <div th:replace="fragments/footer :: footer"></div>
@@ -25,32 +50,49 @@
 
     <script th:inline="javascript">
 
-        const data = {
-            labels: [
-                '맞음',
-                '틀림',
-            ],
-            datasets: [{
-                label: 'My First Dataset',
-                data: [60, 40],
-                backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(54, 162, 235)'
-                    // 'rgb(255, 205, 86)'
+        let correct_cnt;
+        let wrong_cnt;
+
+        $(document).ready(function(){
+            correct_cnt = [[${r.correct_cnt}]];
+            wrong_cnt = [[${r.wrong_cnt}]];
+
+            const data = {
+                labels: [
+                    '맞음',
+                    '틀림',
                 ],
-                hoverOffset: 4
-            }]
-        };
+                datasets: [{
+                    label: 'My First Dataset',
+                    data: [correct_cnt, wrong_cnt],
+                    backgroundColor: [
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 99, 132)'
+                        // 'rgb(255, 205, 86)'
+                    ],
+                    hoverOffset: 4
+                }]
+            };
 
-        const config = {
-            type: 'doughnut',
-            data: data,
-        };
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options : {
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            };
 
-        const myChart = new Chart(
-            document.getElementById('myChart'),
-            config
-        );
+            const myChart = new Chart(
+                document.getElementById('myChart'),
+                config
+            );
+        });
+
+
     </script>
 </body>
 </html>

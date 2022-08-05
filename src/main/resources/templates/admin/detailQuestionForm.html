@@ -1,7 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header" />
-
 <body>
 
 <div class="container">
@@ -195,6 +194,16 @@
             max = Math.max(idx, max);
         });
         console.log(max);
+
+        let option_type;
+        let value = $("input[name='question.type']:checked").val();
+
+        if(value === 'S') {
+            option_type = "radio";
+        } else {
+            option_type = "checkbox";
+        }
+
         let i = max + 1;
         $('#options-root').append('<div id="options-lv2-'+i+'" class="input-group input-group-sm mb-1"></div>');
         $('#options-lv2-'+i).append('<div id="options-lv3-'+i+'" class="input-group-prepend">');
@@ -206,7 +215,21 @@
         $('#options-lv2-'+i).append('<input type="hidden" name="options['+i+'].del_yn" id="del_yn'+i+'" value="N">');
 
         $('#options-lv3-'+i).append('<div id="options-lv4-'+i+'" class="input-group-text justify-content-md-center" style="min-width: 50px">');
-        $('#options-lv4-'+i).append('<input type="radio" name="_dummy" id="dummy'+i+'" class="option">');
+        $('#options-lv4-'+i).append('<input type="'+option_type+'" name="_dummy" id="dummy'+i+'" class="option">');
+
+        $("input[name='_dummy']").change(function () {
+            let idx = this.id.slice(-1)
+            if(this.type == 'radio') {
+                $('[id^="real"]').val('N');
+                $("#real"+idx).val('Y');
+            } else {
+                if(this.checked) {
+                    $("#real"+idx).val('Y');
+                } else {
+                    $("#real"+idx).val('N');
+                }
+            }
+        });
 
     }
 

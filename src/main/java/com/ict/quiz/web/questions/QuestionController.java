@@ -4,17 +4,18 @@ import com.ict.quiz.domain.Category;
 import com.ict.quiz.domain.Question;
 import com.ict.quiz.domain.QuestionOption;
 import com.ict.quiz.domain.UserQuestion;
-import com.ict.quiz.session.SessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.util.ArrayUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -67,16 +68,11 @@ public class QuestionController {
         //log.info("questionOptions = {}", questionOptions);
         model.addAttribute("options", questionOptions);
 
-
-
         return "questions/question";
     }
 
     @PostMapping("/moveQuestion")
     public String question(UserQuestion userQuestion, Model model) throws Exception {
-
-        log.info("model = {}", model);
-        log.info("UserQuestion = {}", userQuestion);
 
         Long question_id = 0L;
         String progress = "/";
@@ -89,9 +85,7 @@ public class QuestionController {
                 question_id = Long.valueOf(q_set[i]);
                 progress = (i+1) + "/" + p_set.length;
                 percent = (int) Math.round( ((double)(i+1) / (double)p_set.length * 100));
-                log.info("i+1 = {}", i+1);
-                log.info("p_set.length = {}", p_set.length);
-                log.info("percent = {}", percent);
+
                 break;
             }
         }
@@ -124,16 +118,13 @@ public class QuestionController {
     @PostMapping("/end")
     public String end(@ModelAttribute UserQuestion userQuestion, Model model) {
 
-        log.info("userQuestion = {}", userQuestion);
-        log.info("model = {}", model);
-
         // 사용자화 문제 저장
         questionService.updateUserQuestion(userQuestion);
 
         // 채점
-        String s = questionService.saveScore(userQuestion);
-        log.info("s = {}", s);
-        model.addAttribute("s", s);
+        ResultForm rf = questionService.saveScore(userQuestion);
+
+        model.addAttribute("r", rf);
 
         return "questions/result";
     }
