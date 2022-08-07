@@ -7,7 +7,7 @@
 
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
 
-    <div class="py-4 text-center">
+    <div class="py-2 text-center">
         <h4>문제 등록</h4>
     </div>
 
@@ -193,7 +193,7 @@
             let idx = this.id.slice(-1)
             max = Math.max(idx, max);
         });
-        console.log(max);
+        //console.log(max);
 
         let option_type;
         let value = $("input[name='question.type']:checked").val();
@@ -238,7 +238,7 @@
         let idx = input.id.slice(-1);
         let selector = "[name=\"options["+idx+"].id\"]";
         let optionId = $(selector).val();
-        console.log("optionId = " + optionId);
+        //console.log("optionId = " + optionId);
         if(optionId != '') {
             console.log("지워져선 안돼");
             $('#options-lv-del'+idx).removeClass('btn-outline-secondary').addClass('btn-danger');

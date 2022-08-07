@@ -94,7 +94,7 @@ public class QuestionController {
 
         // 사용자화 문제 저장
         questionService.updateUserQuestion(userQuestion);
-        log.info("userQuestion = {}", userQuestion);
+        //log.info("userQuestion = {}", userQuestion);
         model.addAttribute("uq", userQuestion);
 
         // 문제 조회
@@ -127,6 +127,13 @@ public class QuestionController {
         model.addAttribute("r", rf);
 
         return "questions/result";
+    }
+
+    @GetMapping("/history")
+    public String history(Model model, HttpSession session) throws Exception {
+
+
+        return "questions/history";
     }
 
 }

@@ -7,8 +7,12 @@
 
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
 
-    <div>
+    <div class="py-2 text-center">
+        <h4>카테고리 선택</h4>
+    </div>
 
+    <hr class="my-4">
+    <div>
         <div class="row">
             <div class="col-sm-6" th:each="category : ${categoryList}" >
                 <div class="card">

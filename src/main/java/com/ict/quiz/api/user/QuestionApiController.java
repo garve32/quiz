@@ -100,20 +100,20 @@ public class QuestionApiController {
     @PostMapping("/move")
     public ResponseEntity move(@RequestBody UserQuestionReqDto req) {
 
-        log.info("req = {}", req);
+        //log.info("req = {}", req);
         questionService.updateUserQuestion(req);
 
         QuestionWithOptionResDto resDto = new QuestionWithOptionResDto();
 
         Question q = questionService.findById(req.getQuestion_id());
-        log.info("q = {}", q);
+        //log.info("q = {}", q);
         List<QuestionOption> o = questionService.findOptionByQuestionId(req.getQuestion_id());
-        log.info("o = {}", o);
+        //log.info("o = {}", o);
 
         resDto.setQuestion(q);
         resDto.setOptions(o);
 
-        log.info("resDto = {}", resDto);
+        //log.info("resDto = {}", resDto);
 
         return ResponseEntity.ok(resDto);
     }

@@ -29,7 +29,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         }
 
         User userInfo = (User) session.getAttribute(SessionConst.LOGIN_USER);
-        log.info("att = {}", userInfo);
 
         request.setAttribute("user_id", userInfo.getId());
 

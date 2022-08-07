@@ -12,13 +12,17 @@
 }
 
 .header > a:hover {
-  color: #545b62;
-  text-decoration: underline;
+  /*color: #545b62;*/
+  text-decoration: none;
 }
 
 .header > a > .form-inline > h4 {
   padding-bottom: 0px;
   margin-bottom:0px;
+}
+
+.text-bheader {
+  color: #1E2A3C !important;
 }
 
 .global-error {
@@ -56,3 +60,29 @@
   position: relative;
 }
 
+.font-size-85 {
+  font-size: 0.85rem;
+}
+
+
+input[type=radio]:checked.selected{
+  background-color: #007bff;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin-left: -1.25rem;
+  /*margin: 3px 3px 0px 5px;*/
+  border: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 100%;
+}
+
+input[type=checkbox]:checked.selected{
+  background-color: #007bff;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin-left: -1.25rem;
+  border: none;
+  width: 14px;
+  height: 14px;
+}

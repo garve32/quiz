@@ -9,14 +9,18 @@
 
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
 
-    <div class="jumbotron">
-        <h1>Quiz</h1>
-<!--        <p class="lead">회원 기능</p>-->
-        <p>
-            <a class="btn btn-lg btn-info" href="/users/add">사용자 등록</a>
-            <a class="btn btn-lg btn-info" href="/users/login">로그인</a>
-        </p>
-
+    <div class="card my-4">
+        <div class="card-body">
+            <h3 class="card-title font-weight-bolder">
+                <span class="text-primary">자격증 취득</span>을 위한 셀프 진단
+            </h3>
+            <h5 class="card-title">모의고사를 진행하면서 실전 감각을 익히세요.</h5>
+            <button class="w-100 btn btn-primary btn-lg" type="button" th:onclick="|location.href='@{/users/login}'|">
+                로그인
+            </button>
+            <p class="text-secondary">개인 이력 관리만을 위한 로그인 기능입니다. 민감한 개인 정보는 저장하지 않습니다.</p>
+            <a class="card-link" href="/users/add">사용자 등록</a>
+        </div>
     </div>
 
     <div th:replace="fragments/footer :: footer" />

@@ -8,54 +8,37 @@
 
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
 
-    <div class="py-4 text-center">
+    <div class="py-2 text-center">
         <h4>문제 관리</h4>
     </div>
 
     <hr class="my-4">
 
     <form th:action="@{/admin/questions}" method="get">
-    <div class="row my-4 mx-1">
-
-
-            <div class="input-group">
-
-                    <input type="text" class="form-control" name="searchKeyword" th:value="${searchKeyword}" placeholder="카테고리" aria-label="Search Category" aria-describedby="button-addon4">
-                    <div class="input-group-append" id="button-addon4">
-                        <button type="submit" class="btn btn-outline-secondary" >검색</button>
-                        <button type="button" class="btn btn-outline-secondary" th:onclick="|location.href='@{/admin/questions}'|">초기화</button>
-                        <button type="button" class="btn btn-outline-primary" th:onclick="|location.href='@{/admin/question/add}'|">등록</button>
+        <div class="row my-4 mx-1">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">Dropdown</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">카테고리</a>
+                        <a class="dropdown-item" href="#">문제</a>
                     </div>
-
+                </div>
+                <input type="text" class="form-control" name="searchKeyword" th:value="${searchKeyword}" placeholder="카테고리" aria-label="Search Category" aria-describedby="button-addon4">
+                <div class="input-group-append" id="button-addon4">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary" >검색</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" th:onclick="|location.href='@{/admin/questions}'|">초기화</button>
+                    <button type="button" class="btn btn-sm btn-primary" th:onclick="|location.href='@{/admin/question/add}'|">등록</button>
+                </div>
             </div>
-
-
-<!--        <div class="col">-->
-<!--            <button type="button" class="btn btn-primary float-right" th:onclick="|location.href='@{/admin/question/add}'|">문제 등록</button>-->
-<!--        </div>-->
-    </div>
+        </div>
     </form>
-
-<!--    <hr class="my-4">-->
-
-<!--    <th:block layout:fragment="content">-->
     <div class="table-responsive">
-
-
-
-<!--        <div class="form-group">-->
-<!--            <form th:action="@{/admin/questions}" method="get">-->
-
-<!--                <input type="text" class="form-control" name="searchKeyword" th:value="${searchKeyword}"  placeholder="카테고리 검색" size="10" >-->
-<!--                <button type="submit" class="btn btn-info btn-sm" >Search</button>-->
-<!--                <button type="submit" class="btn btn-info btn-sm" >Reset</button>-->
-<!--            </form>-->
-<!--        </div>-->
-        <table class="table table-sm table-hover">
+        <table class="table table-sm table-hover font-size-85">
             <thead>
             <tr>
                 <th scope="col" >id</th>
-                <th scope="col" th:class="w-75">title</th>
+                <th scope="col" th:class="w-75">문제</th>
                 <th scope="col" >카테고리</th>
             </tr>
 
@@ -63,24 +46,18 @@
             <tbody>
             <tr th:each="item : ${list}">
                 <td><span th:text="${item.id}">id</span></td>
-                <td><a th:href="|/admin/question/${item.id}|"><span th:text="${#strings.abbreviate(item.text,50)}">text</span></a></td>
-                <td><span th:text="${item.category_id}">category_id</span></td>
+                <td><a th:href="|/admin/question/${item.id}|"><span th:text="${#strings.abbreviate(item.text,75)}">text</span></a></td>
+                <td><span th:text="${item.category_nm}">category_nm</span></td>
             </tr>
             </tbody>
         </table>
-
-<!--        <div class="btn_wrap text-right">-->
-<!--            <a th:href="@{/board/write.do}" class="btn btn-primary waves-effect waves-light">Write</a>-->
-<!--        </div>-->
 
         <th:block layout:fragment="paging">
             <nav th:replace="fragments/paging :: pagination"></nav>
         </th:block>
     </div>
-<!--    </th:block>-->
 
     <div th:replace="fragments/footer :: footer" />
-
 
 </div>
 <th:block layout:fragment="script">

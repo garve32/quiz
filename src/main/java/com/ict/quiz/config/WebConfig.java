@@ -1,6 +1,7 @@
 package com.ict.quiz.config;
 
 import com.ict.quiz.config.filter.LogFilter;
+import com.ict.quiz.config.interceptor.LoginCheckInterceptor;
 import com.ict.quiz.web.argumentresolver.LoginUserArgumentResolver;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Configuration;
@@ -53,11 +54,11 @@ public class WebConfig implements WebMvcConfigurer {
 //                .addPathPatterns("/**")
 //                .excludePathPatterns("/js/**", "/css/**", "/*.ico", "/error");
 
-//        registry.addInterceptor(new LoginCheckInterceptor())
-//                .order(2)
-//                .addPathPatterns("/**")
-//                .excludePathPatterns("/", "/users/add", "/users/login", "/logout", "/api/**",
-//                        "/js/**", "/css/**", "/*.ico", "/error");
+        registry.addInterceptor(new LoginCheckInterceptor())
+                .order(2)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/", "/users/add", "/users/login", "/logout", "/api/**",
+                        "/js/**", "/css/**", "/*.ico", "/*.svg", "/error");
     }
 
     @Override

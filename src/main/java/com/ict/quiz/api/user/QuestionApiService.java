@@ -46,15 +46,15 @@ public class QuestionApiService {
 
         for (int i = 0; i < q_set.length; i++) {
             String q = q_set[i];
-            log.info("q = {}", q);
-            log.info("a = {}", a_set[i]);
+            //log.info("q = {}", q);
+            //log.info("a = {}", a_set[i]);
             String correctAnswer = questionMapper.findCorrectByQuestionId(Long.valueOf(q));
             if(correctAnswer.equals(a_set[i])) {
-                log.info("##{} 번 문제 맞음!", q);
+                //log.info("##{} 번 문제 맞음!", q);
                 c_set[i] = "1";
                 correct_cnt++;
             } else {
-                log.info("##{} 번 문제 틀림!", q);
+                //log.info("##{} 번 문제 틀림!", q);
                 c_set[i] = "0";
 
             }
@@ -78,7 +78,7 @@ public class QuestionApiService {
         }
 
         String correct_set = String.join(",", c_set);
-        log.info("correct_set = {}", correct_set);
+        //log.info("correct_set = {}", correct_set);
         userQuestion.setCorrect_set(correct_set);
         userQuestion.setSuccess_cd(success_cd);
 

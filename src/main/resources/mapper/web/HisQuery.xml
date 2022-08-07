@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ict.quiz.web.questions.HisMapper">
+
+    <select id="getHisList" resultType="HisForm">
+        select t1.id, t2.name as category_nm
+             , if(t1.success_cd = 'S', '합격', '불합격') as success_cd_nm
+             , t2.success_percent as success_per
+             , length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1 as total_q_cnt
+             , length(t1.correct_set) - length(replace(t1.correct_set, '1', '')) as correct_cnt
+             , length(t1.correct_set) - length(replace(t1.correct_set, '0', '')) as wrong_cnt
+             , round((length(t1.correct_set) - length(replace(t1.correct_set, '1', '')))
+                         / (length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1)
+            * 100) as correct_per
+             , DATE_FORMAT(start_dt, '%Y년 %m월 %d일 %H:%i') as start_dt
+             , DATE_FORMAT(end_dt, '%Y년 %m월 %d일 %H:%i') as end_dt
+        from user_question t1
+                 inner join category t2
+                            on t1.category_id = t2.id
+        where t1.user_id = #{user_id}
+        order by t1.id desc
+    </select>
+
+    <select id="getHisDetail" resultType="HisDetail">
+        select t1.id
+             , t1.question_set
+             , t1.answer_set
+             , t1.correct_set
+             , t2.name as category_nm
+             , if(t1.success_cd = 'S', '합격', '불합격') as success_cd_nm
+             , t2.success_percent as success_per
+             , length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1 as total_q_cnt
+             , length(t1.correct_set) - length(replace(t1.correct_set, '1', '')) as correct_cnt
+             , length(t1.correct_set) - length(replace(t1.correct_set, '0', '')) as wrong_cnt
+             , round((length(t1.correct_set) - length(replace(t1.correct_set, '1', '')))
+                         / (length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1)
+            * 100) as correct_per
+             , DATE_FORMAT(start_dt, '%Y년 %m월 %d일 %H:%i') as start_dt
+             , DATE_FORMAT(end_dt, '%Y년 %m월 %d일 %H:%i') as end_dt
+        from user_question t1
+                 inner join category t2
+                            on t1.category_id = t2.id
+        where t1.id = #{id}
+    </select>
+
+</mapper>

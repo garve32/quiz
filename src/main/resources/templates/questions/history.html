@@ -8,17 +8,18 @@
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
 
     <div class="py-2 text-center">
-        <h4>테스트 결과</h4>
+        <h4>시험 이력</h4>
     </div>
 
     <hr class="my-4">
 
-    <div th:replace="fragments/hisDetail :: hisDetail(r=${r})" />
+    <div th:unless="${#lists.isEmpty(hl)}" th:each="d, stat : ${hl}"
+         th:id="|rd-${stat.count}|">
+        <div th:replace="fragments/hisItem :: hisItem(d=${d}, idx=${stat.count})"></div>
+    </div>
 
     <div th:replace="fragments/footer :: footer"></div>
 
 </div> <!-- /container -->
-
-
 </body>
 </html>

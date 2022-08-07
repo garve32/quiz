@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="hisItem(d, idx)">
+
+    <div class="card mb-3 p-2">
+        <div class="form-row">
+            <div class="col-sm-2 d-none d-sm-block">
+                <canvas th:id="|chart-${idx}|"></canvas>
+            </div>
+            <div class="col-sm-auto">
+                <h6 th:text="|카테고리 : ${d.category_nm}|"></h6>
+                <h5>
+                    <span class="badge" th:text="${d.success_cd_nm}" th:classappend="${d.success_cd_nm eq '합격'? 'badge-success':'badge-danger'}"></span>
+<!--                    <span th:text="|(합격하려면 ${d.success_per}%를 달성해야 함)|" th:remove="tag"></span>-->
+                    <span th:text="|${d.correct_per}% 정답|" th:remove="tag"></span>
+                    <span th:text="|(${d.correct_cnt}/${d.total_q_cnt})|" th:remove="tag"></span>
+                    <button class="btn btn-sm btn-outline-secondary"
+                            th:onclick="|location.href='@{/his/detail}/${d.id}'|">
+                        상세 문제 검토
+                    </button>
+                </h5>
+
+                <span th:text="${d.start_dt}"></span>
+                <span> ~ </span>
+                <br class="d-block d-sm-none">
+                <span th:text="${d.end_dt}"></span>
+
+            </div>
+        </div>
+
+        <script th:inline="javascript">
+
+            $(document).ready(function(){
+                let correct_cnt = [[${d.correct_cnt}]];
+                let wrong_cnt = [[${d.wrong_cnt}]];
+                let idx = [[${idx}]];
+
+                const data = {
+                    labels: [
+                        '맞음',
+                        '틀림',
+                    ],
+                    datasets: [{
+                        label: 'My First Dataset',
+                        data: [correct_cnt, wrong_cnt],
+                        backgroundColor: [
+                            // 'rgb(54, 162, 235)',
+                            // 'rgb(255, 99, 132)'
+                            // 'rgb(255, 205, 86)'
+                            // 'rgb(172, 210, 204)',
+                            // 'rgb(252, 174, 160)',
+                            // 'rgb(71, 179, 156)',
+                            // 'rgb(255, 193, 84)'
+                            'rgb(43, 112, 167)',
+                            'rgb(239, 65, 54)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                };
+
+                const config = {
+                    type: 'doughnut',
+                    data: data,
+                    options : {
+                        cutout: '75%',
+                        plugins: {
+                            legend: {
+                                display: false,
+                            }
+                        }
+                    }
+                };
+
+                const myChart = new Chart(
+                    document.getElementById('chart-'+idx),
+                    config
+                );
+            });
+
+        </script>
+    </div>
+</div>

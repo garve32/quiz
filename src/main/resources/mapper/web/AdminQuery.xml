@@ -4,8 +4,11 @@
 <mapper namespace="com.ict.quiz.web.admin.AdminMapper">
 
     <select id="findAllQuestions" parameterType="QuestionPage" resultType="QuestionPage">
-        select id, text, image_name, image, seq, use_yn, category_id
-          from question
+        select t1.id, t1.text, t1.image_name, t1.image, t1.seq, t1.use_yn, t1.category_id
+             , t2.name as category_nm
+          from question t1
+               inner join category t2
+                       on t2.id = t1.category_id
          order by id
          limit #{pagination.firstRecordIndex}, #{recordsPerPage}
     </select>

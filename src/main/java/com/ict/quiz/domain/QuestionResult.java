@@ -16,6 +16,7 @@ public class QuestionResult {
     private String image_name;
     @ApiModelProperty(example = "iVBORw0KGgoAAAANSUhEUgAAAPIAAA...")
     private byte[] image;
+    private String encoded_image;
     @ApiModelProperty(example = "0")
     private int seq;
     @ApiModelProperty(example = "Y")

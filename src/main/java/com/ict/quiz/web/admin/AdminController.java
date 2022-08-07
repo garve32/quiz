@@ -135,20 +135,20 @@ public class AdminController {
         // update 시 file name이 있고 파일이 없으면? 파일업데이트 하면 안됨
         // update 시 file name이 있고 파일이 있으면? 파일업데이트 해야 됨
         if(question.getId() == null) {
-            log.info("insert = {}", question);
+            //log.info("insert = {}", question);
             adminService.insertQuestion(question);
         } else {
             if(question.getImage_name().isEmpty()) {
-                log.info("update with file = {}", question);
+                //log.info("update with file = {}", question);
                 adminService.updateQuestion(question);
             } else {
                 if(upload.getSize() > 0) {
                     // 파일 업데이트 해야함
-                    log.info("update with file = {}", question);
+                    //log.info("update with file = {}", question);
                     adminService.updateQuestion(question);
                 } else {
                     // 파일 업데이트 하면 안됨
-                    log.info("update without file = {}", question);
+                    //log.info("update without file = {}", question);
                     adminService.updateQuestionNotFile(question);
                 }
             }
@@ -162,10 +162,10 @@ public class AdminController {
             option.setQuestion_id(question.getId());
             // Option 아이디가 없으면 insert
             if(option.getId() == null) {
-                log.info("insert option = {}", option);
+                //log.info("insert option = {}", option);
                 adminService.insertOption(option);
             } else {
-                log.info("update option = {}", option);
+                //log.info("update option = {}", option);
                 adminService.updateOption(option);
             }
         }

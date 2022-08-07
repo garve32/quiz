@@ -1,14 +1,13 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header" />
-
 <body>
 
 <div class="container">
 
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
 
-    <div class="py-4 text-center">
+    <div class="py-2 text-center">
         <h4>로그인</h4>
     </div>
 
@@ -28,13 +27,6 @@
             <div class="field-error" th:errors="*{login_id}" />
         </div>
 
-
-<!--        <div class="form-group">-->
-<!--            <label for="login_id">로그인 ID</label>-->
-<!--            <input type="text" id="login_id" th:field="*{login_id}" class="form-control"-->
-<!--                   th:errorclass="field-error">-->
-<!--            <div class="field-error" th:errors="*{login_id}" />-->
-<!--        </div>-->
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text" style="min-width: 100px">비밀번호</span>

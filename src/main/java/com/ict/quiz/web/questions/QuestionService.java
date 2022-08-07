@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.quiz.domain.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
@@ -65,6 +66,10 @@ public class QuestionService {
 
             QuestionResult questionResult = om.convertValue(question, QuestionResult.class);
             questionResult.setCorrect_yn("1".equals(c_set[i]) ? "Y" : "N");
+            if(question.getImage() != null &&question.getImage().length > 0) {
+                String image = Base64.encodeBase64String(question.getImage());
+                questionResult.setEncoded_image(image);
+            }
             questionResultDetail.setQuestion(questionResult);
 
             List<QuestionOption> options = questionMapper.findByQuestionId(Long.valueOf(q));
@@ -72,7 +77,7 @@ public class QuestionService {
             for (QuestionOption option : options) {
                 QuestionOptionResult questionOptionResult = om.convertValue(option, QuestionOptionResult.class);
                 String[] split = a_set[i].split(":");
-                boolean b = Arrays.stream(split).anyMatch(a -> Long.valueOf(a).equals(option.getId()));
+                boolean b = Arrays.stream(split).anyMatch(a -> String.valueOf(option.getId()).equals(a));
                 //log.info("question = {}, a_set[i] = {}, option_id = {}, boolean = {}", q, a_set[i], option.getId(), b);
                 if(b) {
                     questionOptionResult.setSelect_yn("Y");
@@ -113,6 +118,7 @@ public class QuestionService {
         userQuestion.setSuccess_cd(success_cd);
         questionMapper.updateUserQuestion(userQuestion);
 
+        // 풀이한 문제 셋의 결과
         ResultForm resultForm = new ResultForm();
         resultForm.setId(userQuestion.getId());
         resultForm.setCategory_nm(category.getName());
@@ -127,6 +133,7 @@ public class QuestionService {
         String end_dt = userQuestion.getEnd_dt().format(fm);
         resultForm.setStart_dt(start_dt);
         resultForm.setEnd_dt(end_dt);
+        // 풀이한 문제 리스트
         resultForm.setResultDetails(questionResultDetails);
 
         return resultForm;

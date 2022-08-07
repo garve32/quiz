@@ -57,13 +57,13 @@ public class AdminService {
 
         //adminMapper.addQuestion(q);
 
-        log.info("cnt bf = {}", o.size());
+        //log.info("cnt bf = {}", o.size());
         o.removeIf(item -> item.getSeq() == 0);
         o.sort(Comparator.comparing(QuestionOption::getSeq));
 
-        log.info("cnt af = {}", o.size());
+        //log.info("cnt af = {}", o.size());
         for (QuestionOption option : o) {
-            log.info("option = {}", option);
+            //log.info("option = {}", option);
             //option.setQuestion_id(q.getId());
             //adminMapper.addOption(option);
         }
