@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="resultDetail(detail, idx)">
 
-    <div class="card mb-3" id="q_item">
+    <div class="card py-2 my-2" id="q_item">
 
         <h5 class="card-header" th:if="${detail.question.correct_yn eq 'Y'}">
             <span class="badge badge-primary" th:text="|Q${idx}.맞음|">맞음</span>

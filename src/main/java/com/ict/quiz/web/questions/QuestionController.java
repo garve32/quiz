@@ -126,14 +126,8 @@ public class QuestionController {
 
         model.addAttribute("r", rf);
 
-        return "questions/result";
+        return "questions/historyDetail";
     }
 
-    @GetMapping("/history")
-    public String history(Model model, HttpSession session) throws Exception {
-
-
-        return "questions/history";
-    }
 
 }

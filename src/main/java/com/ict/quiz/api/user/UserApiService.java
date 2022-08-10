@@ -1,6 +1,9 @@
 package com.ict.quiz.api.user;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.quiz.domain.User;
 import com.ict.quiz.domain.UserQuestion;
+import com.ict.quiz.domain.api.UserAddReqDto;
 import com.ict.quiz.domain.api.UserQuestionHisResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,5 +33,21 @@ public class UserApiService {
 //        });
 
         return resList;
+    }
+
+    public User insertUser(UserAddReqDto reqDto) throws Exception {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        User user = objectMapper.convertValue(reqDto, User.class);
+        // 중복 확인
+        int cnt = userApiMapper.checkDup(user);
+        if(cnt > 0) {
+            throw new Exception("DUP");
+        }
+
+        // 생성
+        userApiMapper.insertUser(user);
+
+        return user;
     }
 }

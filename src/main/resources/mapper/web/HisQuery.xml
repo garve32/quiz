@@ -13,8 +13,8 @@
              , round((length(t1.correct_set) - length(replace(t1.correct_set, '1', '')))
                          / (length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1)
             * 100) as correct_per
-             , DATE_FORMAT(start_dt, '%Y년 %m월 %d일 %H:%i') as start_dt
-             , DATE_FORMAT(end_dt, '%Y년 %m월 %d일 %H:%i') as end_dt
+             , DATE_FORMAT(start_dt, '%m월 %d일 %H:%i') as start_dt
+             , DATE_FORMAT(end_dt, '%m월 %d일 %H:%i') as end_dt
         from user_question t1
                  inner join category t2
                             on t1.category_id = t2.id

@@ -3,6 +3,23 @@
 
 <mapper namespace="com.ict.quiz.api.user.UserApiMapper">
 
+    <select id="checkDup" resultType="int">
+        select count(*)
+        from user
+        where login_id = #{login_id}
+    </select>
+
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        insert into user (
+            login_id, password, name
+        )
+        values (
+                #{login_id}
+               , #{password}
+               , #{name}
+               )
+    </insert>
+
     <select id="findHisList" resultType="UserQuestion">
         select id, user_id, seq, category_id, question_set, progress_set
             , answer_set, correct_set, start_dt, end_dt, success_cd
