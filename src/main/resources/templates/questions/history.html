@@ -11,7 +11,7 @@
         <h4>시험 이력</h4>
     </div>
 
-    <hr class="my-4">
+    <hr class="my-2">
 
     <div th:unless="${#lists.isEmpty(hl)}" th:each="d, stat : ${hl}"
          th:id="|rd-${stat.count}|">

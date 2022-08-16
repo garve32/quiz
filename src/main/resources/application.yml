@@ -26,6 +26,9 @@ server:
   servlet:
     session:
       tracking-modes: cookie
+  reactive:
+    session:
+      timeout: 120m
 
 springfox:
   documentation:

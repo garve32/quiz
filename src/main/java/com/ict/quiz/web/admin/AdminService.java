@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -24,7 +22,6 @@ public class AdminService {
         question.setPagination(pagination);
 
         List<QuestionPage> allQuestions = adminMapper.findAllQuestions(question);
-
 
         return allQuestions;
     }
@@ -51,38 +48,6 @@ public class AdminService {
 
     public List<Category> findAllCategories() {
         return adminMapper.findAllCategories();
-    }
-
-    public void addQuestion(Question q, List<QuestionOption> o) throws IOException {
-
-        //adminMapper.addQuestion(q);
-
-        //log.info("cnt bf = {}", o.size());
-        o.removeIf(item -> item.getSeq() == 0);
-        o.sort(Comparator.comparing(QuestionOption::getSeq));
-
-        //log.info("cnt af = {}", o.size());
-        for (QuestionOption option : o) {
-            //log.info("option = {}", option);
-            //option.setQuestion_id(q.getId());
-            //adminMapper.addOption(option);
-        }
-
-//        String oriImgName = upload.getOriginalFilename();
-//        String imgName = "";
-//
-//        UUID uuid = UUID.randomUUID();
-//        imgName = uuid+"_"+oriImgName;
-//        String savePath = "files";
-//
-//
-//        if(!new File(savePath).exists()) {
-//            new File(savePath).mkdir();
-//        }
-//        String filePath = savePath+"\\"+imgName;
-//        upload.transferTo(new File(filePath));
-//
-//        log.info("path = {}", filePath);
     }
 
 }

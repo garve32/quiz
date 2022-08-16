@@ -3,19 +3,44 @@
 
 <mapper namespace="com.ict.quiz.web.admin.AdminMapper">
 
+    <sql id="search">
+        <!-- 검색 키워드가 있을 때 -->
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <!-- 검색 유형이 있을 때 -->
+                <when test="searchType != null and searchType != ''">
+                    <choose>
+                        <when test="'category'.equals( searchType )">
+                            AND t2.name LIKE CONCAT('%', #{searchKeyword}, '%')
+                        </when>
+                        <when test="'title'.equals( searchType )">
+                            AND t1.text LIKE CONCAT('%', #{searchKeyword}, '%')
+                        </when>
+                    </choose>
+                </when>
+            </choose>
+        </if>
+    </sql>
+
     <select id="findAllQuestions" parameterType="QuestionPage" resultType="QuestionPage">
         select t1.id, t1.text, t1.image_name, t1.image, t1.seq, t1.use_yn, t1.category_id
              , t2.name as category_nm
           from question t1
                inner join category t2
                        on t2.id = t1.category_id
+        where 1=1
+          <include refid="search" />
          order by id
          limit #{pagination.firstRecordIndex}, #{recordsPerPage}
     </select>
 
     <select id="findAllQuestionsCount" parameterType="QuestionPage" resultType="int">
         select count(*)
-          from question
+          from question t1
+                inner join category t2
+                on t2.id = t1.category_id
+         where 1=1
+        <include refid="search" />
     </select>
 
     <insert id="insertQuestion" parameterType="Question" useGeneratedKeys="true" keyProperty="id">

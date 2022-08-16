@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="hisItem(d, idx)">
 
-    <div class="card my-1 p-1">
+    <div class="card my-1 p-1 bg-light">
         <div class="form-row">
             <div class="col-sm-1 align-self-center d-none d-sm-block">
                 <canvas th:id="|chart-${idx}|"></canvas>
@@ -10,20 +10,20 @@
             <div class="col-sm-11">
                 <p class="mb-0" th:text="|카테고리 : ${d.category_nm}|"></p>
                 <h5 class="d-flex justify-content-between mb-0 align-items-end">
-                    <div>
-                    <span class="badge" th:text="${d.success_cd_nm}" th:classappend="${d.success_cd_nm eq '합격'? 'badge-success':'badge-danger'}"></span>
-                        <br class="d-block d-sm-none">
-                    <span th:text="|${d.correct_per}% 정답|" th:remove="tag"></span>
-                    <span th:text="|(${d.correct_cnt}/${d.total_q_cnt})|" th:remove="tag"></span>
+                    <div class="font-weight-bold">
+                        <span class="badge" th:text="${d.success_cd_nm}" th:classappend="${d.success_cd_nm eq '합격'? 'badge-success':'badge-danger'}"></span>
+                            <br class="d-block d-sm-none">
+                        <span th:text="|${d.correct_per}% 정답|" th:remove="tag"></span>
+                        <span th:text="|(${d.correct_cnt}/${d.total_q_cnt})|" th:remove="tag"></span>
                     </div>
 
-                    <div class="font-size-85">
+                    <div class="font-size-85 text-secondary">
                         <span th:text="${d.start_dt}"></span>
                         <span> ~ </span>
                         <br class="d-block d-sm-none">
                         <span th:text="${d.end_dt}"></span>
                     </div>
-                    <button class="btn btn-sm btn-outline-secondary"
+                    <button class="btn btn-sm btn-outline-dark"
                             th:onclick="|location.href='@{/his/detail}/${d.id}'|">
                         상세<br class="d-block d-sm-none">결과
                     </button>

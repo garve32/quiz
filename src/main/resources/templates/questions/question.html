@@ -16,16 +16,17 @@
         </h5>
 
         <div class="card-body">
-            <p class="card-text" style="white-space: pre-line" th:utext="${q.text}" />
+            <p class="card-text" style="white-space: pre-wrap;" th:utext="${q.text}" />
             <div class="image-area mb-3" th:if="${image}">
                 <img id="imageResult" th:if="${image}" th:src="*{'data:image/png;base64,'+ image}" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
             </div>
 
-            <hr class="my-4">
+            <hr class="my-2">
 
-            <div class="form-check px-4 py-2" th:each="option : ${options}">
-                    <input th:type="${q.type == 'S'?'radio':'checkbox'}" th:id="${optionStat.index}" th:name="ans" th:value="${option.id}" class="form-check-input">
-                <label th:for="${optionStat.index}" th:text="${option.text}" class="form-check-label">ITEM</label>
+            <div class="form-check px-4 py-1" th:each="option : ${options}">
+                <input th:type="${q.type == 'S'?'radio':'checkbox'}" th:id="${optionStat.index}" th:name="ans" th:value="${option.id}" class="form-check-input">
+<!--                <label th:for="${optionStat.index}" th:utext="${option.text}" class="form-check-label">ITEM</label>-->
+                <label th:for="${optionStat.index}" class="form-check-label"><pre class="my-0" style="white-space: pre-wrap;" th:utext="${option.text}">ITEM</pre></label>
             </div>
         </div>
     </div>

@@ -12,19 +12,23 @@
         <h4>문제 관리</h4>
     </div>
 
-    <hr class="my-4">
+    <hr class="my-2">
 
     <form th:action="@{/admin/questions}" method="get">
         <div class="row my-4 mx-1">
-            <div class="input-group input-group-sm">
+            <div class="input-group input-group-sm" id="searchForm">
                 <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">Dropdown</button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">카테고리</a>
-                        <a class="dropdown-item" href="#">문제</a>
-                    </div>
+                    <select class="form-control form-control-sm" id="searchType" th:name="searchType">
+                        <option value="category">카테고리</option>
+                        <option value="title">문제</option>
+                    </select>
+<!--                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">Dropdown</button>-->
+<!--                    <div class="dropdown-menu">-->
+<!--                        <a class="dropdown-item" href="#">카테고리</a>-->
+<!--                        <a class="dropdown-item" href="#">문제</a>-->
+<!--                    </div>-->
                 </div>
-                <input type="text" class="form-control" name="searchKeyword" th:value="${searchKeyword}" placeholder="카테고리" aria-label="Search Category" aria-describedby="button-addon4">
+                <input type="text" class="form-control input-group-append" id="searchKeyword" name="searchKeyword" th:value="${searchKeyword}" placeholder="카테고리" aria-label="Search Category" aria-describedby="button-addon4">
                 <div class="input-group-append" id="button-addon4">
                     <button type="submit" class="btn btn-sm btn-outline-secondary" >검색</button>
                     <button type="button" class="btn btn-sm btn-outline-secondary" th:onclick="|location.href='@{/admin/questions}'|">초기화</button>
@@ -63,6 +67,25 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         /*<![CDATA[*/
+
+        $(document).ready(function(){
+            setQueryStringParams();
+        });
+
+        function setQueryStringParams() {
+
+            if ( !location.search ) {
+                return false;
+            }
+            new URLSearchParams(location.search).forEach((value, key) => {
+                if(key == 'searchType') {
+                    $("#searchType").val(value).prop("selected", true);
+                } else if(key == 'searchKeyword') {
+                    $('#searchKeyword').val(value);
+                }
+            })
+        }
+
         function movePage(uri, queryString) {
             location.href = uri + queryString;
         }

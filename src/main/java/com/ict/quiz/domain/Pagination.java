@@ -2,9 +2,11 @@ package com.ict.quiz.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class Pagination {
 
     /** 페이징 계산에 필요한 파라미터들이 담긴 클래스 */

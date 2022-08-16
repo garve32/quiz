@@ -2,11 +2,13 @@ package com.ict.quiz.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Getter
 @Setter
+@ToString
 public class Criteria {
 
     /** 현재 페이지 번호 */

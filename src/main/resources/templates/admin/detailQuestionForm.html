@@ -11,7 +11,7 @@
         <h4>문제 등록</h4>
     </div>
 
-    <hr class="my-4">
+    <hr class="my-2">
 
     <form th:action="@{/admin/question/save}"  method="post" enctype="multipart/form-data">
         <div th:object="${q}">
@@ -80,7 +80,7 @@
                 </div>
             </div>
             <!-- question End -->
-            <hr class="my-4">
+            <hr class="my-2">
 
             <div class="input-group input-group-sm my-1">
                 <div class="input-group-prepend">
@@ -101,7 +101,8 @@
                         </div>
                     </div>
                     <input type="text" class="form-control number-seq" th:field="*{options[__${stat.index}__].seq}" th:value="${option.seq}" th:readonly="${option.del_yn eq 'Y' ? 'readonly': false}">
-                    <input type="text" class="form-control" th:field="*{options[__${stat.index}__].text}" th:value="${option.text}" th:readonly="${option.del_yn eq 'Y' ? 'readonly': false}">
+<!--                    <input type="text" class="form-control" th:field="*{options[__${stat.index}__].text}" th:value="${option.text}" th:readonly="${option.del_yn eq 'Y' ? 'readonly': false}">-->
+                    <textarea class="form-control overflow-hidden" rows="1" th:field="*{options[__${stat.index}__].text}" th:value="${option.text}" th:readonly="${option.del_yn eq 'Y' ? 'readonly': false}"></textarea>
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" th:id="|options-lv-del${stat.index}|" type="button" onclick="delOption(this)">X</button>
                     </div>
@@ -116,8 +117,8 @@
                             <input th:id="|dummy${stat.index}|" th:name="_dummy" th:type="${q.question.type == 'S'?'radio':'checkbox'}" class="option">
                         </div>
                     </div>
-                    <input type="text" class="form-control number-seq" th:name="'options['+${stat.index}+'].seq'" >
-                    <input type="text" class="form-control" th:name="'options['+${stat.index}+'].text'">
+                    <input type="text" class="form-control number-seq" th:name="'options['+${stat.index}+'].seq'" th:value="${stat.count}">
+                    <textarea class="form-control overflow-hidden" rows="1" th:name="'options['+${stat.index}+'].text'"></textarea>
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" th:id="|options-lv-del${stat.index}|" type="button" onclick="delOption(this)">X</button>
                     </div>
@@ -130,7 +131,7 @@
 
             <button type="button" class="btn btn-sm btn-outline-secondary w-100" onclick="addOption()">선택지 추가</button>
 
-            <hr class="my-4">
+            <hr class="my-2">
 
             <div class="row">
                 <div class="col">
@@ -209,7 +210,8 @@
         $('#options-lv2-'+i).append('<div id="options-lv3-'+i+'" class="input-group-prepend">');
         $('#options-lv2-'+i).append('<input type="hidden" name="options['+i+'].id">');
         $('#options-lv2-'+i).append('<input type="text" class="form-control number-seq" name="options['+i+'].seq">');
-        $('#options-lv2-'+i).append('<input type="text" class="form-control" name="options['+i+'].text">');
+        $('#options-lv2-'+i).append('<textarea class="form-control overflow-hidden" rows="1" name="options['+i+'].text"></textarea>');
+        //$('#options-lv2-'+i).append('<input type="text" class="form-control" name="options['+i+'].text">');
         $('#options-lv2-'+i).append('<div class="input-group-append"><button id="options-lv-del'+i+'" class="btn btn-outline-secondary" type="button" onclick="delOption(this)">X</button></div>');
         $('#options-lv2-'+i).append('<input type="hidden" name="options['+i+'].correct_yn" id="real'+i+'" value="N">');
         $('#options-lv2-'+i).append('<input type="hidden" name="options['+i+'].del_yn" id="del_yn'+i+'" value="N">');
@@ -240,12 +242,20 @@
         let optionId = $(selector).val();
         //console.log("optionId = " + optionId);
         if(optionId != '') {
-            console.log("지워져선 안돼");
-            $('#options-lv-del'+idx).removeClass('btn-outline-secondary').addClass('btn-danger');
-            $('#dummy'+idx).prop('disabled', true);
-            $('#options'+idx+'\\.seq').prop('readonly', true);
-            $('#options'+idx+'\\.text').prop('readonly', true);
-            $('#del_yn'+idx).val('Y');
+
+            if($('#del_yn'+idx).val() == 'Y' ) {
+                $('#options-lv-del'+idx).removeClass('btn-danger').addClass('btn-outline-secondary');
+                $('#dummy'+idx).prop('disabled', false);
+                $('#options'+idx+'\\.seq').prop('readonly', false);
+                $('#options'+idx+'\\.text').prop('readonly', false);
+                $('#del_yn'+idx).val('N');
+            } else {
+                $('#options-lv-del'+idx).removeClass('btn-outline-secondary').addClass('btn-danger');
+                $('#dummy'+idx).prop('disabled', true);
+                $('#options'+idx+'\\.seq').prop('readonly', true);
+                $('#options'+idx+'\\.text').prop('readonly', true);
+                $('#del_yn'+idx).val('Y');
+            }
 
         } else {
             $('#options-lv2-'+idx).remove();

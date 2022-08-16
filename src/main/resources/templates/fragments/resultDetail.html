@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="resultDetail(detail, idx)">
 
-    <div class="card py-2 my-2" id="q_item">
+    <div class="card my-2" id="q_item">
 
         <h5 class="card-header" th:if="${detail.question.correct_yn eq 'Y'}">
             <span class="badge badge-primary" th:text="|Q${idx}.맞음|">맞음</span>
@@ -16,10 +16,10 @@
                 <img id="imageResult" th:if="${detail.question.encoded_image}" th:src="*{'data:image/png;base64,'+ detail.question.encoded_image}" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
             </div>
 
-            <hr class="my-4">
+            <hr class="my-2">
 
             <div class="form-check" th:each="option : ${detail.options}">
-                <input th:type="${detail.question.type == 'S'?'radio':'checkbox'}" th:checked="${option.select_yn eq 'Y'}" class="form-check-input form-check-inline selected" disabled>
+                <input th:type="${detail.question.type == 'S'?'radio':'checkbox'}" th:checked="${option.select_yn eq 'Y'}" style="margin-top: 6px;" class="form-check-input selected" disabled>
                 <label th:text="${option.text}" class="form-check-label d-inline font-size-85">ITEM</label>
                 <span class="badge badge-success" th:if="${option.correct_yn eq 'Y'}">정답</span>
             </div>

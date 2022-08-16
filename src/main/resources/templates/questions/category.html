@@ -11,10 +11,10 @@
         <h4>카테고리 선택</h4>
     </div>
 
-    <hr class="my-4">
+    <hr class="my-2">
     <div>
         <div class="row">
-            <div class="col-sm-6" th:each="category : ${categoryList}" >
+            <div class="col-sm-6 my-2" th:each="category : ${categoryList}" >
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title" th:utext="${category.name}">Category Title</h5>
