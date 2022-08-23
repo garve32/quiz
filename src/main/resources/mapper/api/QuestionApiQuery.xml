@@ -101,6 +101,12 @@
         where id = #{id}
     </select>
 
+    <select id="getCategory" resultType="Category">
+        select id, p_id, name, description, time_limit, question_cnt
+        , success_type, success_cnt, success_percent, use_yn
+        from category
+        where id = #{category_id}
+    </select>
 
 
 </mapper>
