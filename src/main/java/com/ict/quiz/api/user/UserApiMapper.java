@@ -1,5 +1,6 @@
 package com.ict.quiz.api.user;
 
+import com.ict.quiz.domain.HisDetail;
 import com.ict.quiz.domain.User;
 import com.ict.quiz.domain.UserQuestion;
 import com.ict.quiz.domain.api.UserQuestionHisResDto;
@@ -9,9 +10,11 @@ import java.util.List;
 
 @Mapper
 public interface UserApiMapper {
-    List<UserQuestion> findHisList(Long user_id);
+    List<UserQuestionHisResDto> findHisList(Long user_id);
 
     int checkDup(User user);
 
     void insertUser(User user);
+
+    HisDetail findHisDetail(Long id);
 }

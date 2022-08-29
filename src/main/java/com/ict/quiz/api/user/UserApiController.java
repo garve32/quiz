@@ -3,6 +3,7 @@ package com.ict.quiz.api.user;
 import com.ict.quiz.domain.User;
 import com.ict.quiz.domain.api.ErrorResult;
 import com.ict.quiz.domain.api.UserAddReqDto;
+import com.ict.quiz.domain.api.UserQuestionHisDetailResDto;
 import com.ict.quiz.domain.api.UserQuestionHisResDto;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -56,5 +57,18 @@ public class UserApiController {
         List<UserQuestionHisResDto> userQuestionHisResDto = userApiService.findHisList(user_id);
 
         return ResponseEntity.ok(userQuestionHisResDto);
+    }
+
+    @ApiOperation(
+            value = "사용자 문제 이력 상세 조회"
+            , notes = "사용자 문제 셋 ID로 문제 풀이 이력 상세를 조회한다."
+            , response = UserQuestionHisDetailResDto.class
+    )
+    @GetMapping("/his/{id}")
+    public ResponseEntity hisDetail(@PathVariable("id") Long id) {
+
+        UserQuestionHisDetailResDto hisDetail = userApiService.findHisDetail(id);
+
+        return ResponseEntity.ok(hisDetail);
     }
 }

@@ -10,8 +10,9 @@ public class HisDetail {
     private String question_set;
     private String answer_set;
     private String correct_set;
-
+    private Long category_id;
     private String category_nm;
+    private String success_cd;
     private String success_cd_nm;
     private int success_per;
     private int total_q_cnt;

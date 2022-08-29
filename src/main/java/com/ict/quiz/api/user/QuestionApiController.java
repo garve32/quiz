@@ -2,7 +2,7 @@ package com.ict.quiz.api.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.ict.quiz.domain.CategoryResDto;
+import com.ict.quiz.domain.api.CategoryResDto;
 import com.ict.quiz.domain.Question;
 import com.ict.quiz.domain.QuestionOption;
 import com.ict.quiz.domain.UserQuestion;

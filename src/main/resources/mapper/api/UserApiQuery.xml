@@ -20,14 +20,42 @@
                )
     </insert>
 
-    <select id="findHisList" resultType="UserQuestion">
-        select id, user_id, seq, category_id, question_set, progress_set
-            , answer_set, correct_set, start_dt, end_dt, success_cd
-          from user_question
-        where user_id = #{user_id}
-        order by seq
+    <select id="findHisList" resultType="UserQuestionHisResDto">
+        select t1.id, t1.user_id, t1.seq, t1.category_id, t2.name as category_nm
+             , t1.question_set, t1.progress_set
+             , t1.answer_set, t1.correct_set, t1.start_dt, t1.end_dt, t1.success_cd
+             , length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1 as question_cnt
+             , length(t1.correct_set) - length(replace(t1.correct_set, '1', '')) as correct_cnt
+          from user_question t1
+               inner join category t2
+                       on t2.id = t1.category_id
+        where t1.user_id = #{user_id}
+        order by t1.seq
     </select>
 
+    <select id="findHisDetail" resultType="HisDetail">
+        select t1.id
+             , t1.question_set
+             , t1.answer_set
+             , t1.correct_set
+             , t1.category_id
+             , t2.name as category_nm
+             , t1.success_cd
+             , if(t1.success_cd = 'S', '합격', '불합격') as success_cd_nm
+             , t2.success_percent as success_per
+             , length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1 as total_q_cnt
+             , length(t1.correct_set) - length(replace(t1.correct_set, '1', '')) as correct_cnt
+             , length(t1.correct_set) - length(replace(t1.correct_set, '0', '')) as wrong_cnt
+             , round((length(t1.correct_set) - length(replace(t1.correct_set, '1', '')))
+                         / (length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1)
+            * 100) as correct_per
+             , DATE_FORMAT(start_dt, '%Y년 %m월 %d일 %H:%i') as start_dt
+             , DATE_FORMAT(end_dt, '%Y년 %m월 %d일 %H:%i') as end_dt
+        from user_question t1
+                 inner join category t2
+                            on t1.category_id = t2.id
+        where t1.id = #{id}
+    </select>
 
 
 </mapper>

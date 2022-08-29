@@ -1,4 +1,4 @@
-package com.ict.quiz.domain;
+package com.ict.quiz.domain.api;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CategoryResDto {
 
-        @ApiModelProperty(example = "3" ,name = "asdasd")
+        @ApiModelProperty(example = "3")
         private Long id;
         @ApiModelProperty(example = "1")
         private Long p_id;
@@ -28,5 +28,7 @@ public class CategoryResDto {
         private int success_percent;
         @ApiModelProperty( example = "Y")
         private String use_yn;
+        @ApiModelProperty( example = "https://image.com/image.png")
+        private String logo_url;
 
 }

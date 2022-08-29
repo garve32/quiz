@@ -27,7 +27,9 @@
              , t1.question_set
              , t1.answer_set
              , t1.correct_set
+             , t1.category_id
              , t2.name as category_nm
+             , t1.success_cd
              , if(t1.success_cd = 'S', '합격', '불합격') as success_cd_nm
              , t2.success_percent as success_per
              , length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1 as total_q_cnt

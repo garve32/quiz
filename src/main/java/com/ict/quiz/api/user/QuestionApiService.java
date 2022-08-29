@@ -1,6 +1,7 @@
 package com.ict.quiz.api.user;
 
 import com.ict.quiz.domain.*;
+import com.ict.quiz.domain.api.CategoryResDto;
 import com.ict.quiz.domain.api.QuestionStartReqDto;
 import com.ict.quiz.domain.api.UserQuestionReqDto;
 import com.ict.quiz.domain.api.UserQuestionResDto;
@@ -9,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service

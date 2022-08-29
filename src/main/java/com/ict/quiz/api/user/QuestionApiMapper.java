@@ -1,6 +1,7 @@
 package com.ict.quiz.api.user;
 
 import com.ict.quiz.domain.*;
+import com.ict.quiz.domain.api.CategoryResDto;
 import com.ict.quiz.domain.api.QuestionStartReqDto;
 import com.ict.quiz.domain.api.UserQuestionReqDto;
 import com.ict.quiz.domain.api.UserQuestionResDto;
