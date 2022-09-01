@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 REPOSITORY=/home/ubuntu/app
-APP_NAME=quiz
+APP_NAME=quiz-0.0.1
 
 echo "> jar 파일 복사"
 cp $REPOSITORY/target/*.jar $REPOSITORY/
 
 echo "> 현재 구동중인 애플리케이션 pid 확인"
-CURRENT_PID=$(pgrep -fl $APP_NAME | grep jar | awk '{print $1}')
+CURRENT_PID=$(pgrep -f $APP_NAME)
 
 echo "> 현재 구동중인 애플리케이션 pid: $CURRENT_PID"
 if [ -z "$CURRENT_PID" ]
