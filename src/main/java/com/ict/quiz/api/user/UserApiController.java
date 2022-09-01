@@ -1,10 +1,7 @@
 package com.ict.quiz.api.user;
 
 import com.ict.quiz.domain.User;
-import com.ict.quiz.domain.api.ErrorResult;
-import com.ict.quiz.domain.api.UserAddReqDto;
-import com.ict.quiz.domain.api.UserQuestionHisDetailResDto;
-import com.ict.quiz.domain.api.UserQuestionHisResDto;
+import com.ict.quiz.domain.api.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +35,30 @@ public class UserApiController {
             ErrorResult errorResult = null;
             if("DUP".equals(e.getMessage())) {
                 errorResult = new ErrorResult("1", "중복된 사용자가 있습니다.");
+            }
+            return ResponseEntity.badRequest().body(errorResult);
+        }
+
+        return ResponseEntity.ok(user);
+    }
+
+    @ApiOperation(
+            value = "사용자 로그인"
+            , notes = "사용자를 조회하여 정보를 리턴한다."
+            , response = User.class
+    )
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody UserLoginReqDto reqDto) throws Exception {
+        User user;
+        try {
+            user = userApiService.findUser(reqDto);
+        } catch (Exception e) {
+            ErrorResult errorResult = null;
+            if("NONE".equals(e.getMessage())) {
+                errorResult = new ErrorResult("1", "해당 ID의 사용자가 없습니다.");
+            }
+            if("PW".equals(e.getMessage())) {
+                errorResult = new ErrorResult("2", "비밀번호가 일치하지 않습니다.");
             }
             return ResponseEntity.badRequest().body(errorResult);
         }

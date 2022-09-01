@@ -3,6 +3,7 @@ package com.ict.quiz.api.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.quiz.domain.*;
 import com.ict.quiz.domain.api.UserAddReqDto;
+import com.ict.quiz.domain.api.UserLoginReqDto;
 import com.ict.quiz.domain.api.UserQuestionHisDetailResDto;
 import com.ict.quiz.domain.api.UserQuestionHisResDto;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,21 @@ public class UserApiService {
 
         // 생성
         userApiMapper.insertUser(user);
+        user.setPassword(null);
 
+        return user;
+    }
+
+    public User findUser(UserLoginReqDto reqDto) throws Exception {
+        User user = userApiMapper.findUser(reqDto.getLogin_id());
+        if(user == null) {
+            throw new Exception("NONE");
+        }
+        if(!user.getPassword().equals(reqDto.getPassword())) {
+            throw new Exception("PW");
+        }
+
+        user.setPassword(null);
         return user;
     }
 
@@ -113,4 +128,6 @@ public class UserApiService {
 
         return result;
     }
+
+
 }

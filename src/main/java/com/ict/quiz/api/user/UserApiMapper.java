@@ -17,4 +17,6 @@ public interface UserApiMapper {
     void insertUser(User user);
 
     HisDetail findHisDetail(Long id);
+
+    User findUser(String login_id);
 }

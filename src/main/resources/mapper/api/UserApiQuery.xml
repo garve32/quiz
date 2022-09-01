@@ -57,5 +57,11 @@
         where t1.id = #{id}
     </select>
 
+    <select id="findUser" resultType="User">
+        select id, login_id, password, name, admin_yn
+          from user
+         where login_id = #{login_id}
+    </select>
+
 
 </mapper>
