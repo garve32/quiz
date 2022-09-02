@@ -18,7 +18,7 @@
                 from user_question
                 where user_id = #{user_id}) as seq
              , category_id
-             , group_concat(id order by id) as question_set
+             , group_concat(id order by rand()) as question_set
              , group_concat(0) as progress_set
              , group_concat(0) as answer_set
              , group_concat(0) as correct_set
