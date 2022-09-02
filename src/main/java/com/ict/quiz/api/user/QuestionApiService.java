@@ -64,6 +64,7 @@ public class QuestionApiService {
         Category category = questionMapper.getCategory(userQuestion.getCategory_id());
         String success_type = category.getSuccess_type();
         String success_cd = "F";
+        int correct_percent = 0;
 
         if("C".equals(success_type)) {
             int success_cnt = category.getSuccess_cnt();
@@ -72,7 +73,8 @@ public class QuestionApiService {
             }
         } else {
             int success_percent = category.getSuccess_percent();
-            if(correct_cnt /q_set.length >= success_percent / 100) {
+            correct_percent = (int) Math.round( ((double)correct_cnt / (double)q_set.length * 100));
+            if(correct_percent >= success_percent) {
                 success_cd = "S";
             }
         }
@@ -81,7 +83,6 @@ public class QuestionApiService {
         //log.info("correct_set = {}", correct_set);
         userQuestion.setCorrect_set(correct_set);
         userQuestion.setSuccess_cd(success_cd);
-
 
         questionMapper.endUserQuestion(userQuestion);
     }
