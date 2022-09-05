@@ -25,5 +25,7 @@ public class UserQuestionReqDto {
     private String correct_set;
     @ApiModelProperty(example = "S")
     private String success_cd;
+    @ApiModelProperty(example = "38")
+    private int accum_sec;
 
 }

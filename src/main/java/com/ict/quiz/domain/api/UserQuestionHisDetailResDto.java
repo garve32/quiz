@@ -39,6 +39,8 @@ public class UserQuestionHisDetailResDto {
     private String start_dt;
     @ApiModelProperty(example = "2022년 08월 01일 13:00")
     private String end_dt;
+    @ApiModelProperty(example = "38")
+    private int accum_sec;
 
     private List<QuestionResultDetail> resultDetails;
 }

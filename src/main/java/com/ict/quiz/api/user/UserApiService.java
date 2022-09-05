@@ -124,6 +124,7 @@ public class UserApiService {
         result.setCorrect_per(his.getCorrect_per());
         result.setStart_dt(his.getStart_dt());
         result.setEnd_dt(his.getEnd_dt());
+        result.setAccum_sec(his.getAccum_sec());
         result.setResultDetails(questionResultDetails);
 
         return result;

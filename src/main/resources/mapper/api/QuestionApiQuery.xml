@@ -72,6 +72,7 @@
         update user_question
            set progress_set = #{progress_set}
              , answer_set = #{answer_set}
+             , accum_sec = #{accum_sec}
          where id = #{id}
     </update>
 
@@ -82,6 +83,7 @@
           , correct_set = #{correct_set}
           , end_dt = now()
           , success_cd = #{success_cd}
+          , accum_sec = #{accum_sec}
         where id = #{id}
     </update>
 

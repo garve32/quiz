@@ -112,6 +112,7 @@ public class QuestionApiController {
 
         resDto.setQuestion(q);
         resDto.setOptions(o);
+        resDto.setAccum_sec(req.getAccum_sec());
 
         //log.info("resDto = {}", resDto);
 

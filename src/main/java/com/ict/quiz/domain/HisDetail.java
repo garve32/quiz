@@ -21,5 +21,6 @@ public class HisDetail {
     private int correct_per;
     private String start_dt;
     private String end_dt;
+    private int accum_sec;
 
 }

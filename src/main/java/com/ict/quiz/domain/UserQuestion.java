@@ -35,4 +35,6 @@ public class UserQuestion {
     private LocalDateTime end_dt;
     @ApiModelProperty(example = "S")
     private String success_cd;
+    @ApiModelProperty(example = "38")
+    private int accum_sec;
 }
