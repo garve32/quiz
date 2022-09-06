@@ -47,4 +47,6 @@ public class UserQuestionHisResDto {
     private String logo_url;
     @ApiModelProperty(example = "95")
     private int accum_sec;
+    @ApiModelProperty(example = "170")
+    private int time_limit;
 }

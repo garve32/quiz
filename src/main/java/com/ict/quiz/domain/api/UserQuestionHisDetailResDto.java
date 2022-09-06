@@ -41,6 +41,8 @@ public class UserQuestionHisDetailResDto {
     private String end_dt;
     @ApiModelProperty(example = "38")
     private int accum_sec;
+    @ApiModelProperty(example = "170")
+    private int time_limit;
 
     private List<QuestionResultDetail> resultDetails;
 }

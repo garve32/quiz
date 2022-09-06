@@ -28,6 +28,7 @@
              , length(t1.correct_set) - length(replace(t1.correct_set, '1', '')) as correct_cnt
              , t2.logo_url
              , t1.accum_sec
+             , t2.time_limit
           from user_question t1
                inner join category t2
                        on t2.id = t1.category_id
@@ -55,6 +56,7 @@
              , DATE_FORMAT(start_dt, '%Y년 %m월 %d일 %H:%i') as start_dt
              , DATE_FORMAT(end_dt, '%Y년 %m월 %d일 %H:%i') as end_dt
              , t1.accum_sec
+             , t2.time_limit
         from user_question t1
                  inner join category t2
                             on t1.category_id = t2.id
