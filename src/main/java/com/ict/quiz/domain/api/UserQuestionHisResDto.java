@@ -14,25 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class UserQuestionHisResDto {
 
-    public UserQuestionHisResDto(Long id, Long user_id, int seq, Long category_id
-    , String question_set, String progress_set, String answer_set, String correct_set
-    , LocalDateTime start_dt, LocalDateTime end_dt
-    , String category_nm, int question_cnt, int correct_cnt) {
-        this.setId(id);
-        this.setUser_id(user_id);
-        this.setSeq(seq);
-        this.setCategory_id(category_id);
-        this.setQuestion_set(question_set);
-        this.setProgress_set(progress_set);
-        this.setAnswer_set(answer_set);
-        this.setCorrect_set(correct_set);
-        this.setStart_dt(start_dt);
-        this.setEnd_dt(end_dt);
-        this.setCategory_nm(category_nm);
-        this.setQuestion_cnt(question_cnt);
-        this.setCorrect_cnt(correct_cnt);
-
-    }
     @ApiModelProperty(position = 1, example = "172")
     private Long id;
     @ApiModelProperty(example = "1")
@@ -62,4 +43,6 @@ public class UserQuestionHisResDto {
     private int question_cnt;
     @ApiModelProperty(example = "")
     private int correct_cnt;
+    @ApiModelProperty(example = "http://logo.url")
+    private String logo_url;
 }
