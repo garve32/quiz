@@ -41,7 +41,7 @@ public class UserQuestionHisResDto {
 
     @ApiModelProperty(example = "6")
     private int question_cnt;
-    @ApiModelProperty(example = "")
+    @ApiModelProperty(example = "3")
     private int correct_cnt;
     @ApiModelProperty(example = "http://logo.url")
     private String logo_url;
