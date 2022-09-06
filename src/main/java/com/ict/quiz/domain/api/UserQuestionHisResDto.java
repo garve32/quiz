@@ -45,4 +45,6 @@ public class UserQuestionHisResDto {
     private int correct_cnt;
     @ApiModelProperty(example = "http://logo.url")
     private String logo_url;
+    @ApiModelProperty(example = "95")
+    private int accum_sec;
 }

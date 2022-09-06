@@ -27,6 +27,7 @@
              , length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1 as question_cnt
              , length(t1.correct_set) - length(replace(t1.correct_set, '1', '')) as correct_cnt
              , t2.logo_url
+             , t1.accum_sec
           from user_question t1
                inner join category t2
                        on t2.id = t1.category_id

@@ -3,9 +3,6 @@
 REPOSITORY=/home/ubuntu/app
 APP_NAME=quiz-0.0.1
 
-echo "> jar 파일 복사"
-cp $REPOSITORY/temp/*.jar $REPOSITORY/
-
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
@@ -18,6 +15,9 @@ else
         kill -15 $CURRENT_PID
         sleep 10
 fi
+
+echo "> jar 파일 복사"
+cp $REPOSITORY/temp/*.jar $REPOSITORY/
 
 echo "> 새 애플리케이션 배포"
 JAR_NAME=$(ls -tr $REPOSITORY/*.jar|grep jar|tail -n 1)
