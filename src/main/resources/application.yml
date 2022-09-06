@@ -30,6 +30,7 @@ server:
   reactive:
     session:
       timeout: 120m
+  shutdown: graceful
 
 springfox:
   documentation:
