@@ -2,10 +2,7 @@ package com.ict.quiz.api.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.quiz.domain.*;
-import com.ict.quiz.domain.api.UserAddReqDto;
-import com.ict.quiz.domain.api.UserLoginReqDto;
-import com.ict.quiz.domain.api.UserQuestionHisDetailResDto;
-import com.ict.quiz.domain.api.UserQuestionHisResDto;
+import com.ict.quiz.domain.api.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
@@ -70,7 +67,7 @@ public class UserApiService {
 
     public UserQuestionHisDetailResDto findHisDetail(Long id) {
         // 메인 조회
-        HisDetail his = userApiMapper.findHisDetail(id);
+        HisDetailDto his = userApiMapper.findHisDetail(id);
 
         List<QuestionResultDetail> questionResultDetails = new LinkedList<>();
 

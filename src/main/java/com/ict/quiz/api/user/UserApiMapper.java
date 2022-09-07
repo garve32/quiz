@@ -3,6 +3,7 @@ package com.ict.quiz.api.user;
 import com.ict.quiz.domain.HisDetail;
 import com.ict.quiz.domain.User;
 import com.ict.quiz.domain.UserQuestion;
+import com.ict.quiz.domain.api.HisDetailDto;
 import com.ict.quiz.domain.api.UserQuestionHisResDto;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -16,7 +17,7 @@ public interface UserApiMapper {
 
     void insertUser(User user);
 
-    HisDetail findHisDetail(Long id);
+    HisDetailDto findHisDetail(Long id);
 
     User findUser(String login_id);
 }

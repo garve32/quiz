@@ -35,10 +35,10 @@ public class UserQuestionHisDetailResDto {
     private int wrong_cnt;
     @ApiModelProperty(example = "85")
     private int correct_per;
-    @ApiModelProperty(example = "2022년 08월 01일 13:00")
-    private String start_dt;
-    @ApiModelProperty(example = "2022년 08월 01일 13:00")
-    private String end_dt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime start_dt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime end_dt;
     @ApiModelProperty(example = "38")
     private int accum_sec;
     @ApiModelProperty(example = "170")

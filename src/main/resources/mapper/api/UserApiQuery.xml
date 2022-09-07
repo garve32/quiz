@@ -37,7 +37,7 @@
         limit 10
     </select>
 
-    <select id="findHisDetail" resultType="HisDetail">
+    <select id="findHisDetail" resultType="HisDetailDto">
         select t1.id
              , t1.question_set
              , t1.answer_set
@@ -53,8 +53,8 @@
              , round((length(t1.correct_set) - length(replace(t1.correct_set, '1', '')))
                          / (length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1)
             * 100) as correct_per
-             , DATE_FORMAT(start_dt, '%Y년 %m월 %d일 %H:%i') as start_dt
-             , DATE_FORMAT(end_dt, '%Y년 %m월 %d일 %H:%i') as end_dt
+             , t1.start_dt
+             , t1.end_dt
              , t1.accum_sec
              , t2.time_limit
         from user_question t1
