@@ -22,5 +22,6 @@ public class HisDetail {
     private String start_dt;
     private String end_dt;
     private int accum_sec;
+    private int time_limit;
 
 }

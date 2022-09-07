@@ -125,6 +125,7 @@ public class UserApiService {
         result.setStart_dt(his.getStart_dt());
         result.setEnd_dt(his.getEnd_dt());
         result.setAccum_sec(his.getAccum_sec());
+        result.setTime_limit(his.getTime_limit());
         result.setResultDetails(questionResultDetails);
 
         return result;
