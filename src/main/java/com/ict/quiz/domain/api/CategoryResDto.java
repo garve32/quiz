@@ -30,5 +30,7 @@ public class CategoryResDto {
         private String use_yn;
         @ApiModelProperty( example = "https://image.com/image.png")
         private String logo_url;
+        @ApiModelProperty( example = "Y")
+        private String active_yn;
 
 }
