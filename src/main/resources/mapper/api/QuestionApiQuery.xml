@@ -65,7 +65,7 @@
         from question_option
         where question_id = #{question_id}
           and del_yn != 'Y'
-        order by seq
+        order by rand()
     </select>
 
     <update id="updateUserQuestion" parameterType="UserQuestionReqDto">
@@ -88,7 +88,7 @@
     </update>
 
     <select id="findCorrectByQuestionId" resultType="string">
-        select group_concat(qo.id order by qo.seq separator':')
+        select group_concat(qo.id order by qo.id separator':')
         from question q
                  inner join question_option qo
                             on q.id = qo.question_id

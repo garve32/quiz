@@ -9,7 +9,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -46,10 +49,17 @@ public class QuestionApiService {
 
         for (int i = 0; i < q_set.length; i++) {
             String q = q_set[i];
+
             //log.info("q = {}", q);
             //log.info("a = {}", a_set[i]);
             String correctAnswer = questionMapper.findCorrectByQuestionId(Long.valueOf(q));
-            if(correctAnswer.equals(a_set[i])) {
+            String sortedASet =
+                    Arrays.stream(a_set[i].split(":"))             //split with ':'
+                            .map(Integer::valueOf)            //convert your strings to ints
+                            .sorted()                         //sort
+                            .map(String::valueOf)             //convert them back to string
+                            .collect(Collectors.joining(":"));
+            if(correctAnswer.equals(sortedASet)) {
                 //log.info("##{} 번 문제 맞음!", q);
                 c_set[i] = "1";
                 correct_cnt++;
