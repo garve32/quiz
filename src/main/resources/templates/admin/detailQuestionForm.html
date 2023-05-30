@@ -8,7 +8,7 @@
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
 
     <div class="py-2 text-center">
-        <h4>문제 등록</h4>
+        <h4 th:text="${#strings.isEmpty(q.question.id) ?'문제 등록':'문제 수정'}">문제 등록</h4>
     </div>
 
     <hr class="my-2">
@@ -102,7 +102,7 @@
                     </div>
                     <input type="text" class="form-control number-seq" th:field="*{options[__${stat.index}__].seq}" th:value="${option.seq}" th:readonly="${option.del_yn eq 'Y' ? 'readonly': false}">
 <!--                    <input type="text" class="form-control" th:field="*{options[__${stat.index}__].text}" th:value="${option.text}" th:readonly="${option.del_yn eq 'Y' ? 'readonly': false}">-->
-                    <textarea class="form-control overflow-hidden" rows="1" th:field="*{options[__${stat.index}__].text}" th:value="${option.text}" th:readonly="${option.del_yn eq 'Y' ? 'readonly': false}"></textarea>
+                    <textarea class="form-control overflow-hidden" rows="1" th:field="*{options[__${stat.index}__].text}" th:value="${option.text}" th:readonly="${option.del_yn eq 'Y' ? 'readonly': false}" onkeydown="resize(this)"></textarea>
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" th:id="|options-lv-del${stat.index}|" type="button" onclick="delOption(this)">X</button>
                     </div>
@@ -165,6 +165,11 @@
             }
         });
 
+        $("textarea[name='options']").change(function () {
+            this.style.height = '31px'
+            this.style.height = this.scrollHeight + 'px';
+        });
+
         $("input[name='question.type']:radio").change(function () {
             let value = $(this).val();
             if(value === 'S') {
@@ -179,6 +184,13 @@
     $(document).on("keydown", ":input:not(textarea)", function(event) {
         return event.key != "Enter";
     });
+
+    function resize(obj) {
+        console.log(obj);
+        obj.style.height = '31px'
+        obj.style.height = obj.scrollHeight + 'px';
+    }
+
 
     function delImage(input) {
         $('#upload').val('');
