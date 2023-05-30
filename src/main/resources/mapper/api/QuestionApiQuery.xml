@@ -7,7 +7,8 @@
         select id, p_id, name, description, time_limit, question_cnt
              , success_type, success_cnt, success_percent, use_yn
              , logo_url, active_yn
-        from category
+             , (select count(1) from question q where q.category_id = c.id) as pool_cnt
+        from category c
         where use_yn = 'Y'
           and question_cnt > 0
         order by seq

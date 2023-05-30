@@ -32,5 +32,7 @@ public class CategoryResDto {
         private String logo_url;
         @ApiModelProperty( example = "Y")
         private String active_yn;
+        @ApiModelProperty( example = "120")
+        private String pool_cnt;
 
 }
