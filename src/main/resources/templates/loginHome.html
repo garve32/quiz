@@ -53,6 +53,15 @@
         </div>
     </div>
 
+    <div class="row my-2" th:if="${user.admin_yn.equals('Y')}">
+        <div class="col">
+            <button class="w-100 btn btn-lg btn-success " type="button"
+                    th:onclick="|location.href='@{/admin/categories}'|">
+                카테고리 관리
+            </button>
+        </div>
+    </div>
+
     <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->
 

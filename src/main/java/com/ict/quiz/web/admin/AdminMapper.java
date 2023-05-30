@@ -22,4 +22,8 @@ public interface AdminMapper {
     void updateOption(QuestionOption option);
 
     List<Category> findAllCategories();
+
+    List<Category> findCategories();
+
+    Category findCategoryById(Long id);
 }

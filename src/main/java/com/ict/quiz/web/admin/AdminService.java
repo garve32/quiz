@@ -50,4 +50,11 @@ public class AdminService {
         return adminMapper.findAllCategories();
     }
 
+    public List<Category> findCategories() {
+        return adminMapper.findCategories();
+    }
+
+    public Category getCategoryById(Long id) {
+        return adminMapper.findCategoryById(id);
+    }
 }

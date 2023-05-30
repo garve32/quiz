@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="fragments/header :: header" />
+
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+    <div class="py-2 text-center">
+        <h4>카테고리 관리</h4>
+    </div>
+
+    <hr class="my-2">
+
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover font-size-85">
+            <thead>
+            <tr>
+                <th scope="col" >id</th>
+                <th scope="col" >이름</th>
+                <th scope="col" >상세</th>
+                <th scope="col" >사용여부</th>
+                <th scope="col" >활성여부</th>
+                <th scope="col" >순서</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr th:each="item : ${list}">
+                <td><span th:text="${item.id}">id</span></td>
+                <td><a th:href="|/admin/category/${item.id}|"><span th:text="${item.name}">name</span></a></td>
+                <td><span th:text="${item.description}">description</span></a></td>
+                <td><span th:text="${item.use_yn}">use_yn</span></td>
+                <td><span th:text="${item.active_yn}">active_yn</span></td>
+                <td><span th:text="${item.seq}">seq</span></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div th:replace="fragments/footer :: footer" />
+
+</div>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        $(document).ready(function(){
+
+        });
+
+    </script>
+</th:block>
+</body>
+</html>

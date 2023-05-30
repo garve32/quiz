@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+    <div class="py-2 text-center">
+        <h4 th:text="${#strings.isEmpty(c.id) ?'카테고리 등록':'카테고리 수정'}">카테고리 등록</h4>
+    </div>
+
+    <hr class="my-2">
+
+    <form th:action="@{/admin/category/save}"  method="post" enctype="multipart/form-data">
+        <div th:object="${c}">
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <div class="field-error global-error" th:each="err : ${#fields.globalErrors()}" th:utext="${err}">글로벌 오류 메시지</div>
+            </div>
+            <!-- id -->
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="min-width: 80px">이름</span>
+                </div>
+                <input type="text" th:field="*{name}" class="form-control form-control-sm" aria-label="문제" />
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="min-width: 80px">상세</span>
+                </div>
+                <input type="text" th:field="*{description}" class="form-control form-control-sm" aria-label="문제" />
+            </div>
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="min-width: 80px">로고 URL</span>
+                </div>
+                <input type="text" th:field="*{logo_url}" class="form-control form-control-sm" aria-label="문제" />
+            </div>
+            <div class="row flex-sm-row">
+                <div class="col-sm input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" style="min-width: 80px">시간제한</label>
+                    </div>
+                    <input type="text" th:field="*{time_limit}" class="form-control form-control-sm" aria-label="순서" />
+                </div>
+                <div class="col-sm input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" style="min-width: 80px">출제문제</label>
+                    </div>
+                    <input type="text" th:field="*{question_cnt}" class="form-control form-control-sm" aria-label="순서" />
+                </div>
+            </div>
+            <div class="row flex-sm-row">
+                <div class="col-sm input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" style="min-width: 80px">성공타입</label>
+                    </div>
+                    <input type="text" th:field="*{success_type}" class="form-control form-control-sm" aria-label="순서" />
+                </div>
+                <div class="col-sm input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" style="min-width: 80px">통과(정답)</label>
+                    </div>
+                    <input type="text" th:field="*{success_cnt}" class="form-control form-control-sm" aria-label="순서" />
+                </div>
+                <div class="col-sm input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" style="min-width: 80px">통과(%)</label>
+                    </div>
+                    <input type="text" th:field="*{success_percent}" class="form-control form-control-sm" aria-label="순서" />
+                </div>
+            </div>
+            <div class="row flex-sm-row">
+                <div class="col-sm input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" style="min-width: 80px">사용여부</label>
+                    </div>
+                    <select th:field="*{use_yn}" class="custom-select" >
+                        <option selected value="Y">사용</option>
+                        <option value="N">미사용</option>
+                    </select>
+
+                </div>
+                <div class="col-sm input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" style="min-width: 80px">활성여부</label>
+                    </div>
+                    <select th:field="*{active_yn}" class="custom-select">
+                        <option selected value="Y">활성</option>
+                        <option value="N">비활성</option>
+                    </select>
+                </div>
+                <div class="col-sm input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" style="min-width: 80px">순서</label>
+                    </div>
+                    <input type="text" th:field="*{seq}" class="form-control form-control-sm" aria-label="순서" />
+                </div>
+            </div>
+        </div> <!-- textarea End -->
+
+
+        <div th:object="${c}">
+
+
+            <hr class="my-2">
+
+            <div class="row">
+                <div class="col">
+                    <button type="button" th:onclick="|location.href='@{/admin/categories}'|" class="btn btn-secondary w-100">카테고리 목록</button>
+                </div>
+                <div class="col">
+                    <button type="submit" th:text="${#strings.isEmpty(id) ?'카테고리 등록':'카테고리 수정'}" class="btn btn-primary w-100">카테고리 등록</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div th:replace="fragments/footer :: footer"></div>
+
+</div>
+
+<script th:inline="javascript">
+    $(document).ready(function(){
+
+
+
+    });
+
+
+
+
+</script>
+</body>
+</html>

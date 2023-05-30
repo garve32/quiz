@@ -105,11 +105,25 @@
     </update>
 
     <select id="findAllCategories" resultType="Category">
-        select id, p_id, name, description, time_limit, question_cnt
-             , success_type, success_cnt, success_percent, use_yn
+        select id, p_id, name, description, time_limit, question_cnt, logo_url
+             , success_type, success_cnt, success_percent, use_yn, active_yn, seq
+        from category
+        order by id
+    </select>
+
+    <select id="findCategories" resultType="Category">
+        select id, p_id, name, description, time_limit, question_cnt, logo_url
+             , success_type, success_cnt, success_percent, use_yn, active_yn, seq
         from category
         where use_yn = 'Y'
           and question_cnt > 0
+    </select>
+
+    <select id="findCategoryById" resultType="Category">
+        select id, p_id, name, description, time_limit, question_cnt, logo_url
+             , success_type, success_cnt, success_percent, use_yn, active_yn, seq
+        from category
+        where id = #{id}
     </select>
 
 

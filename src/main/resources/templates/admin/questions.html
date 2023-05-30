@@ -28,7 +28,7 @@
 <!--                        <a class="dropdown-item" href="#">문제</a>-->
 <!--                    </div>-->
                 </div>
-                <input type="text" class="form-control input-group-append" id="searchKeyword" name="searchKeyword" th:value="${searchKeyword}" placeholder="카테고리" aria-label="Search Category" aria-describedby="button-addon4">
+                <input type="text" class="form-control input-group-append" id="searchKeyword" name="searchKeyword" th:value="${searchKeyword}" placeholder="검색어" aria-label="Search Category" aria-describedby="button-addon4">
                 <div class="input-group-append" id="button-addon4">
                     <button type="submit" class="btn btn-sm btn-outline-secondary" >검색</button>
                     <button type="button" class="btn btn-sm btn-outline-secondary" th:onclick="|location.href='@{/admin/questions}'|">초기화</button>

@@ -31,7 +31,7 @@ public class AdminController {
 
     @ModelAttribute("categoryList")
     public List<Category> categoryMap() {
-        return adminService.findAllCategories();
+        return adminService.findCategories();
     }
 
     @ModelAttribute("useType")
@@ -54,8 +54,28 @@ public class AdminController {
 
     @GetMapping()
     public String adminForm(Model model) throws Exception {
-
         return "admin/adminForm";
+    }
+
+    @GetMapping("/categories")
+    public String categories(Model model) throws Exception {
+        List<Category> categoryList = adminService.findAllCategories();
+        model.addAttribute("list", categoryList);
+        return "admin/categories";
+    }
+
+    @GetMapping("/category/{id}")
+    public String categoryForm(@PathVariable("id") Long id, Model model) throws Exception {
+        Category category = adminService.getCategoryById(id);
+        model.addAttribute("c", category);
+        return "admin/detailCategoryForm";
+    }
+
+    @PostMapping("/category/save")
+    public String saveCategory(@Validated @ModelAttribute("c") Category c, BindingResult result) throws Exception {
+        result.reject("-1", "기능 미구현");
+        return "admin/detailCategoryForm";
+//        return "redirect:/admin/categories";
     }
 
     @GetMapping("/questions")
