@@ -70,10 +70,6 @@ public class QuestionApiService {
             }
         }
 
-        log.info("q_set = {}", q_set);
-        log.info("a_set = {}", a_set);
-        log.info("c_set = {}", c_set);
-
         // 카테고리별 성공 기준 측정
         Category category = questionMapper.getCategory(userQuestion.getCategory_id());
         String success_type = category.getSuccess_type();
