@@ -2,13 +2,16 @@ spring:
   datasource:
     hikari:
       driver-class-name: org.postgresql.Driver
-      jdbc-url: jdbc:postgresql://localhost:5432/ict
+#      jdbc-url: jdbc:postgresql://localhost:5432/ict
+      jdbc-url: jdbc:postgresql://ep-purple-wildflower-a1zwp8ge-pooler.ap-southeast-1.aws.neon.tech/neondb
 #      driver-class-name: com.mysql.cj.jdbc.Driver
 #      jdbc-url: jdbc:mysql://13.125.18.81:3306/ict?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
       #jdbc-url: jdbc:mysql://43.200.138.19:3306/ict?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
       #jdbc-url: jdbc:mysql://3.37.139.180:3306/ict?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-      username: ictuser
-      password: gksghk12!
+#      username: ictuser
+#      password: gksghk12!
+      username: neondb_owner
+      password: npg_2CUcHbWQ9fDR
       pool-name: cp_my
       maximum-pool-size: 20
       max-lifetime: 26000
