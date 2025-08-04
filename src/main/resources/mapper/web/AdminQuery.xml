@@ -11,10 +11,10 @@
                 <when test="searchType != null and searchType != ''">
                     <choose>
                         <when test="'category'.equals( searchType )">
-                            AND t2.name LIKE CONCAT('%', #{searchKeyword}, '%')
+                            AND t2.name LIKE '%' || #{searchKeyword} || '%'
                         </when>
                         <when test="'title'.equals( searchType )">
-                            AND t1.text LIKE CONCAT('%', #{searchKeyword}, '%')
+                            AND t1.text LIKE '%' || #{searchKeyword} || '%'
                         </when>
                     </choose>
                 </when>
@@ -31,7 +31,7 @@
         where 1=1
           <include refid="search" />
          order by id
-         limit #{pagination.firstRecordIndex}, #{recordsPerPage}
+        LIMIT #{recordsPerPage} OFFSET #{pagination.firstRecordIndex}
     </select>
 
     <select id="findAllQuestionsCount" parameterType="QuestionPage" resultType="int">

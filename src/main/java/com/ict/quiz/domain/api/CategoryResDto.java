@@ -3,9 +3,11 @@ package com.ict.quiz.domain.api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class CategoryResDto {
 
         @ApiModelProperty(example = "3")

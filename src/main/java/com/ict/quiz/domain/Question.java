@@ -2,10 +2,12 @@ package com.ict.quiz.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Positive;
 
 @Data
+@NoArgsConstructor
 public class Question {
 
     @ApiModelProperty(example = "9")
@@ -14,7 +16,7 @@ public class Question {
     private String text;
     @ApiModelProperty(example = "9.png")
     private String image_name;
-    @ApiModelProperty(example = "iVBORw0KGgoAAAANSUhEUgAAAPIAAA...")
+    @ApiModelProperty(example = "iVBORw0KGgoAAAANSUhEUgAAASIAAA...")
     private byte[] image;
     @ApiModelProperty(example = "0")
     private int seq;

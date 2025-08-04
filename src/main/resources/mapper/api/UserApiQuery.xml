@@ -5,12 +5,12 @@
 
     <select id="checkDup" resultType="int">
         select count(*)
-        from user
+        from "user"
         where login_id = #{login_id}
     </select>
 
     <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        insert into user (
+        insert into "user" (
             login_id, password, name
         )
         values (
@@ -45,12 +45,13 @@
              , t1.category_id
              , t2.name as category_nm
              , t1.success_cd
-             , if(t1.success_cd = 'S', '합격', '불합격') as success_cd_nm
+--              , if(t1.success_cd = 'S', '합격', '불합격') as success_cd_nm
+             , case when t1.success_cd = 'S' then '합격' else '불합격' end as success_cd_nm
              , t2.success_percent as success_per
              , length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1 as total_q_cnt
              , length(t1.correct_set) - length(replace(t1.correct_set, '1', '')) as correct_cnt
              , length(t1.correct_set) - length(replace(t1.correct_set, '0', '')) as wrong_cnt
-             , round((length(t1.correct_set) - length(replace(t1.correct_set, '1', '')))
+             , round((length(t1.correct_set) - length(replace(t1.correct_set, '1', '')))::numeric
                          / (length(t1.question_set) - length(replace(t1.question_set, ',', '')) + 1)
             * 100) as correct_per
              , t1.start_dt
@@ -65,7 +66,7 @@
 
     <select id="findUser" resultType="User">
         select id, login_id, password, name, admin_yn
-          from user
+          from "user"
          where login_id = #{login_id}
     </select>
 

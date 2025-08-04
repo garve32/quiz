@@ -1,10 +1,12 @@
 package com.ict.quiz.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 
 @Data
+@NoArgsConstructor
 public class User {
 
     private Long id;

@@ -17,19 +17,20 @@
 
     <select id="pickRandomQuestion" parameterType="QuestionStartReqDto" resultType="UserQuestion">
         select #{user_id} as user_id
-             , (select ifnull(max(seq), 0) + 1
+             , (select COALESCE(max(seq), 0) + 1
                 from user_question
                 where user_id = #{user_id}) as seq
              , category_id
-             , group_concat(id order by rand()) as question_set
-             , group_concat(0) as progress_set
-             , group_concat(0) as answer_set
-             , group_concat(0) as correct_set
-             , now() as start_dt
+--              , group_concat(id order by rand()) as question_set
+             , STRING_AGG(id::text, ',' ORDER BY RANDOM()) as question_set
+             , STRING_AGG('0', ',' ORDER BY id) as progress_set
+             , STRING_AGG('0', ',' ORDER BY id) as answer_set
+             , STRING_AGG('0', ',' ORDER BY id) as correct_set
+             , CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Seoul' as start_dt
         from (select category_id, id
               from question
               where category_id = #{category_id}
-              order by rand()
+              order by RANDOM()
                   limit #{question_cnt}) as t1
         group by category_id
     </select>
@@ -68,7 +69,7 @@
         from question_option
         where question_id = #{question_id}
           and del_yn != 'Y'
-        order by rand()
+        order by RANDOM()
     </select>
 
     <update id="updateUserQuestion" parameterType="UserQuestionReqDto">
@@ -84,14 +85,15 @@
         set progress_set = #{progress_set}
           , answer_set = #{answer_set}
           , correct_set = #{correct_set}
-          , end_dt = now()
+          , end_dt = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Seoul'
           , success_cd = #{success_cd}
           , accum_sec = #{accum_sec}
         where id = #{id}
     </update>
 
     <select id="findCorrectByQuestionId" resultType="string">
-        select group_concat(qo.id order by qo.id separator':')
+--         select group_concat(qo.id order by qo.id separator':')
+        select STRING_AGG(qo.id::text, ':' ORDER BY qo.id)
         from question q
                  inner join question_option qo
                             on q.id = qo.question_id
