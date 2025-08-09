@@ -6,6 +6,7 @@ import com.ict.quiz.domain.api.QuestionStartReqDto;
 import com.ict.quiz.domain.api.UserQuestionReqDto;
 import com.ict.quiz.domain.api.UserQuestionResDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ import java.util.List;
 public interface QuestionApiMapper {
 
     Question findById(Long id);
+
+    List<Question> findByIds(@Param("ids") List<Long> ids);
 
     List<CategoryResDto> findAllCategoryInfo();
 
@@ -26,6 +29,8 @@ public interface QuestionApiMapper {
     void endUserQuestion(UserQuestionReqDto req);
 
     List<QuestionOption> findOptionByQuestionId(Long question_id);
+
+    List<QuestionOption> findOptionsByQuestionIds(@Param("questionIds") List<Long> questionIds);
 
     Category getCategory(Long id);
 

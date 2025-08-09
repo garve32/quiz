@@ -64,12 +64,32 @@
         where id = #{id}
     </select>
 
+    <select id="findByIds" resultType="Question">
+        select id, text, image_name, image, seq, use_yn, type, category_id
+        from question
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
     <select id="findOptionByQuestionId" resultType="QuestionOption">
         select id, number, seq, text, correct_yn, question_id, del_yn
         from question_option
         where question_id = #{question_id}
           and del_yn != 'Y'
         order by RANDOM()
+    </select>
+
+    <select id="findOptionsByQuestionIds" resultType="QuestionOption">
+        select id, number, seq, text, correct_yn, question_id, del_yn
+        from question_option
+        where question_id in
+        <foreach collection="questionIds" item="qid" open="(" separator="," close=")">
+            #{qid}
+        </foreach>
+          and del_yn != 'Y'
+        order by question_id, seq
     </select>
 
     <update id="updateUserQuestion" parameterType="UserQuestionReqDto">

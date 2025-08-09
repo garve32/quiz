@@ -75,33 +75,50 @@ public class UserApiService {
         String[] a_set = his.getAnswer_set().split(",");
         String[] c_set = his.getCorrect_set().split(",");
 
-        for (int i = 0; i < q_set.length; i++) {
-            String q = q_set[i];
-            // 문제 조회
-            ObjectMapper om = new ObjectMapper();
-            QuestionResultDetail questionResultDetail = new QuestionResultDetail();
-            Question question = questionApiMapper.findById(Long.valueOf(q));
-            QuestionResult questionResult = om.convertValue(question, QuestionResult.class);
+        // 1) 질문 ID 목록 파싱 후 일괄 조회
+        List<Long> questionIds = new LinkedList<>();
+        for (String qidStr : q_set) {
+            questionIds.add(Long.valueOf(qidStr));
+        }
 
+        List<Question> questions = questionApiMapper.findByIds(questionIds);
+        // 질문을 ID→Question 맵으로 구성
+        java.util.Map<Long, Question> questionMap = new java.util.HashMap<>();
+        for (Question q : questions) {
+            questionMap.put(q.getId(), q);
+        }
+
+        // 2) 선택지 일괄 조회 후 question_id → options 묶기
+        List<QuestionOption> allOptions = questionApiMapper.findOptionsByQuestionIds(questionIds);
+        java.util.Map<Long, List<QuestionOption>> optionsByQuestionId = new java.util.HashMap<>();
+        for (QuestionOption opt : allOptions) {
+            optionsByQuestionId.computeIfAbsent(opt.getQuestion_id(), k -> new LinkedList<>()).add(opt);
+        }
+
+        ObjectMapper om = new ObjectMapper();
+        for (int i = 0; i < q_set.length; i++) {
+            long qId = Long.parseLong(q_set[i]);
+            Question question = questionMap.get(qId);
+            if (question == null) {
+                continue;
+            }
+
+            QuestionResultDetail questionResultDetail = new QuestionResultDetail();
+            QuestionResult questionResult = om.convertValue(question, QuestionResult.class);
             questionResult.setCorrect_yn("1".equals(c_set[i]) ? "Y" : "N");
-            if(question.getImage() != null &&question.getImage().length > 0) {
+            if (question.getImage() != null && question.getImage().length > 0) {
                 String image = Base64.encodeBase64String(question.getImage());
                 questionResult.setEncoded_image(image);
             }
             questionResultDetail.setQuestion(questionResult);
 
-            List<QuestionOption> options = questionApiMapper.findOptionByQuestionId(Long.valueOf(q));
+            List<QuestionOption> options = optionsByQuestionId.getOrDefault(qId, java.util.Collections.emptyList());
             List<QuestionOptionResult> questionOptionResults = new LinkedList<>();
+            String[] selectedOptionIds = a_set[i].split(":");
             for (QuestionOption option : options) {
                 QuestionOptionResult questionOptionResult = om.convertValue(option, QuestionOptionResult.class);
-                String[] split = a_set[i].split(":");
-                boolean b = Arrays.stream(split).anyMatch(a -> String.valueOf(option.getId()).equals(a));
-                //log.info("question = {}, a_set[i] = {}, option_id = {}, boolean = {}", q, a_set[i], option.getId(), b);
-                if(b) {
-                    questionOptionResult.setSelect_yn("Y");
-                } else {
-                    questionOptionResult.setSelect_yn("N");
-                }
+                boolean selected = Arrays.stream(selectedOptionIds).anyMatch(a -> String.valueOf(option.getId()).equals(a));
+                questionOptionResult.setSelect_yn(selected ? "Y" : "N");
                 questionOptionResults.add(questionOptionResult);
             }
             questionResultDetail.setOptions(questionOptionResults);
