@@ -53,7 +53,6 @@ public class HisService {
                 QuestionOptionResult questionOptionResult = om.convertValue(option, QuestionOptionResult.class);
                 String[] split = a_set[i].split(":");
                 boolean b = Arrays.stream(split).anyMatch(a -> String.valueOf(option.getId()).equals(a));
-                //log.info("question = {}, a_set[i] = {}, option_id = {}, boolean = {}", q, a_set[i], option.getId(), b);
                 if(b) {
                     questionOptionResult.setSelect_yn("Y");
                 } else {

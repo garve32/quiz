@@ -56,7 +56,6 @@ public class QuestionController {
 
         // 첫번째 문제 조회
         Question question = questionService.findById(question_id);
-        //log.info("question = {}", question);
         model.addAttribute("q", question);
         if(question.getImage() != null &&question.getImage().length > 0) {
             String image = Base64.encodeBase64String(question.getImage());
@@ -65,7 +64,6 @@ public class QuestionController {
 
         // 문제 옵션 조회
         List<QuestionOption> questionOptions = questionService.findByQuestionId(question_id);
-        //log.info("questionOptions = {}", questionOptions);
         model.addAttribute("options", questionOptions);
 
         return "questions/question";
@@ -94,12 +92,10 @@ public class QuestionController {
 
         // 사용자화 문제 저장
         questionService.updateUserQuestion(userQuestion);
-        //log.info("userQuestion = {}", userQuestion);
         model.addAttribute("uq", userQuestion);
 
         // 문제 조회
         Question question = questionService.findById(question_id);
-        //log.info("question = {}", question);
         model.addAttribute("q", question);
         if(question.getImage() != null &&question.getImage().length > 0) {
             String image = Base64.encodeBase64String(question.getImage());
@@ -108,7 +104,6 @@ public class QuestionController {
 
         // 문제 옵션 조회
         List<QuestionOption> questionOptions = questionService.findByQuestionId(question_id);
-        //log.info("questionOptions = {}", questionOptions);
         model.addAttribute("options", questionOptions);
 
 

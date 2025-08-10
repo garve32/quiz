@@ -45,7 +45,6 @@ public class TestController {
 
         // 문제 조회
         Question question = questionService.findById(id);
-        //log.info("question = {}", question);
         model.addAttribute("q", question);
         if(question.getImage() != null &&question.getImage().length > 0) {
             String image = Base64.encodeBase64String(question.getImage());
@@ -54,7 +53,6 @@ public class TestController {
 
         // 문제 옵션 조회
         List<QuestionOption> questionOptions = questionService.findByQuestionId(id);
-        //log.info("questionOptions = {}", questionOptions);
         model.addAttribute("options", questionOptions);
 
         return "questions/question";

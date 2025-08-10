@@ -89,14 +89,8 @@ public class UserApiController {
     )
     @GetMapping("/his/{id}")
     public ResponseEntity hisDetail(@PathVariable("id") Long id) {
-        long startTime = System.currentTimeMillis();
-        log.info("=== 사용자 문제 이력 상세 조회 시작 - ID: {} ===", id);
 
         UserQuestionHisDetailResDto hisDetail = userApiService.findHisDetail(id);
-
-        long endTime = System.currentTimeMillis();
-        long executionTime = endTime - startTime;
-        log.info("=== 사용자 문제 이력 상세 조회 완료 - ID: {}, 실행시간: {}ms ===", id, executionTime);
 
         return ResponseEntity.ok(hisDetail);
     }
