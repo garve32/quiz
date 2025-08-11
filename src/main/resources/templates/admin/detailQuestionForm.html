@@ -135,7 +135,7 @@
 
             <div class="row">
                 <div class="col">
-                    <button type="button" th:onclick="|location.href='@{/admin/questions(category_id=${#httpServletRequest.getParameter('category_id')},searchKeyword=${#httpServletRequest.getParameter('searchKeyword')},currentPageNo=${#httpServletRequest.getParameter('currentPageNo')})}'|" class="btn btn-secondary w-100">문제 목록</button>
+                    <button type="button" onclick="goToList()" class="btn btn-secondary w-100">문제 목록</button>
                 </div>
                 <div class="col">
                     <button type="submit" th:text="${#strings.isEmpty(q.question.id) ?'문제 등록':'문제 수정'}" class="btn btn-primary w-100">문제 등록</button>
@@ -315,6 +315,23 @@
     });
 
 
+</script>
+<script>
+    function goToList() {
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const url = new URL('/admin/questions', window.location.origin);
+            ['category_id', 'searchKeyword', 'currentPageNo'].forEach(key => {
+                const value = params.get(key);
+                if (value) {
+                    url.searchParams.set(key, value);
+                }
+            });
+            window.location.href = url.toString();
+        } catch (e) {
+            window.location.href = '/admin/questions';
+        }
+    }
 </script>
 </body>
 </html>

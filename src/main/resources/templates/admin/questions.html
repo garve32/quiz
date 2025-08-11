@@ -35,7 +35,7 @@
                 <div class="input-group-append" id="button-addon4">
                     <button type="submit" class="btn btn-sm btn-outline-secondary" >검색</button>
                     <button type="button" class="btn btn-sm btn-outline-secondary" th:onclick="|location.href='@{/admin/questions}'|">초기화</button>
-                    <button type="button" class="btn btn-sm btn-primary" th:onclick="|location.href='@{/admin/question/add}'|">등록</button>
+                    <button type="button" class="btn btn-sm btn-primary" th:onclick="|location.href='@{/admin/question/add(category_id=${params.category_id},searchKeyword=${params.searchKeyword},currentPageNo=${params.currentPageNo})}'|">등록</button>
                 </div>
             </div>
         </div>

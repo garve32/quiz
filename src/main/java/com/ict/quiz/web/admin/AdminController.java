@@ -117,10 +117,14 @@ public class AdminController {
     }
 
     @GetMapping("/question/add")
-    public String addQuestionForm(Model model) throws Exception {
+    public String addQuestionForm(@RequestParam(value = "category_id", required = false) Long categoryId,
+                                  Model model) throws Exception {
         QuestionWithOptionReqDto dto = new QuestionWithOptionReqDto();
         Question question = new Question();
         question.setType("S");
+        if (categoryId != null) {
+            question.setCategory_id(categoryId);
+        }
         dto.setQuestion(question);
         model.addAttribute("q", dto);
 
@@ -128,7 +132,13 @@ public class AdminController {
     }
 
     @PostMapping("/question/save")
-    public String saveQuestion(@Validated @ModelAttribute("q") QuestionWithOptionReqDto q, BindingResult result, @RequestParam("upload") MultipartFile upload) throws Exception {
+    public String saveQuestion(@Validated @ModelAttribute("q") QuestionWithOptionReqDto q,
+                               BindingResult result,
+                               @RequestParam("upload") MultipartFile upload,
+                               @RequestParam(value = "category_id", required = false) Long categoryId,
+                               @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
+                               @RequestParam(value = "currentPageNo", required = false) Integer currentPageNo,
+                               org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) throws Exception {
 
         if (result.hasFieldErrors()) {
             StringBuilder errorMessage = new StringBuilder();
@@ -196,6 +206,15 @@ public class AdminController {
             }
         }
 
+        if (categoryId != null) {
+            redirectAttributes.addAttribute("category_id", categoryId);
+        }
+        if (searchKeyword != null && !searchKeyword.isEmpty()) {
+            redirectAttributes.addAttribute("searchKeyword", searchKeyword);
+        }
+        if (currentPageNo != null) {
+            redirectAttributes.addAttribute("currentPageNo", currentPageNo);
+        }
         return "redirect:/admin/questions";
     }
 
