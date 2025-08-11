@@ -146,6 +146,63 @@
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
+    <update id="updateCategory" parameterType="Category">
+        update category
+        set name = #{name}
+          , description = #{description}
+          , logo_url = #{logo_url}
+          , time_limit = #{time_limit}
+          , question_cnt = #{question_cnt}
+          , success_type = #{success_type}
+          , success_cnt = #{success_cnt}
+          , success_percent = #{success_percent}
+          , use_yn = #{use_yn}
+          , active_yn = #{active_yn}
+          , seq = #{seq}
+        where id = #{id}
+    </update>
+
+    <insert id="insertCategory" parameterType="Category" useGeneratedKeys="true" keyProperty="id">
+        insert into category (
+            p_id, name, description, time_limit, question_cnt, logo_url,
+            success_type, success_cnt, success_percent, use_yn, active_yn, seq
+        ) values (
+            #{p_id}, #{name}, #{description}, #{time_limit}, #{question_cnt}, #{logo_url},
+            #{success_type}, #{success_cnt}, #{success_percent}, #{use_yn}, #{active_yn}, #{seq}
+        )
+    </insert>
+
+    <select id="findRecentExamAttempts" resultType="ExamAttemptSummary">
+        SELECT
+            u.id                 AS user_id,
+            u.login_id           AS user_login_id,
+            u.name               AS user_name,
+            uq.seq               AS seq,
+            c.id                 AS category_id,
+            c.name               AS category_name,
+            CASE
+                WHEN uq.correct_set IS NULL OR uq.correct_set = '' THEN 0
+                ELSE ROUND(
+                    (
+                        (SELECT COUNT(*) FROM unnest(string_to_array(uq.correct_set, ',')) AS t(x) WHERE x = '1')::numeric
+                        * 100.0
+                    ) / NULLIF(array_length(string_to_array(uq.correct_set, ','), 1), 0), 2
+                )
+            END                  AS score_percent,
+            uq.success_cd        AS success_cd,
+            uq.start_dt          AS start_dt,
+            uq.end_dt            AS end_dt
+        FROM user_question uq
+        JOIN "user" u ON u.id = uq.user_id
+        JOIN category c ON c.id = uq.category_id
+        ORDER BY uq.start_dt DESC NULLS LAST
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countExamAttempts" resultType="int">
+        SELECT COUNT(*) FROM user_question
+    </select>
+
     <select id="findQuestionSelectStatsCountByCategory" parameterType="long" resultType="int">
         SELECT COUNT(*)
         FROM question q

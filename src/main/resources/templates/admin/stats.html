@@ -86,6 +86,37 @@
         <nav th:replace="fragments/paging :: pagination"></nav>
     </div>
 
+    <div class="row mt-4">
+        <div class="col">
+            <h6>최근 응시 20건</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover font-size-85">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width:15%">사용자</th>
+                        <th scope="col" style="width:10%">회차</th>
+                        <th scope="col" class="w-50">카테고리</th>
+                        <th scope="col" style="width:10%">점수(%)</th>
+                        <th scope="col" style="width:15%">응시 시간</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="a : ${recentAttempts}">
+                        <td th:text="${a.user_name}">홍길동</td>
+                        <td th:text="${a.seq}">1</td>
+                        <td th:text="${a.category_name}">카테고리명</td>
+                        <td>
+                            <span th:text="${a.score_percent}">0</span>
+                            <span th:text="${a.success_cd}" class="badge ml-1" th:classappend="${a.success_cd == 'S'} ? 'badge-success' : 'badge-secondary'">S</span>
+                        </td>
+                        <td th:text="${#temporals.format(a.start_dt, 'yyyy-MM-dd HH:mm')}">2025-01-01 12:00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div th:replace="fragments/footer :: footer" />
 
 </div>

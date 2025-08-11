@@ -74,4 +74,24 @@ public class AdminService {
     public CategorySummary findCategorySummary(Long categoryId) {
         return adminMapper.findCategorySummary(categoryId);
     }
+
+    public void updateCategory(Category category) {
+        adminMapper.updateCategory(category);
+    }
+
+    public void insertCategory(Category category) {
+        adminMapper.insertCategory(category);
+    }
+
+    public List<ExamAttemptSummary> findRecentExamAttempts(ExamAttemptPage params) {
+        int total = adminMapper.countExamAttempts();
+        Pagination pagination = new Pagination(params);
+        pagination.setTotalRecordCount(total);
+        params.setPagination(pagination);
+
+        return adminMapper.findRecentExamAttempts(
+                params.getRecordsPerPage(),
+                params.getPagination().getFirstRecordIndex()
+        );
+    }
 }

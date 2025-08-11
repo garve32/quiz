@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+    <div class="py-2 text-center">
+        <h4>통계 관리 - 응시</h4>
+        <div class="text-right">
+            <a class="btn btn-sm btn-outline-secondary" th:href="@{/admin/stats/questions}">문제별 통계 보기</a>
+        </div>
+    </div>
+
+    <hr class="my-2">
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover font-size-85">
+            <thead>
+            <tr>
+                <th scope="col" style="width:25%">사용자</th>
+                <th scope="col" style="width:10%">회차</th>
+                <th scope="col" style="width:45%">카테고리</th>
+                <th scope="col" style="width:10%">점수(%)</th>
+                <th scope="col" style="width:20%">응시 시간</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="a : ${attempts}">
+                <td th:text="${a.user_name + ' (' + a.user_login_id + ')'}" style="white-space: nowrap;">홍길동(hong)</td>
+                <td th:text="${a.seq}">1</td>
+                <td th:text="${a.category_name}">카테고리명</td>
+                <td>
+                    <span th:text="${a.score_percent}">0</span>
+                    <span th:text="${a.success_cd}" class="badge ml-1" th:classappend="${a.success_cd == 'S'} ? 'badge-success' : 'badge-secondary'">S</span>
+                </td>
+                <td th:text="${#temporals.format(a.start_dt, 'yyyy-MM-dd HH:mm')}" style="white-space: nowrap;">2025-01-01 12:00</td>
+            </tr>
+            </tbody>
+        </table>
+        <nav th:replace="fragments/paging :: pagination"></nav>
+    </div>
+
+    <div th:replace="fragments/footer :: footer" />
+
+</div>
+</body>
+<script th:inline="javascript">
+    function movePage(uri, queryString) {
+        location.href = uri + queryString;
+    }
+</script>
+</html>
+
+

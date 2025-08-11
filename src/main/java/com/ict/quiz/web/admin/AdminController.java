@@ -71,9 +71,17 @@ public class AdminController {
 
     @PostMapping("/category/save")
     public String saveCategory(@Validated @ModelAttribute("c") Category c, BindingResult result) throws Exception {
-        result.reject("-1", "기능 미구현");
-        return "admin/detailCategoryForm";
-//        return "redirect:/admin/categories";
+        if (result.hasErrors()) {
+            return "admin/detailCategoryForm";
+        }
+
+        if (c.getId() == null) {
+            adminService.insertCategory(c);
+        } else {
+            adminService.updateCategory(c);
+        }
+
+        return "redirect:/admin/categories";
     }
 
     @GetMapping("/questions")
@@ -83,10 +91,10 @@ public class AdminController {
         return "admin/questions";
     }
 
-    @GetMapping("/stats")
-    public String stats(@RequestParam(value = "categoryId", required = false) Long categoryId,
-                        @ModelAttribute("params") QuestionStat params,
-                        Model model) throws Exception {
+    @GetMapping("/stats/questions")
+    public String questionStats(@RequestParam(value = "categoryId", required = false) Long categoryId,
+                                @ModelAttribute("params") QuestionStat params,
+                                Model model) throws Exception {
         if (categoryId != null) {
             params.setCategory_id(categoryId);
             List<QuestionStat> stats = adminService.findQuestionSelectStatsByCategory(params);
@@ -94,7 +102,20 @@ public class AdminController {
             model.addAttribute("selectedCategoryId", categoryId);
             model.addAttribute("summary", adminService.findCategorySummary(categoryId));
         }
-        return "admin/stats";
+        return "admin/stats_question";
+    }
+
+    @GetMapping("/stats/exams")
+    public String examStats(@ModelAttribute("params") ExamAttemptPage params,
+                            Model model) throws Exception {
+        List<ExamAttemptSummary> list = adminService.findRecentExamAttempts(params);
+        model.addAttribute("attempts", list);
+        return "admin/stats_exam";
+    }
+
+    @GetMapping("/stats")
+    public String statsRoot() {
+        return "redirect:/admin/stats/exams";
     }
 
     @GetMapping("/question/{id}")

@@ -33,4 +33,11 @@ public interface AdminMapper {
     int findQuestionSelectStatsCountByCategory(@Param("categoryId") Long categoryId);
 
     CategorySummary findCategorySummary(@Param("categoryId") Long categoryId);
+
+    void updateCategory(Category category);
+
+    void insertCategory(Category category);
+
+    List<ExamAttemptSummary> findRecentExamAttempts(@Param("limit") int limit, @Param("offset") int offset);
+    int countExamAttempts();
 }
