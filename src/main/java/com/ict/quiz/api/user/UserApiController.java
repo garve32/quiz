@@ -87,7 +87,7 @@ public class UserApiController {
     )
     @GetMapping("/his")
     public ResponseEntity his(Long user_id) {
-
+        log.info("[GET] /api/u/his called, user_id={}", user_id);
         List<UserQuestionHisResDto> userQuestionHisResDto = userApiService.findHisList(user_id);
 
         return ResponseEntity.ok(userQuestionHisResDto);
