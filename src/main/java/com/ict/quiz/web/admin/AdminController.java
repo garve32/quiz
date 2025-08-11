@@ -2,7 +2,6 @@ package com.ict.quiz.web.admin;
 
 import com.ict.quiz.domain.*;
 import com.ict.quiz.web.questions.QuestionService;
-import com.ict.quiz.web.validator.QuestionValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -11,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -83,6 +81,20 @@ public class AdminController {
         List<QuestionPage> questionList = adminService.findAllQuestions(question);
         model.addAttribute("list", questionList);
         return "admin/questions";
+    }
+
+    @GetMapping("/stats")
+    public String stats(@RequestParam(value = "categoryId", required = false) Long categoryId,
+                        @ModelAttribute("params") QuestionStat params,
+                        Model model) throws Exception {
+        if (categoryId != null) {
+            params.setCategory_id(categoryId);
+            List<QuestionStat> stats = adminService.findQuestionSelectStatsByCategory(params);
+            model.addAttribute("stats", stats);
+            model.addAttribute("selectedCategoryId", categoryId);
+            model.addAttribute("summary", adminService.findCategorySummary(categoryId));
+        }
+        return "admin/stats";
     }
 
     @GetMapping("/question/{id}")

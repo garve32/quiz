@@ -57,4 +57,21 @@ public class AdminService {
     public Category getCategoryById(Long id) {
         return adminMapper.findCategoryById(id);
     }
+
+    public List<QuestionStat> findQuestionSelectStatsByCategory(QuestionStat params) {
+        int total = adminMapper.findQuestionSelectStatsCountByCategory(params.getCategory_id());
+        Pagination pagination = new Pagination(params);
+        pagination.setTotalRecordCount(total);
+        params.setPagination(pagination);
+
+        return adminMapper.findQuestionSelectStatsByCategory(
+                params.getCategory_id(),
+                params.getRecordsPerPage(),
+                params.getPagination().getFirstRecordIndex()
+        );
+    }
+
+    public CategorySummary findCategorySummary(Long categoryId) {
+        return adminMapper.findCategorySummary(categoryId);
+    }
 }

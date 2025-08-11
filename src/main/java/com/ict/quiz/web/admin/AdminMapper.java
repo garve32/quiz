@@ -2,6 +2,7 @@ package com.ict.quiz.web.admin;
 
 import com.ict.quiz.domain.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,4 +27,10 @@ public interface AdminMapper {
     List<Category> findCategories();
 
     Category findCategoryById(Long id);
+
+    List<QuestionStat> findQuestionSelectStatsByCategory(@Param("categoryId") Long categoryId, @Param("limit") int limit, @Param("offset") int offset);
+
+    int findQuestionSelectStatsCountByCategory(@Param("categoryId") Long categoryId);
+
+    CategorySummary findCategorySummary(@Param("categoryId") Long categoryId);
 }

@@ -1,8 +1,10 @@
 package com.ict.quiz.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class QuestionPage extends Criteria{
 
     private Long id;
@@ -17,4 +19,11 @@ public class QuestionPage extends Criteria{
     /** 페이징 정보 */
     public Pagination pagination;
 
+    @Override
+    public String makeQueryString(int pageNo) {
+        String base = super.makeQueryString(pageNo);
+        String categoryQuery = (category_id != null) ? (base.isEmpty() ? "?" : "&") + "category_id=" + category_id : "";
+        String searchQuery = (getSearchKeyword() != null && !getSearchKeyword().isEmpty()) ? (categoryQuery.isEmpty() && base.isEmpty() ? "?" : "&") + "searchKeyword=" + getSearchKeyword() : "";
+        return base + categoryQuery + searchQuery;
+    }
 }

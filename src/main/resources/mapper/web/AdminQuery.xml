@@ -4,21 +4,13 @@
 <mapper namespace="com.ict.quiz.web.admin.AdminMapper">
 
     <sql id="search">
-        <!-- 검색 키워드가 있을 때 -->
+        <!-- 카테고리 선택 시 필터 적용 -->
+        <if test="category_id != null and category_id != ''">
+            AND t1.category_id = #{category_id}
+        </if>
+        <!-- 제목 검색어가 있을 때 제목 LIKE 검색 -->
         <if test="searchKeyword != null and searchKeyword != ''">
-            <choose>
-                <!-- 검색 유형이 있을 때 -->
-                <when test="searchType != null and searchType != ''">
-                    <choose>
-                        <when test="'category'.equals( searchType )">
-                            AND t2.name LIKE '%' || #{searchKeyword} || '%'
-                        </when>
-                        <when test="'title'.equals( searchType )">
-                            AND t1.text LIKE '%' || #{searchKeyword} || '%'
-                        </when>
-                    </choose>
-                </when>
-            </choose>
+            AND t1.text LIKE '%' || #{searchKeyword} || '%'
         </if>
     </sql>
 
@@ -108,7 +100,7 @@
         select id, p_id, name, description, time_limit, question_cnt, logo_url
              , success_type, success_cnt, success_percent, use_yn, active_yn, seq
         from category
-        order by id
+        order by seq, id
     </select>
 
     <select id="findCategories" resultType="Category">
@@ -117,6 +109,7 @@
         from category
         where use_yn = 'Y'
           and question_cnt > 0
+        order by seq, id
     </select>
 
     <select id="findCategoryById" resultType="Category">
@@ -125,7 +118,61 @@
         from category
         where id = #{id}
     </select>
+    <select id="findQuestionSelectStatsByCategory" resultType="QuestionStat">
+        SELECT
+            q.id   AS question_id,
+            q.text AS question_text,
+            COALESCE(COUNT(*) FILTER (WHERE q.id = q_ids.elem::bigint), 0) AS select_count,
+            COALESCE(COUNT(*) FILTER (WHERE q.id = q_ids.elem::bigint AND corr.elem = '1'), 0) AS correct_count,
+            CASE
+                WHEN COALESCE(COUNT(*) FILTER (WHERE q.id = q_ids.elem::bigint), 0) > 0 THEN
+                    ROUND(
+                        (COALESCE(COUNT(*) FILTER (WHERE q.id = q_ids.elem::bigint AND corr.elem = '1'), 0)::numeric
+                            * 100.0)
+                        / COALESCE(COUNT(*) FILTER (WHERE q.id = q_ids.elem::bigint), 0), 2
+                    )
+                ELSE 0
+            END AS correct_rate
+        FROM question q
+        LEFT JOIN user_question uq
+               ON uq.category_id = q.category_id
+        LEFT JOIN LATERAL unnest(string_to_array(uq.question_set, ',')) WITH ORDINALITY AS q_ids(elem, idx)
+               ON TRUE
+        LEFT JOIN LATERAL unnest(string_to_array(uq.correct_set, ',')) WITH ORDINALITY AS corr(elem, idx2)
+               ON corr.idx2 = q_ids.idx
+        WHERE q.category_id = #{categoryId}
+        GROUP BY q.id, q.text
+        ORDER BY select_count DESC, q.id
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
 
+    <select id="findQuestionSelectStatsCountByCategory" parameterType="long" resultType="int">
+        SELECT COUNT(*)
+        FROM question q
+        WHERE q.category_id = #{categoryId}
+    </select>
 
+    <select id="findCategorySummary" parameterType="long" resultType="CategorySummary">
+        WITH uq AS (
+            SELECT * FROM user_question WHERE category_id = #{categoryId}
+        ),
+        qcnt AS (
+            SELECT COUNT(*) AS question_cnt FROM question WHERE category_id = #{categoryId}
+        )
+        SELECT
+            (SELECT COUNT(*) FROM uq) AS attempts,
+            (SELECT COUNT(*) FROM uq WHERE end_dt IS NOT NULL) AS completed,
+            CASE WHEN (SELECT COUNT(*) FROM uq) > 0
+                THEN ROUND(((SELECT COUNT(*) FROM uq WHERE end_dt IS NOT NULL)::numeric
+                    * 100.0) / (SELECT COUNT(*) FROM uq), 2)
+                ELSE 0 END AS completion_rate,
+            (SELECT COUNT(*) FROM uq WHERE success_cd = 'S') AS success,
+            CASE WHEN (SELECT COUNT(*) FROM uq) > 0
+                THEN ROUND(((SELECT COUNT(*) FROM uq WHERE success_cd = 'S')::numeric
+                    * 100.0) / (SELECT COUNT(*) FROM uq), 2)
+                ELSE 0 END AS success_rate,
+            (SELECT ROUND(AVG(accum_sec), 2) FROM uq) AS avg_seconds,
+            (SELECT ROUND(AVG(accum_sec / NULLIF(qcnt.question_cnt, 0)), 2) FROM uq, qcnt) AS avg_seconds_per_question
+    </select>
 
 </mapper>
