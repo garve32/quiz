@@ -1,23 +1,30 @@
 package com.ict.quiz.api.user;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.ict.quiz.domain.api.CategoryResDto;
 import com.ict.quiz.domain.Question;
 import com.ict.quiz.domain.QuestionOption;
 import com.ict.quiz.domain.UserQuestion;
+import com.ict.quiz.domain.api.CategoryResDto;
 import com.ict.quiz.domain.api.QuestionStartReqDto;
 import com.ict.quiz.domain.api.QuestionWithOptionResDto;
 import com.ict.quiz.domain.api.UserQuestionReqDto;
 import com.ict.quiz.domain.api.UserQuestionResDto;
+
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -79,13 +86,6 @@ public class QuestionApiController {
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
         UserQuestionResDto userQuestionResDto = om.convertValue(userQuestion, UserQuestionResDto.class);
-
-//        String[] q_set_str = userQuestion.getQuestion_set().split(",");
-//        Long[] q_set = new Long[q_set_str.length];
-//
-//        for (int i = 0; i < q_set.length; i++) {
-//            q_set[i] = Long.valueOf(q_set_str[i]);
-//        }
 
         // 정상 리턴
         return ResponseEntity.ok(userQuestionResDto);

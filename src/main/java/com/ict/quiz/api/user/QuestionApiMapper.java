@@ -1,14 +1,18 @@
 package com.ict.quiz.api.user;
 
-import com.ict.quiz.domain.*;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import com.ict.quiz.domain.Category;
+import com.ict.quiz.domain.Question;
+import com.ict.quiz.domain.QuestionOption;
+import com.ict.quiz.domain.UserQuestion;
 import com.ict.quiz.domain.api.CategoryResDto;
 import com.ict.quiz.domain.api.QuestionStartReqDto;
 import com.ict.quiz.domain.api.UserQuestionReqDto;
 import com.ict.quiz.domain.api.UserQuestionResDto;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 @Mapper
 public interface QuestionApiMapper {
