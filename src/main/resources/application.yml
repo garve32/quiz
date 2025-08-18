@@ -2,22 +2,13 @@ spring:
   datasource:
     hikari:
       driver-class-name: org.postgresql.Driver
-#      jdbc-url: jdbc:postgresql://localhost:5432/ict
-#      driver-class-name: com.mysql.cj.jdbc.Driver
-#      jdbc-url: jdbc:mysql://13.125.18.81:3306/ict?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-      #jdbc-url: jdbc:mysql://43.200.138.19:3306/ict?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-      #jdbc-url: jdbc:mysql://3.37.139.180:3306/ict?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-#      username: ictuser
-#      password: gksghk12!
-      jdbc-url: jdbc:postgresql://ep-purple-wildflower-a1zwp8ge-pooler.ap-southeast-1.aws.neon.tech/neondb
-      username: neondb_owner
-      password: npg_2CUcHbWQ9fDR
-#      jdbc-url: ${JDBC_DATABASE_URL}
-#      username: ${JDBC_DATABASE_USERNAME}
-#      password: ${JDBC_DATABASE_PASSWORD}
+#      jdbc-url: jdbc:postgresql://ep-purple-wildflower-a1zwp8ge-pooler.ap-southeast-1.aws.neon.tech/neondb
+#      username: neondb_owner
+#      password: npg_2CUcHbWQ9fDR
+      jdbc-url: ${JDBC_DATABASE_URL}
+      username: ${JDBC_DATABASE_USERNAME}
+      password: ${JDBC_DATABASE_PASSWORD}
       pool-name: cp_my
-#      maximum-pool-size: 20
-#      max-lifetime: 26000
       maximum-pool-size: 10
       minimum-idle: 2
       idle-timeout: 30000
