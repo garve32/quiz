@@ -26,15 +26,15 @@ jobs:
       - uses: actions/checkout@v3.3.0
 
       - name: execute remote ssh
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.REMOTE_IP }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.REMOTE_IDENTITYFILE }}
-          port: ${{ secrets.REMOTE_PORT }}
-          script: |
-            whoami
-            ls -al
+        # uses: appleboy/ssh-action@master
+        # with:
+        #   host: ${{ secrets.REMOTE_IP }}
+        #   username: ${{ secrets.REMOTE_USER }}
+        #   key: ${{ secrets.REMOTE_IDENTITYFILE }}
+        #   port: ${{ secrets.REMOTE_PORT }}
+        #   script: |
+        #     whoami
+        #     ls -al
 
     # steps:
     # - uses: actions/checkout@v4
