@@ -1,9 +1,10 @@
 package com.ict.quiz.api.user;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.ict.quiz.domain.api.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +15,12 @@ import com.ict.quiz.domain.QuestionOptionResult;
 import com.ict.quiz.domain.QuestionResult;
 import com.ict.quiz.domain.QuestionResultDetail;
 import com.ict.quiz.domain.User;
-import com.ict.quiz.domain.api.HisDetailDto;
-import com.ict.quiz.domain.api.UserAddReqDto;
-import com.ict.quiz.domain.api.UserLoginReqDto;
-import com.ict.quiz.domain.api.UserQuestionHisDetailResDto;
-import com.ict.quiz.domain.api.UserQuestionHisResDto;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserApiService {
@@ -154,6 +152,19 @@ public class UserApiService {
         result.setResultDetails(questionResultDetails);
 
         return result;
+    }
+
+    public List<CategoryResDto> findCategoryHis(Long user_id) {
+        List<CategoryResDto> categoryHis = userApiMapper.findCategoryHis(user_id);
+        return categoryHis;
+    }
+
+    public List<CategoryStatsResDto> findCategoryStats(Long user_id, Long category_id) {
+        log.info("user_id: {}, category_id: {}", user_id, category_id);
+        List<CategoryStatsResDto> categoryStats = userApiMapper.findCategoryStats(user_id, category_id);
+        log.info("categoryStats = {}", categoryStats);
+        return categoryStats;
+
     }
 
 

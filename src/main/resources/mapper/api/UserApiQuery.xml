@@ -73,5 +73,50 @@
          where login_id = #{login_id}
     </select>
 
+    <select id="findCategoryHis" resultType="CategoryResDto">
+        select tb.id, tb.name, tb.logo_url
+        from (
+                 select category_id, max(id) as max_category_id
+                 from user_question
+                 where user_id = #{user_id}
+                 group by category_id
+             ) ta
+                 inner join category tb
+                            on tb.id = ta.category_id
+        order by ta.max_category_id desc
+    </select>
+
+    <select id="findCategoryStats" resultType="CategoryStatsResDto">
+        select select_count
+             , count(question_id) as attempt_count
+             , round(avg(correct_rate), 2) as correct_rate
+        from (
+                 SELECT
+                     q.id   AS question_id,
+                     COALESCE(COUNT(*) FILTER (WHERE q.id = q_ids.elem::bigint), 0) AS select_count,
+                     CASE
+                         WHEN COALESCE(COUNT(*) FILTER (WHERE q.id = q_ids.elem::bigint), 0) > 0 THEN
+                             ROUND(
+                                     (COALESCE(COUNT(*) FILTER (WHERE q.id = q_ids.elem::bigint AND corr.elem = '1'), 0)::numeric
+                            * 100.0)
+                                         / COALESCE(COUNT(*) FILTER (WHERE q.id = q_ids.elem::bigint), 0), 2
+                             )
+                         ELSE 0
+                         END AS correct_rate
+                 FROM question q
+                          LEFT JOIN user_question uq
+                                    ON uq.category_id = q.category_id
+                                        and uq.user_id = #{user_id}
+                          LEFT JOIN LATERAL unnest(string_to_array(uq.question_set, ',')) WITH ORDINALITY AS q_ids(elem, idx)
+                 ON TRUE
+                     LEFT JOIN LATERAL unnest(string_to_array(uq.correct_set, ',')) WITH ORDINALITY AS corr(elem, idx2)
+                 ON corr.idx2 = q_ids.idx
+                 WHERE q.category_id = #{category_id}
+                 GROUP BY q.id, q.text
+             )
+        group by select_count
+        order by select_count
+    </select>
+
 
 </mapper>

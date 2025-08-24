@@ -93,7 +93,26 @@ public class UserApiController {
 
         return ResponseEntity.ok(hisDetail);
     }
-    
+
+    @GetMapping("/his/categories")
+    public ResponseEntity categories(Long user_id) {
+        log.info("[GET] /api/u/his/categories called, user_id={}", user_id);
+        List<CategoryResDto> categoryResDto = userApiService.findCategoryHis(user_id);
+        return ResponseEntity.ok(categoryResDto);
+    }
+
+
+    @ApiOperation(
+            value = "사용자 카테고리별 문제 현황 조회"
+            , notes = "사용자 ID와 카테고리 ID로 해당 카테고리의 문제별 현황을 조회한다."
+            , response = CategoryStatsResDto.class
+    )
+    @GetMapping("/category-stats")
+    public ResponseEntity getCategoryStats(Long user_id, Long category_id) {
+
+        List<CategoryStatsResDto> categoryStats = userApiService.findCategoryStats(user_id, category_id);
+        return ResponseEntity.ok(categoryStats);
+    }
 
     @PostMapping("/api/u/session-extend")
     public ResponseEntity extendSession(HttpServletRequest request) {
