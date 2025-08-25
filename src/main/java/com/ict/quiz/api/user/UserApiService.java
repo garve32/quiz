@@ -154,8 +154,8 @@ public class UserApiService {
         return result;
     }
 
-    public List<CategoryResDto> findCategoryHis(Long user_id) {
-        List<CategoryResDto> categoryHis = userApiMapper.findCategoryHis(user_id);
+    public List<CategoryStatsCategoryResDto> findCategoryHis(Long user_id) {
+        List<CategoryStatsCategoryResDto> categoryHis = userApiMapper.findCategoryHis(user_id);
         return categoryHis;
     }
 

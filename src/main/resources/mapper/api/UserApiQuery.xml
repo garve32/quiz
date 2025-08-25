@@ -73,10 +73,10 @@
          where login_id = #{login_id}
     </select>
 
-    <select id="findCategoryHis" resultType="CategoryResDto">
-        select tb.id, tb.name, tb.logo_url
+    <select id="findCategoryHis" resultType="CategoryStatsCategoryResDto">
+        select tb.id, tb.name, tb.logo_url, ta.attempt_count
         from (
-                 select category_id, max(id) as max_category_id
+                 select category_id, max(id) as max_category_id, count(id) as attempt_count
                  from user_question
                  where user_id = #{user_id}
                  group by category_id
@@ -106,6 +106,7 @@
                  FROM question q
                           LEFT JOIN user_question uq
                                     ON uq.category_id = q.category_id
+                                        and uq.success_cd is not null
                                         and uq.user_id = #{user_id}
                           LEFT JOIN LATERAL unnest(string_to_array(uq.question_set, ',')) WITH ORDINALITY AS q_ids(elem, idx)
                  ON TRUE

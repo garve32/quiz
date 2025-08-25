@@ -97,7 +97,7 @@ public class UserApiController {
     @GetMapping("/his/categories")
     public ResponseEntity categories(Long user_id) {
         log.info("[GET] /api/u/his/categories called, user_id={}", user_id);
-        List<CategoryResDto> categoryResDto = userApiService.findCategoryHis(user_id);
+        List<CategoryStatsCategoryResDto> categoryResDto = userApiService.findCategoryHis(user_id);
         return ResponseEntity.ok(categoryResDto);
     }
 
