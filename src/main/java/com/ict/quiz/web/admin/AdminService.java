@@ -94,4 +94,49 @@ public class AdminService {
                 params.getPagination().getFirstRecordIndex()
         );
     }
+
+    // 해설 관련 메서드들
+    public List<QuestionExplanationPage> findAllExplanations(QuestionExplanationPage explanation) {
+        int cnt = adminMapper.findAllExplanationsCount(explanation);
+        Pagination pagination = new Pagination(explanation);
+        pagination.setTotalRecordCount(cnt);
+
+        explanation.setPagination(pagination);
+
+        return adminMapper.findAllExplanations(explanation);
+    }
+
+    public QuestionExplanationPage findExplanationById(Long id) {
+        return adminMapper.findExplanationById(id);
+    }
+
+    public QuestionExplanationPage findExplanationByQuestionId(Long questionId) {
+        return adminMapper.findExplanationByQuestionId(questionId);
+    }
+
+    public void insertExplanation(QuestionExplanationPage explanation) {
+        adminMapper.insertExplanation(explanation);
+    }
+
+    public void updateExplanation(QuestionExplanationPage explanation) {
+        adminMapper.updateExplanation(explanation);
+    }
+
+    public void updateExplanationNotFile(QuestionExplanationPage explanation) {
+        adminMapper.updateExplanationNotFile(explanation);
+    }
+
+    public List<QuestionPage> findQuestionsForExplanation() {
+        return adminMapper.findQuestionsForExplanation();
+    }
+
+    public List<QuestionPage> findQuestionsWithExplanationStatus(QuestionPage question) {
+        int cnt = adminMapper.findQuestionsWithExplanationStatusCount(question);
+        Pagination pagination = new Pagination(question);
+        pagination.setTotalRecordCount(cnt);
+
+        question.setPagination(pagination);
+
+        return adminMapper.findQuestionsWithExplanationStatus(question);
+    }
 }

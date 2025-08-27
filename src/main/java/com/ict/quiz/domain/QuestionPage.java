@@ -15,6 +15,7 @@ public class QuestionPage extends Criteria{
     private String type;
     private Long category_id;
     private String category_nm;
+    private boolean has_explanation;
 
     /** 페이징 정보 */
     public Pagination pagination;

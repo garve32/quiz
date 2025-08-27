@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+    <div class="py-2 text-center">
+        <h4 th:text="${#strings.isEmpty(e.id) ? '해설 등록' : '해설 수정'}">해설 등록</h4>
+    </div>
+
+    <hr class="my-2">
+
+    <!-- 문제 정보 표시 -->
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5 class="mb-0">문제 정보</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <strong>문제:</strong>
+                <div class="mt-2" th:utext="${question.text}">문제 내용</div>
+            </div>
+            
+            <!-- 문제 이미지가 있는 경우 표시 -->
+            <div class="mb-3" th:if="${questionImage}">
+                <strong>문제 이미지:</strong>
+                <div class="mt-2">
+                    <img th:src="'data:image/png;base64,' + ${questionImage}" alt="문제 이미지" class="img-fluid rounded shadow-sm" style="max-height: 300px;">
+                </div>
+            </div>
+
+            <!-- 선택지 표시 -->
+            <div class="mb-3" th:if="${options != null and !options.empty}">
+                <strong>선택지:</strong>
+                <div class="mt-2">
+                    <div th:each="option : ${options}" 
+                         th:if="${option.del_yn == 'N'}"
+                         class="mb-2">
+                        <div th:class="'alert ' + ${option.correct_yn == 'Y' ? 'alert-success' : 'alert-light'}" 
+                             style="padding: 8px 12px; margin-bottom: 5px;">
+                            <span th:text="${option.seq + '. ' + option.text}">1. 옵션 내용</span>
+                            <span th:if="${option.correct_yn == 'Y'}" class="badge badge-success ml-2">정답</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 해설 등록 폼 -->
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5 class="mb-0">해설 등록</h5>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/admin/explanation/save}" th:object="${e}" method="post" enctype="multipart/form-data">
+                <div th:if="${#fields.hasGlobalErrors()}">
+                    <div class="field-error global-error" th:each="err : ${#fields.globalErrors()}" th:utext="${err}">글로벌 오류 메시지</div>
+                </div>
+                
+                <!-- hidden fields -->
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{question_id}" />
+                <input type="hidden" name="category_id" th:value="${category_id}" />
+                <input type="hidden" name="searchKeyword" th:value="${searchKeyword}" />
+                <input type="hidden" name="currentPageNo" th:value="${currentPageNo}" />
+
+                <!-- 해설 내용 -->
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" style="min-width: 80px">해설</span>
+                    </div>
+                    <textarea th:field="*{explanation_text}" 
+                              class="form-control form-control-sm" 
+                              th:classappend="${#fields.hasErrors('explanation_text')} ? 'is-invalid' : ''"
+                              aria-label="해설 내용" 
+                              rows="10" 
+                              placeholder="해설 내용을 입력해주세요"></textarea>
+                    <div th:if="${#fields.hasErrors('explanation_text')}" class="invalid-feedback" th:errors="*{explanation_text}">
+                        해설 내용 오류
+                    </div>
+                </div>
+
+                <!-- 이미지 업로드 -->
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" style="min-width: 80px">이미지</span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" id="upload" name="upload" class="custom-file-input" onchange="readURL(this);" th:value="${e.image}">
+                        <label id="upload-label" for="upload" class="custom-file-label" th:text="${#strings.isEmpty(e.image_name) ? '선택된 파일 없음' : e.image_name}">선택된 파일 없음</label>
+                        <input type="hidden" th:field="*{image_name}">
+                    </div>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="delImageBtn" onclick="delImage(this);">X</button>
+                    </div>
+                </div>
+                <div class="image-area mb-3" th:if="${upload}">
+                    <img id="imageResult" th:src="'data:image/png;base64,' + ${upload}" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                </div>
+                <div class="image-area mb-3" th:unless="${upload}">
+                    <img id="imageResult" src="data:image/png;base64," alt="" class="img-fluid rounded shadow-sm mx-auto d-block" style="display: none;">
+                </div>
+
+                <!-- 사용 여부 -->
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" style="min-width: 80px">사용여부</label>
+                    </div>
+                    <select th:field="*{use_yn}" class="custom-select">
+                        <option value="Y">사용</option>
+                        <option value="N">미사용</option>
+                    </select>
+                </div>
+
+                <hr class="my-2">
+
+                <div class="row">
+                    <div class="col">
+                        <button type="button" onclick="goToList()" class="btn btn-secondary w-100">해설 목록</button>
+                    </div>
+                    <div class="col">
+                        <button type="submit" th:text="${#strings.isEmpty(e.id) ? '해설 등록' : '해설 수정'}" class="btn btn-primary w-100">해설 등록</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"></div>
+
+</div>
+
+<script th:inline="javascript">
+    $(document).ready(function(){
+        // 업로드된 이미지가 있으면 표시
+        if ($('#imageResult').attr('src') && $('#imageResult').attr('src') !== 'data:image/png;base64,') {
+            $('#imageResult').show();
+        }
+    });
+
+    $(document).on("keydown", ":input:not(textarea)", function(event) {
+        return event.key != "Enter";
+    });
+
+    function delImage(input) {
+        $('#upload').val('');
+        $('#upload-label').text('선택된 파일 없음');
+        $('#imageResult').attr('src', 'data:image/png;base64,').hide();
+        $("#image_name").val('');
+    }
+
+    /*  ==========================================
+        SHOW UPLOADED IMAGE
+    * ========================================== */
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imageResult').attr('src', e.target.result).show();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    /*  ==========================================
+        SHOW UPLOADED IMAGE NAME
+    * ========================================== */
+    $('#upload').change(function(event) {
+        const files = event.target.files;
+        if (files.length > 0) {
+            $('#upload-label').text(files[0].name);
+            $("#image_name").val(files[0].name);
+        }
+    });
+
+    function goToList() {
+        const params = new URLSearchParams();
+        
+        // URL 파라미터 추가
+        const categoryId = /*[[${category_id}]]*/ null;
+        const searchKeyword = /*[[${searchKeyword}]]*/ null;
+        const currentPageNo = /*[[${currentPageNo}]]*/ null;
+        
+        if (categoryId) params.set('category_id', categoryId);
+        if (searchKeyword) params.set('searchKeyword', searchKeyword);
+        if (currentPageNo) params.set('currentPageNo', currentPageNo);
+        
+        const queryString = params.toString();
+        const url = '/admin/explains' + (queryString ? '?' + queryString : '');
+        window.location.href = url;
+    }
+</script>
+</body>
+</html>

@@ -18,11 +18,14 @@ public class QuestionExplanation {
     @ApiModelProperty(example = "9")
     private Long question_id;
 
-    @ApiModelProperty(example = "문제 해설")
-    private String title;
-
     @ApiModelProperty(example = "이 문제는 다음과 같이 풀 수 있습니다...")
     private String explanation_text;
+
+    @ApiModelProperty(example = "explanation.png")
+    private String image_name;
+    
+    @ApiModelProperty(example = "iVBORw0KGgoAAAANSUhEUgAAASIAAA...")
+    private byte[] image;
 
     @ApiModelProperty(example = "Y")
     private String use_yn;

@@ -18,19 +18,25 @@
         <div class="col">
             <button class="w-100 btn btn-primary btn-lg" type="button"
                     th:onclick="|location.href='@{/admin/questions}'|">
-                문제 조회
+                문제 관리
+            </button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-success btn-lg" type="button"
+                    th:onclick="|location.href='@{/admin/explains}'|">
+                해설 관리
             </button>
         </div>
         <div class="col">
             <button class="w-100 btn btn-info btn-lg" type="button"
-                    th:onclick="|location.href='@{/questions/history}'|">
-                문제 등록
+                    th:onclick="|location.href='@{/admin/categories}'|">
+                카테고리 관리
             </button>
         </div>
         <div class="col">
-            <button class="w-100 btn btn-info btn-lg" type="button"
-                    th:onclick="|location.href='@{/questions/history}'|">
-                문제 수정
+            <button class="w-100 btn btn-secondary btn-lg" type="button"
+                    th:onclick="|location.href='@{/admin/stats}'|">
+                통계
             </button>
         </div>
     </div>

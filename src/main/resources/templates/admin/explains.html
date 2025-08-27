@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="fragments/header :: header" />
+
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+    <div class="py-2 text-center">
+        <h4>해설 관리</h4>
+    </div>
+
+    <hr class="my-2">
+
+    <form th:action="@{/admin/explains}" method="get">
+        <div class="row my-4 mx-1">
+            <div class="input-group input-group-sm" id="searchForm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">카테고리</span>
+                </div>
+                <select class="form-control form-control-sm" id="category_id" name="category_id">
+                    <option value="">선택하세요</option>
+                    <option th:each="c : ${categoryList}"
+                            th:value="${c.id}"
+                            th:text="${c.name}"
+                            th:selected="${params.category_id != null and c.id == params.category_id}">
+                    </option>
+                </select>
+                <div class="input-group-prepend">
+                    <span class="input-group-text">제목</span>
+                </div>
+                <input type="text" class="form-control input-group-append" id="searchKeyword" name="searchKeyword" th:value="${params.searchKeyword}" placeholder="문제 제목 검색" aria-label="Search Title" aria-describedby="button-addon4">
+                <div class="input-group-append" id="button-addon4">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary" >검색</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" th:onclick="|location.href='@{/admin/explains}'|">초기화</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="table-responsive">
+        <table class="table table-sm table-hover font-size-85">
+            <thead>
+            <tr>
+                <th scope="col" >id</th>
+                <th scope="col" th:class="w-60">문제</th>
+                <th scope="col" >카테고리</th>
+                <th scope="col" >해설등록</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr th:each="item : ${list}">
+                <td><span th:text="${item.id}">id</span></td>
+                <td>
+                    <a th:href="@{/admin/explanation/{id}(id=${item.id}, category_id=${params.category_id}, searchKeyword=${params.searchKeyword}, currentPageNo=${params.currentPageNo})}">
+                        <span th:text="${#strings.abbreviate(item.text,75)}">text</span>
+                    </a>
+                </td>
+                <td><span th:text="${item.category_nm}">category_nm</span></td>
+                <td>
+                    <span th:if="${item.has_explanation}" class="badge badge-success">등록됨</span>
+                    <span th:if="${!item.has_explanation}" class="badge badge-warning">미등록</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <th:block layout:fragment="paging">
+            <nav th:replace="fragments/paging :: pagination"></nav>
+        </th:block>
+    </div>
+
+    <div th:replace="fragments/footer :: footer" />
+
+</div>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        $(document).ready(function(){
+            setQueryStringParams();
+        });
+
+        function setQueryStringParams() {
+
+            if ( !location.search ) {
+                return false;
+            }
+            new URLSearchParams(location.search).forEach((value, key) => {
+                if(key == 'searchType') {
+                    $("#searchType").val(value).prop("selected", true);
+                } else if(key == 'searchKeyword') {
+                    $('#searchKeyword').val(value);
+                }
+            })
+        }
+
+        function movePage(uri, queryString) {
+            location.href = uri + queryString;
+        }
+        /*]]>*/
+    </script>
+</th:block>
+</body>
+</html>

@@ -239,4 +239,130 @@ public class AdminController {
         return "redirect:/admin/questions";
     }
 
+    // 해설 관리 관련 메서드들
+    @GetMapping("/explains")
+    public String explains(@ModelAttribute("params") QuestionPage question, Model model) throws Exception {
+        List<QuestionPage> questionList = adminService.findQuestionsWithExplanationStatus(question);
+        model.addAttribute("list", questionList);
+        return "admin/explains";
+    }
+
+    @GetMapping("/explanation/{id}")
+    public String explanationForm(@PathVariable("id") Long id, 
+                                  @RequestParam(value = "category_id", required = false) Long categoryId,
+                                  @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
+                                  @RequestParam(value = "currentPageNo", required = false) Integer currentPageNo,
+                                  Model model) throws Exception {
+        
+        // id는 문제 ID로 처리
+        Question question = questionService.findById(id);
+        List<QuestionOption> options = questionService.findByQuestionId(id);
+        
+        // 해당 문제에 대한 기존 해설이 있는지 확인
+        QuestionExplanationPage explanation = adminService.findExplanationByQuestionId(id);
+        
+        if (explanation == null) {
+            // 새 해설 등록
+            explanation = new QuestionExplanationPage();
+            explanation.setQuestion_id(id);
+            explanation.setUse_yn("Y");
+        }
+        
+        model.addAttribute("question", question);
+        model.addAttribute("options", options);
+        model.addAttribute("e", explanation);
+        
+        // 검색 파라미터 추가
+        model.addAttribute("category_id", categoryId);
+        model.addAttribute("searchKeyword", searchKeyword);
+        model.addAttribute("currentPageNo", currentPageNo);
+
+        if(explanation.getImage() != null && explanation.getImage().length > 0) {
+            String image = Base64.encodeBase64String(explanation.getImage());
+            model.addAttribute("upload", image);
+        }
+        
+        if(question.getImage() != null && question.getImage().length > 0) {
+            String questionImage = Base64.encodeBase64String(question.getImage());
+            model.addAttribute("questionImage", questionImage);
+        }
+        
+        return "admin/detailExplanationForm";
+    }
+
+    @GetMapping("/explanation/add")
+    public String addExplanationForm(@RequestParam(value = "question_id", required = false) Long questionId,
+                                     @RequestParam(value = "category_id", required = false) Long categoryId,
+                                     Model model) throws Exception {
+        QuestionExplanationPage explanation = new QuestionExplanationPage();
+        if (questionId != null) {
+            explanation.setQuestion_id(questionId);
+        }
+        if (categoryId != null) {
+            explanation.setCategory_id(categoryId);
+        }
+        explanation.setUse_yn("Y");
+        model.addAttribute("e", explanation);
+        
+        // 문제 목록을 가져와서 모델에 추가
+        List<QuestionPage> questionList = adminService.findQuestionsForExplanation();
+        model.addAttribute("questionList", questionList);
+        
+        return "admin/detailExplanationForm";
+    }
+
+    @PostMapping("/explanation/save")
+    public String saveExplanation(@ModelAttribute("e") QuestionExplanationPage e,
+                                  BindingResult result,
+                                  @RequestParam("upload") MultipartFile upload,
+                                  @RequestParam(value = "category_id", required = false) Long categoryId,
+                                  @RequestParam(value = "searchKeyword", required = false) String searchKeyword,
+                                  @RequestParam(value = "currentPageNo", required = false) Integer currentPageNo,
+                                  Model model,
+                                  org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) throws Exception {
+
+        // 유효성 검사
+        if (e.getQuestion_id() == null) {
+            result.rejectValue("question_id", "required", "문제를 선택해주세요.");
+        }
+        if (e.getExplanation_text() == null || e.getExplanation_text().trim().isEmpty()) {
+            result.rejectValue("explanation_text", "required", "해설 내용을 입력해주세요.");
+        }
+
+        if (result.hasErrors()) {
+            // 문제 목록을 다시 가져와서 모델에 추가
+            List<QuestionPage> questionList = adminService.findQuestionsForExplanation();
+            model.addAttribute("questionList", questionList);
+            return "admin/detailExplanationForm";
+        }
+
+        byte[] bytes = upload.getBytes();
+        e.setImage(bytes);
+
+        if(e.getId() == null) {
+            adminService.insertExplanation(e);
+        } else {
+            if(e.getImage_name() == null || e.getImage_name().isEmpty()) {
+                adminService.updateExplanation(e);
+            } else {
+                if(upload.getSize() > 0) {
+                    adminService.updateExplanation(e);
+                } else {
+                    adminService.updateExplanationNotFile(e);
+                }
+            }
+        }
+
+        if (categoryId != null) {
+            redirectAttributes.addAttribute("category_id", categoryId);
+        }
+        if (searchKeyword != null && !searchKeyword.isEmpty()) {
+            redirectAttributes.addAttribute("searchKeyword", searchKeyword);
+        }
+        if (currentPageNo != null) {
+            redirectAttributes.addAttribute("currentPageNo", currentPageNo);
+        }
+        return "redirect:/admin/explains";
+    }
+
 }

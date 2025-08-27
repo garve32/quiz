@@ -232,4 +232,148 @@
             (SELECT ROUND(AVG(accum_sec / NULLIF(qcnt.question_cnt, 0)), 2) FROM uq, qcnt) AS avg_seconds_per_question
     </select>
 
+    <!-- 해설 관련 쿼리들 -->
+    <sql id="explanationSearch">
+        <!-- 카테고리 선택 시 필터 적용 -->
+        <if test="category_id != null and category_id != ''">
+            AND t2.category_id = #{category_id}
+        </if>
+        <!-- 제목 검색어가 있을 때 해설 내용 또는 문제 내용 LIKE 검색 -->
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (t1.explanation_text LIKE '%' || #{searchKeyword} || '%' 
+                 OR t2.text LIKE '%' || #{searchKeyword} || '%')
+        </if>
+    </sql>
+
+    <select id="findAllExplanations" parameterType="QuestionExplanationPage" resultType="QuestionExplanationPage">
+        SELECT 
+            t1.id, 
+            t1.question_id, 
+            t1.explanation_text, 
+            t1.image_name, 
+            t1.image, 
+            t1.use_yn,
+            t2.text as question_text,
+            t3.name as category_name,
+            t2.category_id
+        FROM question_explanation t1
+        INNER JOIN question t2 ON t2.id = t1.question_id
+        INNER JOIN category t3 ON t3.id = t2.category_id
+        WHERE 1=1
+        <include refid="explanationSearch" />
+        ORDER BY t1.id DESC
+        LIMIT #{recordsPerPage} OFFSET #{pagination.firstRecordIndex}
+    </select>
+
+    <select id="findAllExplanationsCount" parameterType="QuestionExplanationPage" resultType="int">
+        SELECT COUNT(*)
+        FROM question_explanation t1
+        INNER JOIN question t2 ON t2.id = t1.question_id
+        INNER JOIN category t3 ON t3.id = t2.category_id
+        WHERE 1=1
+        <include refid="explanationSearch" />
+    </select>
+
+    <select id="findExplanationById" parameterType="long" resultType="QuestionExplanationPage">
+        SELECT 
+            t1.id, 
+            t1.question_id, 
+            t1.explanation_text, 
+            t1.image_name, 
+            t1.image, 
+            t1.use_yn,
+            t2.text as question_text,
+            t3.name as category_name,
+            t2.category_id
+        FROM question_explanation t1
+        INNER JOIN question t2 ON t2.id = t1.question_id
+        INNER JOIN category t3 ON t3.id = t2.category_id
+        WHERE t1.id = #{id}
+    </select>
+
+    <select id="findExplanationByQuestionId" parameterType="long" resultType="QuestionExplanationPage">
+        SELECT 
+            t1.id, 
+            t1.question_id, 
+            t1.explanation_text, 
+            t1.image_name, 
+            t1.image, 
+            t1.use_yn,
+            t2.text as question_text,
+            t3.name as category_name,
+            t2.category_id
+        FROM question_explanation t1
+        INNER JOIN question t2 ON t2.id = t1.question_id
+        INNER JOIN category t3 ON t3.id = t2.category_id
+        WHERE t1.question_id = #{questionId} AND t1.use_yn = 'Y'
+        LIMIT 1
+    </select>
+
+    <insert id="insertExplanation" parameterType="QuestionExplanationPage" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO question_explanation (
+            question_id, explanation_text, image_name, image, use_yn
+        ) VALUES (
+            #{question_id}, #{explanation_text}, #{image_name}, #{image}, #{use_yn}
+        )
+    </insert>
+
+    <update id="updateExplanation" parameterType="QuestionExplanationPage">
+        UPDATE question_explanation
+        SET question_id = #{question_id},
+            explanation_text = #{explanation_text},
+            image_name = #{image_name},
+            image = #{image},
+            use_yn = #{use_yn}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateExplanationNotFile" parameterType="QuestionExplanationPage">
+        UPDATE question_explanation
+        SET question_id = #{question_id},
+            explanation_text = #{explanation_text},
+            use_yn = #{use_yn}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findQuestionsForExplanation" resultType="QuestionPage">
+        SELECT 
+            t1.id, 
+            t1.text, 
+            t1.category_id,
+            t2.name as category_nm
+        FROM question t1
+        INNER JOIN category t2 ON t2.id = t1.category_id
+        WHERE t1.use_yn = 'Y'
+        ORDER BY t2.seq, t1.id
+    </select>
+
+    <!-- 해설 등록 여부와 함께 문제 목록 조회 -->
+    <select id="findQuestionsWithExplanationStatus" parameterType="QuestionPage" resultType="QuestionPage">
+        SELECT 
+            t1.id, 
+            t1.text, 
+            t1.image, 
+            t1.seq, 
+            t1.use_yn, 
+            t1.type, 
+            t1.category_id,
+            t2.name as category_nm,
+            CASE WHEN t3.id IS NOT NULL THEN true ELSE false END as has_explanation
+        FROM question t1
+        INNER JOIN category t2 ON t2.id = t1.category_id
+        LEFT JOIN question_explanation t3 ON t3.question_id = t1.id AND t3.use_yn = 'Y'
+        WHERE 1=1
+        <include refid="search" />
+        ORDER BY t1.id
+        LIMIT #{recordsPerPage} OFFSET #{pagination.firstRecordIndex}
+    </select>
+
+    <select id="findQuestionsWithExplanationStatusCount" parameterType="QuestionPage" resultType="int">
+        SELECT COUNT(*)
+        FROM question t1
+        INNER JOIN category t2 ON t2.id = t1.category_id
+        WHERE 1=1
+        <include refid="search" />
+    </select>
+
 </mapper>

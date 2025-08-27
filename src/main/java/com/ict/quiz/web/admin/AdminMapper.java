@@ -40,4 +40,18 @@ public interface AdminMapper {
 
     List<ExamAttemptSummary> findRecentExamAttempts(@Param("limit") int limit, @Param("offset") int offset);
     int countExamAttempts();
+
+    // 해설 관련 메서드들
+    List<QuestionExplanationPage> findAllExplanations(QuestionExplanationPage explanation);
+    int findAllExplanationsCount(QuestionExplanationPage explanation);
+    QuestionExplanationPage findExplanationById(Long id);
+    QuestionExplanationPage findExplanationByQuestionId(Long questionId);
+    void insertExplanation(QuestionExplanationPage explanation);
+    void updateExplanation(QuestionExplanationPage explanation);
+    void updateExplanationNotFile(QuestionExplanationPage explanation);
+    List<QuestionPage> findQuestionsForExplanation();
+    
+    // 해설 등록 여부와 함께 문제 목록 조회
+    List<QuestionPage> findQuestionsWithExplanationStatus(QuestionPage question);
+    int findQuestionsWithExplanationStatusCount(QuestionPage question);
 }
