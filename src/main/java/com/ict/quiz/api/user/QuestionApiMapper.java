@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.ict.quiz.domain.Category;
+import com.ict.quiz.domain.Explanation;
 import com.ict.quiz.domain.Question;
 import com.ict.quiz.domain.QuestionOption;
 import com.ict.quiz.domain.UserQuestion;
@@ -39,6 +40,8 @@ public interface QuestionApiMapper {
     Category getCategory(Long id);
 
     String findCorrectByQuestionId(Long question_id);
+
+    List<Explanation> findExplanationsByQuestionIds(@Param("questionIds") List<Long> questionIds);
 
     UserQuestionResDto findUserQuestionById(Long id);
 }

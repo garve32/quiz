@@ -12,4 +12,6 @@ public class QuestionResultDetail {
     private QuestionResult question;
     @Valid
     private List<QuestionOptionResult> options;
+    @Valid
+    private Explanation explanation;
 }

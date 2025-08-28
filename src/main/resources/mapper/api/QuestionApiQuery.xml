@@ -136,5 +136,16 @@
         where id = #{category_id}
     </select>
 
+    <select id="findExplanationsByQuestionIds" resultType="Explanation">
+        select id, question_id, explanation_text, image_name, image, use_yn
+        from question_explanation
+        where question_id in
+        <foreach collection="questionIds" item="qid" open="(" separator="," close=")">
+            #{qid}
+        </foreach>
+          and use_yn = 'Y'
+        order by question_id
+    </select>
+
 
 </mapper>

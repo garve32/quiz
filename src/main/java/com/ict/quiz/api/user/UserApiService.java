@@ -15,6 +15,7 @@ import com.ict.quiz.domain.QuestionOptionResult;
 import com.ict.quiz.domain.QuestionResult;
 import com.ict.quiz.domain.QuestionResultDetail;
 import com.ict.quiz.domain.User;
+import com.ict.quiz.domain.Explanation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -104,6 +105,13 @@ public class UserApiService {
             optionsByQuestionId.computeIfAbsent(opt.getQuestion_id(), k -> new LinkedList<>()).add(opt);
         }
 
+        // 3) 해설 일괄 조회 후 question_id → explanation 묶기
+        List<Explanation> allExplanations = questionApiMapper.findExplanationsByQuestionIds(questionIds);
+        java.util.Map<Long, Explanation> explanationByQuestionId = new java.util.HashMap<>();
+        for (Explanation exp : allExplanations) {
+            explanationByQuestionId.put(exp.getQuestion_id(), exp);
+        }
+
         ObjectMapper om = new ObjectMapper();
         for (int i = 0; i < q_set.length; i++) {
             long qId = Long.parseLong(q_set[i]);
@@ -131,6 +139,18 @@ public class UserApiService {
                 questionOptionResults.add(questionOptionResult);
             }
             questionResultDetail.setOptions(questionOptionResults);
+
+            // 해설 설정
+            Explanation explanation = explanationByQuestionId.get(qId);
+            if (explanation != null) {
+                // 이미지가 있는 경우 Base64 인코딩
+                if (explanation.getImage() != null && explanation.getImage().length > 0) {
+                    String encodedImage = Base64.encodeBase64String(explanation.getImage());
+                    explanation.setEncoded_image(encodedImage);
+                }
+                questionResultDetail.setExplanation(explanation);
+            }
+
             questionResultDetails.add(questionResultDetail);
         }
 
