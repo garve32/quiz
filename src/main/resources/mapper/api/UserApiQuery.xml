@@ -113,6 +113,7 @@
                      LEFT JOIN LATERAL unnest(string_to_array(uq.correct_set, ',')) WITH ORDINALITY AS corr(elem, idx2)
                  ON corr.idx2 = q_ids.idx
                  WHERE q.category_id = #{category_id}
+                   AND q.use_yn = 'Y'
                  GROUP BY q.id, q.text
              )
         group by select_count

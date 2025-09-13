@@ -7,7 +7,7 @@
         select id, p_id, name, description, time_limit, question_cnt
              , success_type, success_cnt, success_percent, use_yn
              , logo_url, active_yn
-             , (select count(1) from question q where q.category_id = c.id) as pool_cnt
+             , (select count(1) from question q where q.category_id = c.id and q.use_yn = 'Y') as pool_cnt
         from category c
         where use_yn = 'Y'
           and question_cnt > 0
@@ -30,6 +30,7 @@
         from (select category_id, id
               from question
               where category_id = #{category_id}
+                and use_yn = 'Y'
               order by RANDOM()
                   limit #{question_cnt}) as t1
         group by category_id
